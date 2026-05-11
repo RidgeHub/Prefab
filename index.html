@@ -127,10 +127,10 @@
   <div class="card">
     <div class="card-header"><div class="step-num">1</div><div class="card-title">Google Sheet — current project</div></div>
     <div class="input-row">
-      <input type="text" id="sheetUrl" placeholder="Paste published CSV URL…" />
+      <input type="text" id="sheetUrl" placeholder="Paste Google Sheet URL…" />
       <button class="btn-accent" onclick="fetchSheet()">Fetch</button>
     </div>
-    <p class="card-hint">File → Share → Publish to web → CSV &nbsp;·&nbsp; Col A = Room &nbsp;·&nbsp; B = ID Label &nbsp;·&nbsp; C = Assembly Code</p>
+    <p class="card-hint">File → Share → Anyone with the link can view &nbsp;·&nbsp; Col A = Room &nbsp;·&nbsp; B = ID Label &nbsp;·&nbsp; C = Assembly Code</p>
     <div id="sheetStatus"></div>
   </div>
 
@@ -227,10 +227,12 @@ function setMasterBar(state, label, meta) {
 async function fetchSheet() {
   const url = document.getElementById('sheetUrl').value.trim();
   if (!url) { setStatus('sheetStatus','Paste a URL first.','err'); return; }
+  const m = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+  if (!m) { setStatus('sheetStatus','Could not find sheet ID — paste the full Google Sheet URL.','err'); return; }
   setStatus('sheetStatus','Fetching…','info');
   try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status} — make sure you used the published CSV link.`);
+    const res = await fetch(`https://docs.google.com/spreadsheets/d/${m[1]}/export?format=csv`);
+    if (!res.ok) throw new Error('Fetch failed. Make sure the sheet is shared as "Anyone with the link can view".');
     const text = await res.text();
     projectRows = parseCSV(text);
     if (projectRows.length < 2) throw new Error('Sheet appears empty.');
