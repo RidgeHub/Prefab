@@ -95,7 +95,7 @@
   .badge-ok{background:var(--green-bg);color:var(--green);border:1px solid rgba(46,204,138,0.2)}
   .badge-miss{background:var(--red-bg);color:var(--red);border:1px solid rgba(224,85,85,0.2)}
   .bom-qty{font-family:var(--mono);font-weight:500;color:var(--accent)}
-  .cat-pill{display:inline-block;font-size:10px;font-family:var(--mono);padding:1px 6px;border-radius:4px;margin-right:4px;background:var(--surface);color:var(--text3);border:1px solid var(--border)}
+  .qty-tag{font-family:var(--mono);font-size:11px;color:var(--accent);margin-left:2px}
   .empty-state{text-align:center;padding:2rem;color:var(--text3);font-family:var(--mono);font-size:12px}
   @media(max-width:600px){.app{padding:1rem 1rem 3rem}header{flex-direction:column}}
 </style>
@@ -110,10 +110,9 @@
         <div class="logo-sub">Ridgeline Electrical Industries</div>
       </div>
     </div>
-    <div class="version-tag">v2.0</div>
+    <div class="version-tag">v2.1</div>
   </header>
 
-  <!-- Master status bar -->
   <div class="master-bar loading" id="masterBar">
     <div class="master-bar-left">
       <div class="master-dot spin" id="masterDot"></div>
@@ -125,24 +124,21 @@
     <button class="btn-reload" onclick="fetchMaster()">↺ Reload</button>
   </div>
 
-  <!-- Step 1 -->
   <div class="card">
     <div class="card-header"><div class="step-num">1</div><div class="card-title">Google Sheet — current project</div></div>
     <div class="input-row">
-      <input type="text" id="sheetUrl" placeholder="Paste Google Sheet URL…" />
+      <input type="text" id="sheetUrl" placeholder="Paste published CSV URL…" />
       <button class="btn-accent" onclick="fetchSheet()">Fetch</button>
     </div>
-    <p class="card-hint">Share as "Anyone with the link can view" &nbsp;·&nbsp; Col A = Room &nbsp;·&nbsp; B = ID Label &nbsp;·&nbsp; C = Assembly Code</p>
+    <p class="card-hint">File → Share → Publish to web → CSV &nbsp;·&nbsp; Col A = Room &nbsp;·&nbsp; B = ID Label &nbsp;·&nbsp; C = Assembly Code</p>
     <div id="sheetStatus"></div>
   </div>
 
-  <!-- Step 2 -->
   <div class="card" id="runCard">
     <div class="card-header"><div class="step-num">2</div><div class="card-title">Run lookup &amp; generate bill of materials</div></div>
     <button class="btn-run" id="runBtn" onclick="runLookup()" disabled>Run lookup →</button>
   </div>
 
-  <!-- Results -->
   <div class="results" id="resultsSection" style="display:none;">
     <div class="tabs">
       <button class="tab active" onclick="showTab('filled')" id="tab-filled">Filled sheet <span class="tab-badge" id="cnt-filled">0</span></button>
@@ -170,89 +166,71 @@
 
 <script>
 const MASTER_URL = 'https://raw.githubusercontent.com/RidgeHub/Prefab/main/master-codes.csv';
-
-// masterMap: code -> { box, plasterRing, wireConnector, pigtails, deviceCover, devices[], rawItems[] }
 let masterMap = {}, projectRows = [];
 let filledData = [], bomData = [], missedCodes = [];
 
-/* ── Parse the matrix-style master CSV ── */
+function withQty(item, qty) {
+  return qty > 1 ? `${item} (${qty})` : item;
+}
+
 function parseMasterMatrix(text) {
   const rows = parseCSV(text);
   if (rows.length < 4) throw new Error('master-codes.csv has too few rows.');
-
-  const itemNames  = rows[0];  // row 0: full item names
-  const categories = rows[2];  // row 2: category labels (Box, Plaster Ring, Wire Connector, Device, etc.)
-  // row 3+ are assembly code rows; col 2 = Prefab-Code
-
+  const itemNames  = rows[0];
+  const categories = rows[2];
   const map = {};
   for (let ri = 3; ri < rows.length; ri++) {
     const row  = rows[ri];
     const code = (row[2] || '').trim().toUpperCase();
     if (!code) continue;
-
-    const entry = {
-      box: [], plasterRing: [], wireConnector: [],
-      pigtail: [], deviceCover: [], device: [], other: [],
-      rawItems: []  // [{cat, item, qty}] for BOM
-    };
-
+    const entry = { box:[], plasterRing:[], wireConnector:[], pigtail:[], deviceCover:[], device:[], other:[], rawItems:[] };
     for (let ci = 3; ci < row.length; ci++) {
       const val = (row[ci] || '').trim();
       if (!val || val === '0') continue;
-      const qty     = isNaN(val) ? 1 : Number(val);
-      const cat     = (categories[ci] || '').trim().toLowerCase();
-      const item    = (itemNames[ci]  || '').trim();
+      const qty  = isNaN(val) ? 1 : Number(val);
+      const cat  = (categories[ci] || '').trim().toLowerCase();
+      const item = (itemNames[ci]  || '').trim();
       if (!item) continue;
-
-      // Push to BOM raw list
       entry.rawItems.push({ cat: categories[ci] || '', item, qty });
-
-      if      (cat === 'box')            entry.box.push(item);
-      else if (cat === 'plaster ring')   entry.plasterRing.push(item);
-      else if (cat === 'wire connector') entry.wireConnector.push(item);
-      else if (cat === 'pigtail')        entry.pigtail.push(item);
-      else if (cat === 'device cover')   entry.deviceCover.push(item);
-      else if (cat === 'device')         entry.device.push(item);
-      else                               entry.other.push(item);
+      if      (cat === 'box')            entry.box.push({item,qty});
+      else if (cat === 'plaster ring')   entry.plasterRing.push({item,qty});
+      else if (cat === 'wire connector') entry.wireConnector.push({item,qty});
+      else if (cat === 'pigtail')        entry.pigtail.push({item,qty});
+      else if (cat === 'device cover')   entry.deviceCover.push({item,qty});
+      else if (cat === 'device')         entry.device.push({item,qty});
+      else                               entry.other.push({item,qty});
     }
     map[code] = entry;
   }
   return map;
 }
 
-/* ── Fetch master from GitHub ── */
 async function fetchMaster() {
-  setMasterBar('loading', 'Loading master codes…');
+  setMasterBar('loading','Loading master codes…');
   try {
     const res = await fetch(MASTER_URL + '?v=' + Date.now());
     if (!res.ok) throw new Error(`HTTP ${res.status} — check repo is public and file exists.`);
-    const text = await res.text();
-    masterMap = parseMasterMatrix(text);
-    const count = Object.keys(masterMap).length;
-    setMasterBar('ok', `${count} assembly codes loaded`, 'RidgeHub/Prefab / master-codes.csv');
+    masterMap = parseMasterMatrix(await res.text());
+    setMasterBar('ok', `${Object.keys(masterMap).length} assembly codes loaded`, 'RidgeHub/Prefab / master-codes.csv');
     checkReady();
-  } catch(e) {
-    setMasterBar('err', `Failed: ${e.message}`);
-  }
+  } catch(e) { setMasterBar('err', `Failed: ${e.message}`); }
 }
 
 function setMasterBar(state, label, meta) {
   document.getElementById('masterBar').className = `master-bar ${state}`;
-  document.getElementById('masterDot').className = `master-dot ${state === 'loading' ? 'spin' : state}`;
+  document.getElementById('masterDot').className = `master-dot ${state==='loading'?'spin':state}`;
   const lbl = document.getElementById('masterLabel');
   lbl.className = `master-label ${state}`; lbl.textContent = label;
   if (meta !== undefined) document.getElementById('masterMeta').textContent = meta;
 }
 
-/* ── Fetch project Google Sheet ── */
 async function fetchSheet() {
   const url = document.getElementById('sheetUrl').value.trim();
-  const m = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
-  if (!m) { setStatus('sheetStatus','Could not find sheet ID — paste the full Google Sheet URL.','err'); return; }
+  if (!url) { setStatus('sheetStatus','Paste a URL first.','err'); return; }
   setStatus('sheetStatus','Fetching…','info');
   try {
-    const res = await fetch(`https://docs.google.com/spreadsheets/d/${m[1]}/export?format=csv`);
-    if (!res.ok) throw new Error('Fetch failed. Check: File → Share → Anyone with the link → Viewer.');
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status} — make sure you used the published CSV link.`);
     const text = await res.text();
     projectRows = parseCSV(text);
     if (projectRows.length < 2) throw new Error('Sheet appears empty.');
@@ -261,7 +239,6 @@ async function fetchSheet() {
   } catch(e) { setStatus('sheetStatus', e.message, 'err'); }
 }
 
-/* ── CSV parser ── */
 function parseCSV(text) {
   return text.split('\n').filter(l => l.trim()).map(line => {
     const cols = []; let cur = '', inQ = false;
@@ -283,14 +260,14 @@ function checkReady() {
   document.getElementById('runBtn').disabled = !ok;
 }
 
-/* ── Run lookup ── */
 function runLookup() {
-  filledData   = [['Room','ID Label','Assembly Code','Box','Plaster Ring','Wire Connector','Wire Nuts / Pigtails','Device Cover','Device 1','Device 2','Device 3','Device 4','Status']];
-  missedCodes  = [];
-  const bomRaw = {}; // item -> qty
+  const outHeaders = ['Room','ID Label','Assembly Code','Box','Plaster Ring','Wire Connector','Pigtail','Device Cover','Device 1','Device 2','Device 3','Device 4','Status'];
+  filledData  = [outHeaders];
+  missedCodes = [];
+  const bomRaw = {};
 
   for (let i = 1; i < projectRows.length; i++) {
-    const r    = projectRows[i];
+    const r     = projectRows[i];
     const room  = r[0]||'', label = r[1]||'';
     const code  = (r[2]||'').trim().toUpperCase();
     const match = masterMap[code];
@@ -301,23 +278,27 @@ function runLookup() {
       continue;
     }
 
-    const box     = match.box.join(' | ');
-    const plaster = match.plasterRing.join(' | ');
-    const wire    = match.wireConnector.join(' | ');
-    const pigtail = match.pigtail.join(' | ');
-    const devCov  = match.deviceCover.join(' | ');
-    const devs    = match.device.slice(0, 4);
-    while (devs.length < 4) devs.push('');
+    const fmt = arr => arr.map(({item,qty}) => withQty(item,qty)).join(' | ');
 
-    filledData.push([room, label, code, box, plaster, wire, pigtail, devCov, ...devs, 'OK']);
+    const box     = fmt(match.box);
+    const plaster = fmt(match.plasterRing);
+    const wire    = fmt(match.wireConnector);
+    const pigtail = fmt(match.pigtail);
+    const devCov  = fmt(match.deviceCover);
 
-    // BOM: use rawItems with quantities
-    for (const { item, qty } of match.rawItems) {
+    // devices: up to 4 slots, each with qty in parens if >1
+    const devCells = match.device.slice(0,4).map(({item,qty}) => withQty(item,qty));
+    while (devCells.length < 4) devCells.push('');
+
+    filledData.push([room, label, code, box, plaster, wire, pigtail, devCov, ...devCells, 'OK']);
+
+    // BOM accumulation with actual quantities
+    for (const {item, qty} of match.rawItems) {
       bomRaw[item] = (bomRaw[item] || 0) + qty;
     }
   }
 
-  bomData = [['Item','Total qty'], ...Object.entries(bomRaw).sort((a,b) => b[1]-a[1])];
+  bomData = [['Item','Total Qty'], ...Object.entries(bomRaw).sort((a,b) => b[1]-a[1])];
 
   renderFilled(); renderBOM(); renderMiss();
   document.getElementById('cnt-filled').textContent = filledData.length - 1;
@@ -325,10 +306,9 @@ function runLookup() {
   document.getElementById('cnt-miss').textContent   = [...new Set(missedCodes)].length;
   document.getElementById('resultsSection').style.display = '';
   showTab('filled');
-  document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('resultsSection').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-/* ── Render tables ── */
 function renderFilled() {
   const t = document.getElementById('filledTable'); t.innerHTML = '';
   const hr = t.createTHead().insertRow();
@@ -338,11 +318,15 @@ function renderFilled() {
     const tr = tbody.insertRow();
     filledData[i].forEach((cell, ci) => {
       const td = tr.insertCell();
-      if (ci === filledData[0].length - 1) {
+      const isStatus = ci === filledData[0].length - 1;
+      if (isStatus) {
         td.innerHTML = cell === 'OK'
           ? `<span class="badge badge-ok">OK</span>`
           : cell ? `<span class="badge badge-miss">${cell}</span>` : '';
-      } else { td.textContent = cell; }
+      } else {
+        // highlight qty in parens with accent color
+        td.innerHTML = String(cell).replace(/\((\d+)\)/g, '<span class="qty-tag">($1)</span>');
+      }
     });
   }
 }
@@ -371,9 +355,9 @@ function renderMiss() {
     const td = tbody.insertRow().insertCell();
     td.colSpan = 2; td.className = 'empty-state'; td.textContent = 'All codes matched ✓';
   } else {
-    entries.forEach(([code, cnt]) => {
+    entries.forEach(([code,cnt]) => {
       const tr = tbody.insertRow();
-      tr.insertCell().innerHTML = `<span class="badge badge-miss">${code}</span>`;
+      tr.insertCell().innerHTML   = `<span class="badge badge-miss">${code}</span>`;
       tr.insertCell().textContent = cnt;
     });
   }
@@ -386,7 +370,6 @@ function showTab(name) {
   });
 }
 
-/* ── Downloads ── */
 function downloadCSV(which) {
   const data = which === 'filled' ? filledData : bomData;
   const csv = data.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
