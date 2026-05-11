@@ -231,8 +231,7 @@ async function fetchSheet() {
   if (!m) { setStatus('sheetStatus','Could not find sheet ID — paste the full Google Sheet URL.','err'); return; }
   setStatus('sheetStatus','Fetching…','info');
   try {
-    const csvUrl = `https://docs.google.com/spreadsheets/d/${m[1]}/export?format=csv`;
-    const res = await fetch(`https://corsproxy.io/?url=${encodeURIComponent(csvUrl)}`);
+    const res = await fetch(`https://docs.google.com/spreadsheets/d/${m[1]}/export?format=csv`);
     if (!res.ok) throw new Error('Fetch failed. Make sure the sheet is shared as "Anyone with the link can view".');
     const text = await res.text();
     projectRows = parseCSV(text);
