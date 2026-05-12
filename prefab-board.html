@@ -245,21 +245,25 @@ function loadLocal(){
 }
 
 async function loadFromGitHub(){
-  const token=getGHToken();
-  if(!token){ loadLocal(); showProjectList(); return; }
   setSyncStatus('syncing','Loading…');
+  // Use raw URL to read (no token needed for public repo)
+  const rawUrl='https://raw.githubusercontent.com/'+REPO+'/main/'+GH_FILE+'?v='+Date.now();
   try{
-    const res=await fetch(GH_API,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});
+    const res=await fetch(rawUrl);
     if(res.status===404){ projects=[]; ghSha=null; setSyncStatus('synced','Ready'); showProjectList(); return; }
     if(!res.ok) throw new Error('HTTP '+res.status);
-    const data=await res.json();
-    ghSha=data.sha;
-    projects=JSON.parse(atob(data.content.replace(/\n/g,'')));
+    projects=await res.json();
+    // Also fetch sha for future saves
+    const token=getGHToken();
+    if(token){
+      const meta=await fetch(GH_API,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});
+      if(meta.ok){ const d=await meta.json(); ghSha=d.sha; }
+    }
     saveLocal();
     setSyncStatus('synced','Synced');
     showProjectList();
   }catch(e){
-    setSyncStatus('error','Load failed');
+    setSyncStatus('error','Load failed: '+e.message);
     loadLocal(); showProjectList();
   }
 }
