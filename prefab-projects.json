@@ -123,10 +123,10 @@
         "devices": [
           "5-20R - DUPLEX / Commercial Grade / Tamper Resistant / White (1)"
         ],
-        "batchDone": false,
+        "batchDone": true,
         "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
+        "batchDoneAt": "May 12, 2:04 PM",
+        "batchDoneBy": "James",
         "labelDoneAt": null,
         "labelDoneBy": null
       },
@@ -139,10 +139,10 @@
         "wire": "",
         "pigtail": "",
         "devices": [],
-        "batchDone": false,
+        "batchDone": true,
         "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
+        "batchDoneAt": "May 12, 2:04 PM",
+        "batchDoneBy": "James",
         "labelDoneAt": null,
         "labelDoneBy": null
       },
