@@ -106,11 +106,11 @@
           "5-20R - DUPLEX / Commercial Grade / GFCI / White (1)"
         ],
         "batchDone": true,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": "May 12, 2:04 PM",
         "batchDoneBy": "James",
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 12, 2:37 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp2wn0gtgxb6",
@@ -124,11 +124,11 @@
           "5-20R - DUPLEX / Commercial Grade / Tamper Resistant / White (1)"
         ],
         "batchDone": true,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": "May 12, 2:04 PM",
         "batchDoneBy": "James",
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 12, 2:37 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp2wn0gth64b",
