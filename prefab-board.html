@@ -437,10 +437,7 @@ function showProjectList(){
   const el=document.getElementById('mainContent');
   const hasToken=!!getGHToken();
   if(!projects.length){
-    var tokenBtn = hasToken
-      ? '<div style="background:#edf7f2;border:1px solid #a0d4b8;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#2a7a4b;">✓ GitHub connected</div><button onclick="loadFromGitHub()" style="width:100%;padding:12px;font-size:15px;font-weight:600;background:#2a7a4b;color:#fff;border:none;border-radius:8px;cursor:pointer;margin-bottom:10px;">↺ Sync from GitHub</button>'
-      : '<div style="background:#fff8e6;border:1px solid #f0d080;border-radius:10px;padding:14px;margin-bottom:12px;text-align:left;"><div style="font-weight:600;font-size:15px;margin-bottom:6px;">⚙ Connect GitHub</div><div style="font-size:13px;color:#6b6560;margin-bottom:12px;">Enter your token to sync projects across devices.</div><button onclick="openTokenModal()" style="width:100%;padding:12px;font-size:15px;font-weight:600;background:#2a7a4b;color:#fff;border:none;border-radius:8px;cursor:pointer;">Enter GitHub Token</button></div>';
-    el.innerHTML = '<div style="padding:1.5rem;"><div style="font-size:40px;text-align:center;margin-bottom:12px;">📦</div>' + tokenBtn + '<button onclick="openNewProject()" style="width:100%;padding:12px;font-size:15px;font-weight:600;background:#c84b2f;color:#fff;border:none;border-radius:8px;cursor:pointer;">+ New Project</button></div>';
+    el.innerHTML='<div class="empty"><div class="empty-icon">📦</div>No projects yet.<br/>Tap "+ New Project" to upload an assembly file.</div>';
     return;
   }
   el.innerHTML=projects.map(p=>{
