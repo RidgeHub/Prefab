@@ -201,6 +201,7 @@
         "labelDoneBy": null
       }
     ],
-    "createdAt": 1778606922269
+    "createdAt": 1778606922269,
+    "status": "shipped"
   }
 ]
