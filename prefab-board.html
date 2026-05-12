@@ -3,143 +3,143 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<title>RidgeHub — Prefab Board</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<title>Ridgeline Electrical — Prefab Board</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-:root {
-  --bg:#f0ede8;--surface:#faf8f5;--surface2:#e8e4de;
-  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.15);
-  --text:#1a1714;--text2:#6b6560;--text3:#a8a29c;
+:root{
+  --bg:#0f1117;--surface:#181c27;--surface2:#1e2333;--surface3:#242840;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
   --accent:#c84b2f;--accent2:#e8813a;
-  --green:#2a7a4b;--green-bg:rgba(42,122,75,0.1);
+  --text:#e8eaf0;--text2:#8b91a8;--text3:#555b72;
+  --green:#2ecc8a;--green-bg:rgba(46,204,138,0.1);
+  --yellow:#f0c040;--blue:#5b9cf6;--orange:#e8813a;
+  --gang:#2ecc8a;--seg1:#e8eaf0;--seg2:#e8eaf0;--seg3:#e8eaf0;--seg4:#8b91a8;
   --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
-  --seg1:#1a1714;--seg2:#1a1714;--seg3:#1a1714;--seg4:#1a1714;
-  --gang:#2a7a4b;
-  --col-plaster:#1a6fba;--col-device:#c84b2f;--col-wire:#7b3fa0;
-  --radius:10px;--card-radius:8px;
+  --radius:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;min-height:100vh}
-body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(0,0,0,0.04) 1px,transparent 1px);background-size:24px 24px;pointer-events:none;z-index:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
 .app{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh}
 
-/* Header */
-header{padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--accent);background:var(--surface);position:sticky;top:0;z-index:100;gap:6px;flex-wrap:nowrap}
-.logo{display:flex;align-items:center;gap:8px}
-.logo-mark{width:32px;height:32px;border-radius:6px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:500;color:#fff;flex-shrink:0}
-.logo-text{font-size:12px;font-weight:500;color:var(--text2);white-space:nowrap}
-.project-title{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
-.header-right{display:flex;align-items:center;gap:5px;flex-wrap:nowrap;flex-shrink:0}
-.btn{background:none;border:1px solid var(--border2);border-radius:6px;padding:7px 10px;color:var(--text2);font-family:var(--sans);font-size:12px;cursor:pointer;white-space:nowrap;transition:all 0.15s}
-.btn:hover{background:var(--surface2)}
+header{padding:.875rem 1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border2);background:var(--surface);position:sticky;top:0;z-index:100;gap:8px;flex-wrap:nowrap}
+.header-left{display:flex;align-items:center;gap:8px;min-width:0}
+.logo-mark{width:30px;height:30px;border-radius:6px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:500;color:#fff;flex-shrink:0}
+.header-titles{min-width:0}
+.header-app{font-size:10px;color:var(--text3);font-family:var(--mono)}
+.header-project{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.header-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.btn{background:none;border:1px solid var(--border2);border-radius:6px;padding:6px 11px;color:var(--text2);font-family:var(--sans);font-size:12px;cursor:pointer;white-space:nowrap;transition:all 0.15s;text-decoration:none;display:inline-flex;align-items:center}
+.btn:hover{background:var(--surface2);color:var(--text)}
 .btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
 .btn-primary:hover{background:#b03d24}
-.btn-green{background:var(--green);border-color:var(--green);color:#fff;font-weight:500}
-.btn-green:hover{background:#1e5c38}
-.btn-print{background:#1a6fba;border-color:#1a6fba;color:#fff;font-weight:500}
-.btn-print:hover{background:#155a99}
+.btn-green{background:var(--green);border-color:var(--green);color:#000;font-weight:500}
+.btn-green:hover{opacity:0.85}
+
 .sync-status{font-family:var(--mono);font-size:10px;color:var(--text3);display:flex;align-items:center;gap:4px}
-.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--text3);flex-shrink:0}
-.sync-dot.synced{background:var(--green)}.sync-dot.syncing{background:var(--accent2);animation:blink 1s infinite}.sync-dot.error{background:var(--accent)}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0}
+.sync-dot.synced{background:var(--green)}.sync-dot.syncing{background:var(--yellow);animation:blink 1s infinite}.sync-dot.error{background:var(--accent)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 
-/* Assembler bar */
-.assembler-bar{background:var(--surface2);border-bottom:1px solid var(--border);padding:7px 1rem;font-size:12px;color:var(--text2);display:flex;align-items:center;justify-content:space-between}
-.assembler-name{font-family:var(--mono);color:var(--text);font-weight:500}
+.assembler-bar{background:var(--surface2);border-bottom:1px solid var(--border);padding:6px 1rem;font-size:12px;color:var(--text2);display:flex;align-items:center;justify-content:space-between}
+.assembler-name{font-family:var(--mono);color:var(--green);font-weight:500}
 
-/* Phase tabs */
-.phase-tabs{display:flex;border-bottom:1px solid var(--border2);background:var(--surface);position:sticky;top:57px;z-index:99}
-.phase-tab{flex:1;padding:11px 6px;font-size:13px;font-weight:500;text-align:center;cursor:pointer;border-bottom:3px solid transparent;color:var(--text2);background:none;border-top:none;border-left:none;border-right:none;font-family:var(--sans);transition:all 0.15s}
+.phase-tabs{display:flex;border-bottom:1px solid var(--border2);background:var(--surface)}
+.phase-tab{flex:1;padding:10px 6px;font-size:12px;font-weight:500;text-align:center;cursor:pointer;border-bottom:2px solid transparent;color:var(--text3);background:none;border-top:none;border-left:none;border-right:none;font-family:var(--sans);transition:all 0.15s}
 .phase-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 
-/* Progress bar */
-.progress-wrap{padding:.75rem 1rem;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;position:sticky;top:104px;z-index:98}
-.progress-label{font-family:var(--mono);font-size:12px;color:var(--text2);white-space:nowrap}
-.progress-bar-outer{flex:1;height:7px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.progress-wrap{padding:.75rem 1rem;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.progress-label{font-family:var(--mono);font-size:11px;color:var(--text2);white-space:nowrap}
+.progress-bar-outer{flex:1;height:6px;background:var(--surface2);border-radius:99px;overflow:hidden}
 .progress-bar-fill{height:100%;background:var(--green);border-radius:99px;transition:width 0.4s}
-.progress-pct{font-family:var(--mono);font-size:12px;color:var(--green);white-space:nowrap;font-weight:500}
+.progress-pct{font-family:var(--mono);font-size:11px;color:var(--green);white-space:nowrap;font-weight:500}
 
-/* Content */
 .content{padding:1rem;display:flex;flex-direction:column;gap:10px;padding-bottom:80px}
 
 /* Project list */
-.project-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:1.1rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;transition:all 0.15s}
-.project-card:hover{border-color:var(--accent);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
-.project-name{font-size:16px;font-weight:700;margin-bottom:2px}
-.project-meta{font-size:12px;color:var(--text2);font-family:var(--mono);margin-bottom:8px}
+.project-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:1rem;display:flex;align-items:center;gap:10px;transition:all 0.15s}
+.project-card:hover{border-color:var(--accent)}
+.project-card-info{flex:1;cursor:pointer;min-width:0}
+.project-name{font-size:15px;font-weight:700;margin-bottom:2px}
+.project-meta{font-size:11px;color:var(--text2);font-family:var(--mono);margin-bottom:8px}
 .project-prog{display:flex;align-items:center;gap:8px}
-.project-prog .progress-bar-outer{width:130px;flex:none}
+.project-prog .progress-bar-outer{width:100px;flex:none}
+.status-select{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 8px;font-size:11px;font-family:var(--mono);color:var(--text2);cursor:pointer;flex-shrink:0}
 
 /* Batch items */
 .batch-section{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden}
-.batch-section-header{padding:9px 14px;background:var(--surface2);border-bottom:1px solid var(--border2);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text2);font-family:var(--mono)}
+.section-hdr{padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border2);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);font-family:var(--mono)}
 .batch-item{padding:16px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;transition:background 0.15s}
 .batch-item:last-child{border-bottom:none}
 .batch-item.done-batch{background:var(--green-bg)}
-.batch-check{width:32px;height:32px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.2s;font-size:16px}
+.batch-check{width:32px;height:32px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.2s;font-size:15px;color:var(--text3)}
 .batch-check:hover{border-color:var(--green)}
-.batch-check.checked{background:var(--green);border-color:var(--green);color:#fff}
+.batch-check.checked{background:var(--green);border-color:var(--green);color:#000;font-weight:700}
 .batch-info{flex:1;min-width:0}
 .batch-line{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
 .batch-qty{font-family:var(--mono);font-size:24px;font-weight:700;color:#8a1a00;flex-shrink:0}
-.batch-qty-label{font-size:13px;color:#1a1714;font-family:var(--mono);margin-right:4px;font-weight:500}
-.batch-desc{font-size:16px;line-height:1.5;display:flex;flex-wrap:wrap;align-items:baseline;gap:3px}
-.batch-signoff{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:5px}
-.seg{font-weight:600}
-.seg-sep{color:var(--text3);font-size:13px;font-weight:400;margin:0 1px}
-.seg1{color:var(--seg1)}.seg2{color:var(--seg2)}.seg3{color:var(--seg3)}.seg4{color:var(--seg4)}
+.batch-qty-label{font-size:13px;color:#1a1714;font-family:var(--mono);font-weight:500;margin-right:2px}
+.batch-desc{font-size:16px;line-height:1.5;display:flex;flex-wrap:wrap;align-items:baseline;gap:3px;color:var(--text)}
+.batch-footer{font-size:12px;color:var(--text3);font-family:var(--mono);margin-top:6px}
+.batch-signoff{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:4px}
+.seg{font-weight:500;color:var(--text)}
+.seg-sep{color:var(--text3);font-size:13px;margin:0 1px}
 .seg-gang{color:var(--gang);font-weight:700}
-.seg-plain{color:var(--text2)}
+.seg-grade{font-size:11px;color:var(--text3);font-family:var(--mono);font-weight:400;margin-left:3px}
 
 /* Label list */
 .room-section{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden}
-.room-header{padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border2);font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;justify-content:space-between}
-.room-count{font-size:11px;color:var(--text3);font-family:var(--mono);font-weight:400}
-.label-item{padding:14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;transition:background 0.15s}
+.room-hdr{padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border2);font-size:12px;font-weight:700;color:var(--text);display:flex;justify-content:space-between;align-items:center}
+.room-count{font-size:10px;color:var(--text3);font-family:var(--mono);font-weight:400}
+.label-item{padding:13px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;transition:background 0.15s}
 .label-item:last-child{border-bottom:none}
 .label-item.done-label{background:var(--green-bg)}
-.label-check{width:28px;height:28px;border-radius:6px;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.2s;font-size:14px}
+.label-check{width:26px;height:26px;border-radius:6px;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.2s;font-size:13px}
 .label-check:hover{border-color:var(--green)}
-.label-check.checked{background:var(--green);border-color:var(--green);color:#fff}
+.label-check.checked{background:var(--green);border-color:var(--green);color:#000;font-weight:700}
 .label-info{flex:1;min-width:0}
 .label-id{font-family:var(--mono);font-size:14px;font-weight:700;margin-bottom:4px;color:var(--text)}
-.label-desc{font-size:15px;display:flex;flex-wrap:wrap;align-items:baseline;gap:3px;line-height:1.5}
-.label-signoff{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:4px}
+.label-desc{font-size:15px;display:flex;flex-wrap:wrap;align-items:baseline;gap:3px}
+.label-signoff{font-size:10px;color:var(--text3);font-family:var(--mono);margin-top:3px}
 
 /* Packing list */
-.pack-header{font-size:16px;font-weight:700;margin-bottom:1rem;padding-bottom:8px;border-bottom:2px solid var(--text)}
-.pack-room{margin-bottom:1.25rem}
-.pack-room-title{font-size:13px;font-weight:700;padding:6px 0;border-bottom:1px solid var(--border2);margin-bottom:6px;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.05em;color:var(--text2)}
-.pack-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px}
+.pack-header{font-size:16px;font-weight:700;margin-bottom:4px;color:var(--text)}
+.pack-subheader{font-size:12px;color:var(--text2);font-family:var(--mono);margin-bottom:1rem}
+.pack-room{margin-bottom:1rem;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden}
+.pack-room-title{font-size:11px;font-weight:600;padding:8px 14px;background:var(--surface2);border-bottom:1px solid var(--border2);text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);font-family:var(--mono)}
+.pack-item{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border);font-size:13px}
 .pack-item:last-child{border-bottom:none}
-.pack-label{font-family:var(--mono);font-weight:700;width:90px;flex-shrink:0;color:var(--text)}
+.pack-label-id{font-family:var(--mono);font-weight:700;width:90px;flex-shrink:0;color:var(--text)}
 .pack-desc{flex:1;color:var(--text2)}
-.pack-status{font-size:11px;font-family:var(--mono);flex-shrink:0;width:50px;text-align:right}
-.pack-status.done{color:var(--green);font-weight:600}
-.pack-status.pending{color:var(--text3)}
+.pack-status{font-size:10px;font-family:var(--mono);flex-shrink:0}
+.pack-status.done{color:var(--green)}.pack-status.pending{color:var(--text3)}
 .print-btn-wrap{margin-bottom:1rem}
 
-/* Empty */
-.empty{text-align:center;padding:3rem 1rem;color:var(--text3);font-family:var(--mono);font-size:13px}
-.empty-icon{font-size:40px;margin-bottom:12px}
+.empty{text-align:center;padding:3rem 1rem;color:var(--text3);font-family:var(--mono);font-size:12px}
+.empty-icon{font-size:36px;margin-bottom:10px}
 
 /* Modals */
-.modal-overlay{position:fixed;inset:0;background:rgba(26,23,20,0.55);z-index:200;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
-.modal{background:var(--surface);border-radius:16px 16px 0 0;width:100%;max-width:540px;padding:1.5rem;max-height:85vh;overflow-y:auto}
-.modal-title{font-size:17px;font-weight:700;margin-bottom:1rem}
-.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text2);font-family:var(--mono)}
-input[type=text],input[type=file],select{background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:11px;font-size:15px;font-family:var(--sans);color:var(--text);outline:none;width:100%}
-input:focus{border-color:var(--accent)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.modal{background:var(--surface);border-radius:16px 16px 0 0;border-top:1px solid var(--border2);width:100%;max-width:540px;padding:1.5rem;max-height:88vh;overflow-y:auto}
+.modal-title{font-size:17px;font-weight:700;margin-bottom:1rem;color:var(--text)}
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);font-family:var(--mono)}
+input[type=text],input[type=file],input[type=number],input[type=date],input[type=password],select{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:10px;font-size:14px;font-family:var(--sans);color:var(--text);outline:none;width:100%;transition:border-color 0.15s}
+input:focus,select:focus{border-color:var(--accent)}
+input[type=file]{color:var(--text2)}
 .modal-actions{display:flex;gap:8px;margin-top:6px}
-.modal-actions .btn{flex:1;padding:12px;font-size:15px;text-align:center}
-.info-box{background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:14px}
+.modal-actions .btn{flex:1;padding:11px;font-size:14px;text-align:center;justify-content:center}
+.info-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:12px}
 
-@media print {
-  header,.assembler-bar,.phase-tabs,.progress-wrap,.btn,.print-btn-wrap,body::before{display:none!important}
-  body{background:#fff;font-size:12px}
-  .pack-room-title{font-size:13px}
+@media print{
+  header,.assembler-bar,.phase-tabs,.progress-wrap,.btn,.print-btn-wrap,body::before,.no-print{display:none!important}
+  body{background:#fff;color:#000}
+  .surface{background:#fff}
+  .pack-room{border:1px solid #ccc}
+  .pack-room-title{background:#f5f5f5;color:#555}
+  .pack-label-id{color:#000}
+  .pack-desc{color:#333}
   .content{padding:0}
 }
 </style>
@@ -147,24 +147,25 @@ input:focus{border-color:var(--accent)}
 <body>
 <div class="app">
   <header>
-    <div class="logo">
-      <div class="logo-mark">PF</div>
-      <div>
-        <div class="logo-text" id="logoSub">Ridgeline Electrical — Prefab</div>
-        <div class="project-title" id="projectTitleEl" style="display:none;"></div>
+    <div class="header-left">
+      <div class="logo-mark">RE</div>
+      <div class="header-titles">
+        <div class="header-app" id="headerApp">Ridgeline Electrical — Prefab Board</div>
+        <div class="header-project" id="headerProject" style="display:none;"></div>
       </div>
     </div>
     <div class="header-right">
       <div class="sync-status no-print"><div class="sync-dot" id="syncDot"></div><span id="syncText">—</span></div>
-      <button class="btn no-print" onclick="openTokenModal()" id="tokenBtn">⚙ GitHub</button>
+      <button class="btn no-print" onclick="openTokenModal()">⚙</button>
+      <a href="index.html" class="btn no-print">← Hub</a>
       <button class="btn no-print" id="backBtn" onclick="showProjectList()" style="display:none;">← Projects</button>
-      <button class="btn btn-primary no-print" id="newProjectBtn" onclick="openNewProject()">+ New Project</button>
+      <button class="btn btn-primary no-print" id="newProjectBtn" onclick="openNewProject()">+ New</button>
     </div>
   </header>
 
   <div id="assemblerBar" class="assembler-bar" style="display:none;">
     <span>Assembler: <span class="assembler-name" id="assemblerNameDisplay"></span></span>
-    <button class="btn no-print" style="padding:4px 10px;font-size:12px;" onclick="openSetName()">Change</button>
+    <button class="btn no-print" style="padding:3px 8px;font-size:11px;" onclick="openSetName()">Change</button>
   </div>
 
   <div id="phaseTabs" class="phase-tabs" style="display:none;">
@@ -180,26 +181,11 @@ input:focus{border-color:var(--accent)}
   </div>
 
   <div class="content" id="mainContent">
-    <div class="empty"><div class="empty-icon">📦</div>No projects yet.<br/>Tap "+ New Project" to get started.</div>
+    <div class="empty"><div class="empty-icon">📋</div>No projects yet.<br/>Tap "+ New" to upload an assembly file.</div>
   </div>
 </div>
 
-<!-- New project modal -->
-<div class="modal-overlay" id="newProjectModal" style="display:none;" onclick="if(event.target===this)closeNewProject()">
-  <div class="modal">
-    <div class="modal-title">New Prefab Project</div>
-    <div class="info-box">Upload the filled sheet from the Assembly Lookup app (.xlsx or .csv). Needs columns: Room, ID Label, Assembly Code, Plaster Ring, Wire Connector, Pigtail, Device 1–4, Status.</div>
-    <div class="form-group"><label>Project Name</label><input type="text" id="npName" placeholder="e.g. Chernoff Cosmetic — Phase 2"/></div>
-    <div class="form-group"><label>Project Number</label><input type="text" id="npNum" placeholder="e.g. 2024-041"/></div>
-    <div class="form-group"><label>Assembly File (.xlsx or .csv)</label><input type="file" id="npFile" accept=".csv,.xlsx,.xls"/></div>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeNewProject()">Cancel</button>
-      <button class="btn btn-primary" onclick="createProject()">Create Project</button>
-    </div>
-  </div>
-</div>
-
-<!-- GitHub token modal -->
+<!-- Token modal -->
 <div class="modal-overlay" id="tokenModal" style="display:none;" onclick="if(event.target===this)closeTokenModal()">
   <div class="modal">
     <div class="modal-title">GitHub Token</div>
@@ -207,12 +193,12 @@ input:focus{border-color:var(--accent)}
     <div class="form-group"><label>Personal Access Token</label><input type="password" id="ghTokenInput" placeholder="ghp_…"/></div>
     <div class="modal-actions">
       <button class="btn" onclick="closeTokenModal()">Cancel</button>
-      <button class="btn btn-green" onclick="saveToken()">Save &amp; Sync</button>
+      <button class="btn btn-green" onclick="saveToken()">Save & Sync</button>
     </div>
   </div>
 </div>
 
-<!-- Set name modal -->
+<!-- Name modal -->
 <div class="modal-overlay" id="nameModal" style="display:none;" onclick="if(event.target===this)closeSetName()">
   <div class="modal">
     <div class="modal-title">Your Name</div>
@@ -224,94 +210,89 @@ input:focus{border-color:var(--accent)}
   </div>
 </div>
 
+<!-- New project modal -->
+<div class="modal-overlay" id="newProjectModal" style="display:none;" onclick="if(event.target===this)closeNewProject()">
+  <div class="modal">
+    <div class="modal-title">New Prefab Project</div>
+    <div class="info-box">Upload the filled sheet from the Assembly Lookup app (.xlsx or .csv).</div>
+    <div class="form-group"><label>Project Name</label><input type="text" id="npName" placeholder="e.g. Chernoff Cosmetic Surgery"/></div>
+    <div class="form-group"><label>Project Number</label><input type="text" id="npNum" placeholder="e.g. 26005"/></div>
+    <div class="form-group"><label>Assembly File (.xlsx or .csv)</label><input type="file" id="npFile" accept=".csv,.xlsx,.xls"/></div>
+    <div class="form-group"><label>Boxes to Ship</label><input type="number" id="npBoxes" placeholder="e.g. 4" min="1"/></div>
+    <div class="form-group"><label>Needed on Site By</label><input type="date" id="npOnSite"/></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeNewProject()">Cancel</button>
+      <button class="btn btn-primary" onclick="createProject()">Create Project</button>
+    </div>
+  </div>
+</div>
+
 <script>
-const STORAGE_KEY  = 'ridgehub_prefab_v2';
-const REPO         = 'RidgeHub/Prefab';
-const GH_FILE      = 'prefab-projects.json';
-const GH_API       = `https://api.github.com/repos/${REPO}/contents/${GH_FILE}`;
-let projects = [], currentProject = null, currentPhase = 1;
-let assemblerName = localStorage.getItem('prefab_assembler') || '';
-let ghSha = null;
+const STORAGE_KEY='ridgehub_prefab_v2';
+const REPO='RidgeHub/Prefab';
+const GH_FILE='prefab-projects.json';
+const GH_API=`https://api.github.com/repos/${REPO}/contents/${GH_FILE}`;
+let projects=[],currentProject=null,currentPhase=1;
+let assemblerName=localStorage.getItem('prefab_assembler')||'';
+let ghSha=null;
+const STATUS_LABELS={inprogress:'In Progress',ready:'Ready for Delivery',shipped:'Shipped',received:'Received'};
+const STATUS_COLORS={inprogress:'#5b9cf6',ready:'#f0c040',shipped:'#e8813a',received:'#2ecc8a'};
 
-function getGHToken(){ return localStorage.getItem('prefab_gh_token')||''; }
+function getGHToken(){return localStorage.getItem('prefab_gh_token')||'';}
+function saveLocal(){localStorage.setItem(STORAGE_KEY,JSON.stringify({projects,sha:ghSha}));}
+function loadLocal(){try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');projects=d.projects||[];ghSha=d.sha||null;}catch(e){projects=[];}}
 
-function saveLocal(){ localStorage.setItem(STORAGE_KEY, JSON.stringify({projects, sha:ghSha})); }
-
-function loadLocal(){
-  try{
-    const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
-    projects=d.projects||[]; ghSha=d.sha||null;
-  }catch(e){ projects=[]; }
+function setSyncStatus(state,text){
+  const dot=document.getElementById('syncDot'),lbl=document.getElementById('syncText');
+  if(!dot||!lbl)return;
+  dot.className='sync-dot'+(state?' '+state:'');lbl.textContent=text;
 }
 
 async function loadFromGitHub(){
   setSyncStatus('syncing','Loading…');
-  // Use raw URL to read (no token needed for public repo)
   const rawUrl='https://raw.githubusercontent.com/'+REPO+'/main/'+GH_FILE+'?v='+Date.now();
   try{
     const res=await fetch(rawUrl);
-    if(res.status===404){ projects=[]; ghSha=null; setSyncStatus('synced','Ready'); showProjectList(); return; }
-    if(!res.ok) throw new Error('HTTP '+res.status);
+    if(res.status===404){projects=[];ghSha=null;setSyncStatus('synced','Ready');showProjectList();return;}
+    if(!res.ok)throw new Error('HTTP '+res.status);
     projects=await res.json();
-    // Also fetch sha for future saves
     const token=getGHToken();
-    if(token){
-      const meta=await fetch(GH_API,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});
-      if(meta.ok){ const d=await meta.json(); ghSha=d.sha; }
-    }
-    saveLocal();
-    setSyncStatus('synced','Synced');
-    showProjectList();
-  }catch(e){
-    setSyncStatus('error','Load failed: '+e.message);
-    loadLocal(); showProjectList();
-  }
+    if(token){const meta=await fetch(GH_API,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});if(meta.ok){ghSha=(await meta.json()).sha;}}
+    saveLocal();setSyncStatus('synced','Synced');showProjectList();
+  }catch(e){setSyncStatus('error','Load failed');loadLocal();showProjectList();}
 }
 
 async function saveData(){
   saveLocal();
-  const token=getGHToken();
-  if(!token) return;
+  const token=getGHToken();if(!token)return;
   setSyncStatus('syncing','Saving…');
   try{
     const body={message:'Update prefab projects',content:btoa(unescape(encodeURIComponent(JSON.stringify(projects,null,2))))};
-    if(ghSha) body.sha=ghSha;
+    if(ghSha)body.sha=ghSha;
     const res=await fetch(GH_API,{method:'PUT',headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
-    if(!res.ok) throw new Error('HTTP '+res.status);
-    ghSha=(await res.json()).content.sha;
-    setSyncStatus('synced','Saved ✓');
-  }catch(e){ setSyncStatus('error','Save failed'); }
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    ghSha=(await res.json()).content.sha;setSyncStatus('synced','Saved ✓');
+  }catch(e){setSyncStatus('error','Save failed');}
 }
 
-function setSyncStatus(state,text){
-  const dot=document.getElementById('syncDot');
-  const lbl=document.getElementById('syncText');
-  if(!dot||!lbl) return;
-  dot.className='sync-dot'+(state?' '+state:'');
-  lbl.textContent=text;
-}
-function genId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function tsNow(){return new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});}
 
-/* ── GitHub token modal ── */
-function openTokenModal(){ document.getElementById('ghTokenInput').value=getGHToken(); document.getElementById('tokenModal').style.display='flex'; }
-function closeTokenModal(){ document.getElementById('tokenModal').style.display='none'; }
-function saveToken(){
-  const t=document.getElementById('ghTokenInput').value.trim();
-  if(!t){ alert('Enter a token.'); return; }
-  localStorage.setItem('prefab_gh_token',t);
-  closeTokenModal();
-  loadFromGitHub();
-}
+/* Token */
+function openTokenModal(){document.getElementById('ghTokenInput').value=getGHToken();document.getElementById('tokenModal').style.display='flex';}
+function closeTokenModal(){document.getElementById('tokenModal').style.display='none';}
+function saveToken(){const t=document.getElementById('ghTokenInput').value.trim();if(!t){alert('Enter a token.');return;}localStorage.setItem('prefab_gh_token',t);closeTokenModal();loadFromGitHub();}
 
-/* ── Assembler name ── */
-function openSetName(){ document.getElementById('nameInput').value=assemblerName; document.getElementById('nameModal').style.display='flex'; }
-function closeSetName(){ document.getElementById('nameModal').style.display='none'; }
+/* Name */
+function openSetName(){document.getElementById('nameInput').value=assemblerName;document.getElementById('nameModal').style.display='flex';}
+function closeSetName(){document.getElementById('nameModal').style.display='none';}
 function saveName(){
-  const n=document.getElementById('nameInput').value.trim();
-  if(!n){ alert('Enter your name.'); return; }
-  assemblerName=n; localStorage.setItem('prefab_assembler',n);
+  const n=document.getElementById('nameInput').value.trim();if(!n){alert('Enter your name.');return;}
+  assemblerName=n;localStorage.setItem('prefab_assembler',n);
   document.getElementById('assemblerNameDisplay').textContent=assemblerName;
   closeSetName();
+  const pending=localStorage.getItem('_pendingProject');
+  if(pending){localStorage.removeItem('_pendingProject');openProject(pending);}
 }
 function updateAssemblerBar(){
   const show=!!currentProject;
@@ -319,122 +300,81 @@ function updateAssemblerBar(){
   document.getElementById('assemblerNameDisplay').textContent=assemblerName||'Not set';
 }
 
-/* ── File parsing ── */
+/* File parsing */
 function parseCSVText(text){
   return text.split('\n').filter(l=>l.trim()).map(line=>{
-    const cols=[]; let cur='',inQ=false;
-    for(const c of line){ if(c==='"')inQ=!inQ; else if(c===','&&!inQ){cols.push(cur.trim());cur='';}else cur+=c; }
-    cols.push(cur.trim()); return cols;
+    const cols=[];let cur='',inQ=false;
+    for(const c of line){if(c==='"')inQ=!inQ;else if(c===','&&!inQ){cols.push(cur.trim());cur='';}else cur+=c;}
+    cols.push(cur.trim());return cols;
   });
 }
-
 function parseAssemblies(rows){
-  if(rows.length<2) throw new Error('File appears empty');
+  if(rows.length<2)throw new Error('File appears empty');
   const hdr=rows[0].map(h=>String(h||'').toLowerCase().trim());
-  const ci=(names)=>{ for(const n of names){ const i=hdr.findIndex(h=>h.includes(n)); if(i!==-1)return i; } return -1; };
-  const iRoom=ci(['room']), iLabel=ci(['id label','label','id']), iCode=ci(['assembly code','code','assembly']);
-  const iPlaster=ci(['plaster']), iWire=ci(['wire connector','wire']), iPigtail=ci(['pigtail']);
-  const iD1=ci(['device 1']), iD2=ci(['device 2']), iD3=ci(['device 3']), iD4=ci(['device 4']);
-  const iStatus=ci(['status']);
-
+  const ci=(names)=>{for(const n of names){const i=hdr.findIndex(h=>h.includes(n));if(i!==-1)return i;}return -1;};
+  const iRoom=ci(['room']),iLabel=ci(['id label','label','id']),iCode=ci(['assembly code','code','assembly']);
+  const iPlaster=ci(['plaster']),iWire=ci(['wire connector','wire']),iPigtail=ci(['pigtail']);
+  const iD1=ci(['device 1']),iD2=ci(['device 2']),iD3=ci(['device 3']),iD4=ci(['device 4']),iStatus=ci(['status']);
   const assemblies=[];
   for(let i=1;i<rows.length;i++){
     const r=rows[i];
     const get=(idx)=>idx!==-1?String(r[idx]||'').trim():'';
-    const status=get(iStatus);
-    if(status.toUpperCase()==='NOT FOUND') continue;
-    const label=get(iLabel);
-    if(!label) continue;
-    const devices=[get(iD1),get(iD2),get(iD3),get(iD4)].filter(d=>d);
-    assemblies.push({
-      id:genId(), room:get(iRoom)||'?', labelId:label, code:get(iCode),
-      plaster:get(iPlaster), wire:get(iWire), pigtail:get(iPigtail),
-      devices, batchDone:false, labelDone:false,
-      batchDoneAt:null, batchDoneBy:null, labelDoneAt:null, labelDoneBy:null
-    });
+    if(get(iStatus).toUpperCase()==='NOT FOUND')continue;
+    const label=get(iLabel);if(!label)continue;
+    assemblies.push({id:genId(),room:get(iRoom)||'?',labelId:label,code:get(iCode),
+      plaster:get(iPlaster),wire:get(iWire),pigtail:get(iPigtail),
+      devices:[get(iD1),get(iD2),get(iD3),get(iD4)].filter(d=>d),
+      batchDone:false,labelDone:false,batchDoneAt:null,batchDoneBy:null,labelDoneAt:null,labelDoneBy:null});
   }
   return assemblies;
 }
 
-/* ── Text formatting ── */
-function stripAdj(s){ return s.replace(/[\/,]?\s*Adj(ustable)?/gi,'').replace(/Adj(ustable)?\s*[\/,]?\s*/gi,'').trim(); }
-
-function getGang(s){
-  const m=s.match(/\b([1-4])\s*[Gg](ang)?\b/);
-  return m?m[1]+'G':'';
-}
-
-function formatDevice(s){
-  return s.replace(/\s*\(\d+\)\s*/g,'').trim().split('/').map(p=>p.trim()).filter(p=>p);
-}
-
-function formatWire(s){ return s.replace(/\s*\(\d+\)\s*/g,'').trim(); }
-
-/* ── Compact single-line description ── */
-// Returns plain text: "1G / 5-20R - Duplex - White"
+/* Formatting */
+function stripAdj(s){return s.replace(/[\/,]?\s*Adj(ustable)?/gi,'').replace(/Adj(ustable)?\s*[\/,]?\s*/gi,'').trim();}
+function getGang(s){const m=s.match(/\b([1-4])\s*[Gg](ang)?\b/);return m?m[1]+'G':'';}
+function formatDevice(s){return s.replace(/\s*\(\d+\)\s*/g,'').trim().split('/').map(p=>p.trim()).filter(p=>p);}
+function formatWire(s){return s.replace(/\s*\(\d+\)\s*/g,'').trim();}
 function assemblyLine(a){
   const gang=a.plaster?getGang(stripAdj(a.plaster)):'';
   const devParts=a.devices.length?formatDevice(a.devices[0]).join(' - '):'';
-  const parts=[gang,devParts].filter(p=>p);
-  return parts.join(' / ');
+  return [gang,devParts].filter(p=>p).join(' / ');
 }
-
-/* ── Colored HTML description ── */
-// "1G / 5-20R - Duplex - GFCI - White"
+const gradeRe=/hospital\s+grade|commercial\s+grade|specification\s+grade|residential\s+grade/gi;
 function assemblyHTML(a){
   const gang=a.plaster?getGang(stripAdj(a.plaster)):'';
-  const gangHTML=gang?`<span class="seg seg-gang">${esc(gang)}</span>`:'';
-
-  // Grade keywords to extract and show smaller
-  const gradeWords=/hospital\s+grade|commercial\s+grade|specification\s+grade|residential\s+grade/gi;
-
+  const gangHTML=gang?`<span class="seg-gang">${esc(gang)}</span>`:'';
   const devHTMLParts=a.devices.map(d=>{
-    const parts=formatDevice(d);
-    let grade='';
-    const filtered=parts.filter(p=>{
-      if(gradeWords.test(p)){ grade=p; return false; }
-      return true;
-    });
+    const parts=formatDevice(d);let grade='';
+    const filtered=parts.filter(p=>{if(gradeRe.test(p)){grade=p;return false;}return true;});
+    gradeRe.lastIndex=0;
     const main=filtered.map(p=>`<span class="seg">${esc(p)}</span>`).join('<span class="seg-sep"> - </span>');
-    const gradeHTML=grade?` <span style="font-size:11px;color:var(--text3);font-family:var(--mono);font-weight:400;">${esc(grade)}</span>`:'';
-    return main+gradeHTML;
+    return main+(grade?`<span class="seg-grade">${esc(grade)}</span>`:'');
   });
-
   const pieces=[];
-  if(gangHTML) pieces.push(gangHTML);
-  if(devHTMLParts.length) pieces.push(devHTMLParts.join('<span class="seg-sep"> + </span>'));
-
+  if(gangHTML)pieces.push(gangHTML);
+  if(devHTMLParts.length)pieces.push(devHTMLParts.join('<span class="seg-sep"> + </span>'));
   return pieces.join('<span class="seg-sep"> / </span>');
 }
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function tsNow(){ return new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}); }
-
-/* ── Batch grouping — keyed by index to avoid special char issues ── */
+/* Batch grouping */
 function buildBatches(assemblies){
   const map=new Map();
   assemblies.forEach((a,idx)=>{
     const gang=a.plaster?getGang(stripAdj(a.plaster)):'';
     const devKey=a.devices.map(d=>formatDevice(d).join('|')).join('::');
     const key=`${gang}||${devKey}`;
-    if(!map.has(key)) map.set(key,{key, gang, devices:a.devices, wire:a.wire, pigtail:a.pigtail, indices:[], count:0});
-    map.get(key).indices.push(idx);
-    map.get(key).count++;
+    if(!map.has(key))map.set(key,{key,gang,devices:a.devices,indices:[],count:0});
+    map.get(key).indices.push(idx);map.get(key).count++;
   });
   return Array.from(map.values());
 }
+function isBatchDone(batch,assemblies){return batch.indices.every(i=>assemblies[i].batchDone);}
 
-function isBatchDone(batch, assemblies){
-  return batch.indices.every(i=>assemblies[i].batchDone);
-}
-
-/* ── Project list ── */
-function updateStatus(projectId, status){
-  const p = projects.find(x=>x.id===projectId);
-  if(!p) return;
-  p.status = status;
-  saveData();
-  showProjectList();
+/* Project list */
+function updateStatus(projectId,status){
+  const p=projects.find(x=>x.id===projectId);if(!p)return;
+  p.status=status;saveData();showProjectList();
 }
 
 function showProjectList(){
@@ -443,152 +383,112 @@ function showProjectList(){
   document.getElementById('progressWrap').style.display='none';
   document.getElementById('backBtn').style.display='none';
   document.getElementById('newProjectBtn').style.display='';
-  document.getElementById('projectTitleEl').style.display='none';
-  document.getElementById('logoSub').style.display='';
+  document.getElementById('headerProject').style.display='none';
+  document.getElementById('headerApp').style.display='';
   updateAssemblerBar();
   const el=document.getElementById('mainContent');
-  const hasToken=!!getGHToken();
-  if(!projects.length){
-    el.innerHTML='<div class="empty"><div class="empty-icon">📦</div>No projects yet.<br/>Tap "+ New Project" to upload an assembly file.</div>';
-    return;
-  }
+  if(!projects.length){el.innerHTML='<div class="empty"><div class="empty-icon">📋</div>No projects yet.<br/>Tap "+ New" to upload an assembly file.</div>';return;}
   el.innerHTML=projects.map(p=>{
-    const total=p.assemblies.length, done=p.assemblies.filter(a=>a.labelDone).length;
+    const total=p.assemblies.length,done=p.assemblies.filter(a=>a.labelDone).length;
     const pct=total?Math.round((done/total)*100):0;
-    return `<div class="project-card" onclick="openProject('${p.id}')">
-      <div style="flex:1;">
-        <div class="project-name">${esc(p.name)}</div>
-        <div class="project-meta">${p.num?'#'+esc(p.num)+' · ':''}${total} assemblies</div>
+    const status=p.status||'inprogress';
+    const color=STATUS_COLORS[status]||'#5b9cf6';
+    const boxes=p.boxCount?`📦 ${p.boxCount} box${p.boxCount>1?'es':''}`:'';
+    const onSite=p.onSiteDate?'📅 '+new Date(p.onSiteDate).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';
+    return `<div class="project-card">
+      <div class="project-card-info" onclick="openProject('${p.id}')">
+        <div class="project-name">${esc(p.name)}${p.num?` <span style="font-size:11px;font-weight:400;color:var(--text3);">#${esc(p.num)}</span>`:''}</div>
+        <div class="project-meta">${total} assemblies${boxes?' · '+boxes:''}${onSite?' · '+onSite:''}</div>
         <div class="project-prog">
           <div class="progress-bar-outer"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-          <span style="font-family:var(--mono);font-size:11px;color:var(--text2)">${done}/${total}</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--text2);margin-right:6px;">${done}/${total}</span>
+          <span style="font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:99px;background:${color}22;color:${color};">${STATUS_LABELS[status]||status}</span>
         </div>
       </div>
-      <div style="color:var(--text3);font-size:22px;padding-left:8px;">›</div>
+      <select class="status-select" onchange="updateStatus('${p.id}',this.value)" onclick="event.stopPropagation()">
+        <option value="inprogress" ${status==='inprogress'?'selected':''}>In Progress</option>
+        <option value="ready" ${status==='ready'?'selected':''}>Ready for Delivery</option>
+        <option value="shipped" ${status==='shipped'?'selected':''}>Shipped</option>
+        <option value="received" ${status==='received'?'selected':''}>Received</option>
+      </select>
     </div>`;
   }).join('');
 }
 
 function openProject(id){
-  if(!assemblerName){ 
-    localStorage.setItem('_pendingProject',id);
-    openSetName(); return; 
-  }
-  currentProject=projects.find(p=>p.id===id);
-  if(!currentProject) return;
+  if(!assemblerName){localStorage.setItem('_pendingProject',id);openSetName();return;}
+  currentProject=projects.find(p=>p.id===id);if(!currentProject)return;
   document.getElementById('phaseTabs').style.display='flex';
   document.getElementById('progressWrap').style.display='flex';
   document.getElementById('backBtn').style.display='';
   document.getElementById('newProjectBtn').style.display='none';
-  document.getElementById('projectTitleEl').textContent=currentProject.name+(currentProject.num?' — #'+currentProject.num:'');
-  document.getElementById('projectTitleEl').style.display='';
-  document.getElementById('logoSub').style.display='none';
-  updateAssemblerBar();
-  showPhase(1);
+  document.getElementById('headerProject').textContent=currentProject.name;
+  document.getElementById('headerProject').style.display='';
+  document.getElementById('headerApp').style.display='none';
+  updateAssemblerBar();showPhase(1);
 }
 
-// After setting name, check if we had a pending project
-const _origSaveName = saveName;
-function saveName(){
-  const n=document.getElementById('nameInput').value.trim();
-  if(!n){ alert('Enter your name.'); return; }
-  assemblerName=n; localStorage.setItem('prefab_assembler',n);
-  document.getElementById('assemblerNameDisplay').textContent=assemblerName;
-  closeSetName();
-  const pending=localStorage.getItem('_pendingProject');
-  if(pending){ localStorage.removeItem('_pendingProject'); openProject(pending); }
-}
-
-/* ── Phase navigation ── */
 function showPhase(n){
   currentPhase=n;
   [1,2,3].forEach(i=>document.getElementById('ptab'+i).classList.toggle('active',i===n));
-  if(n===1) renderPhase1();
-  else if(n===2) renderPhase2();
-  else renderPhase3();
+  if(n===1)renderPhase1();else if(n===2)renderPhase2();else renderPhase3();
   updateProgress();
 }
-
 function updateProgress(){
-  if(!currentProject) return;
-  const total=currentProject.assemblies.length;
-  const done=currentProject.assemblies.filter(a=>a.labelDone).length;
+  if(!currentProject)return;
+  const total=currentProject.assemblies.length,done=currentProject.assemblies.filter(a=>a.labelDone).length;
   const pct=total?Math.round((done/total)*100):0;
   document.getElementById('progressLabel').textContent=`${done} / ${total} labeled`;
   document.getElementById('progressFill').style.width=pct+'%';
   document.getElementById('progressPct').textContent=pct+'%';
 }
 
-/* ── Phase 1: Batch Build ── */
+/* Phase 1 */
 function renderPhase1(){
   const batches=buildBatches(currentProject.assemblies);
   const pending=batches.filter(b=>!isBatchDone(b,currentProject.assemblies));
   const done=batches.filter(b=>isBatchDone(b,currentProject.assemblies));
   let html='';
-
-  const renderBatch=(b)=>{
+  const renderBatch=b=>{
     const isDone=isBatchDone(b,currentProject.assemblies);
     const firstA=currentProject.assemblies[b.indices[0]];
     const signoff=isDone&&firstA.batchDoneBy?`✓ ${esc(firstA.batchDoneBy)} · ${esc(firstA.batchDoneAt)}`:'';
+    const indicesStr=b.indices.join(',');
     return `<div class="batch-item ${isDone?'done-batch':''}">
-      <div class="batch-check ${isDone?'checked':''}" onclick="toggleBatch(${b.indices.map(i=>i).join(',')})">
-        ${isDone?'✓':''}
-      </div>
+      <div class="batch-check ${isDone?'checked':''}" onclick="toggleBatch('${indicesStr}')">${isDone?'✓':''}</div>
       <div class="batch-info">
         <div class="batch-line">
-          <span class="batch-qty">${b.count}</span>
-          <span class="batch-qty-label">Qty</span>
+          <span class="batch-qty">${b.count}</span><span class="batch-qty-label">Qty</span>
           <span class="batch-desc">${assemblyHTML(firstA)}</span>
         </div>
-        <div style="font-size:12px;color:var(--text3);font-family:var(--mono);margin-top:6px;">+ Wire Connectors &nbsp;·&nbsp; + Black, White &amp; Green Pigtails</div>
+        <div class="batch-footer">+ Wire Connectors &nbsp;·&nbsp; + Black, White &amp; Green Pigtails</div>
         ${signoff?`<div class="batch-signoff">${signoff}</div>`:''}
       </div>
     </div>`;
   };
-
-  if(pending.length){
-    html+=`<div class="batch-section"><div class="batch-section-header">To Build — ${pending.length} type${pending.length!==1?'s':''}</div>`;
-    html+=pending.map(renderBatch).join('');
-    html+=`</div>`;
-  }
-  if(done.length){
-    html+=`<div class="batch-section" style="margin-top:10px;"><div class="batch-section-header">Done — ${done.length} type${done.length!==1?'s':''}</div>`;
-    html+=done.map(renderBatch).join('');
-    html+=`</div>`;
-  }
-  if(!batches.length) html='<div class="empty">No assemblies found.</div>';
+  if(pending.length){html+=`<div class="batch-section"><div class="section-hdr">To Build — ${pending.length} type${pending.length!==1?'s':''}</div>${pending.map(renderBatch).join('')}</div>`;}
+  if(done.length){html+=`<div class="batch-section" style="margin-top:10px;"><div class="section-hdr">Done — ${done.length} type${done.length!==1?'s':''}</div>${done.map(renderBatch).join('')}</div>`;}
+  if(!batches.length)html='<div class="empty">No assemblies found.</div>';
   document.getElementById('mainContent').innerHTML=html;
 }
-
-function toggleBatch(...indices){
+function toggleBatch(indicesStr){
+  const indices=indicesStr.split(',').map(Number);
   const assemblies=currentProject.assemblies;
-  const allDone=indices.every(i=>assemblies[i].batchDone);
-  const newDone=!allDone;
-  const ts=tsNow();
-  indices.forEach(i=>{
-    if(!assemblies[i]) return;
-    assemblies[i].batchDone=newDone;
-    assemblies[i].batchDoneAt=newDone?ts:null;
-    assemblies[i].batchDoneBy=newDone?assemblerName:null;
-  });
-  saveData(); renderPhase1(); updateProgress();
+  const allDone=indices.every(i=>assemblies[i]&&assemblies[i].batchDone);
+  const newDone=!allDone,ts=tsNow();
+  indices.forEach(i=>{if(!assemblies[i])return;assemblies[i].batchDone=newDone;assemblies[i].batchDoneAt=newDone?ts:null;assemblies[i].batchDoneBy=newDone?assemblerName:null;});
+  saveData();renderPhase1();updateProgress();
 }
 
-/* ── Phase 2: Label & Sort ── */
+/* Phase 2 */
 function renderPhase2(){
   const byRoom={};
-  currentProject.assemblies.forEach((a,idx)=>{
-    const r=a.room||'?';
-    if(!byRoom[r]) byRoom[r]=[];
-    byRoom[r].push({a,idx});
-  });
+  currentProject.assemblies.forEach((a,idx)=>{const r=a.room||'?';if(!byRoom[r])byRoom[r]=[];byRoom[r].push({a,idx});});
   const rooms=Object.keys(byRoom).sort();
   let html='';
   rooms.forEach(room=>{
-    const items=byRoom[room];
-    const doneCount=items.filter(({a})=>a.labelDone).length;
-    html+=`<div class="room-section">
-      <div class="room-header"><span>Room ${esc(room)}</span><span class="room-count">${doneCount}/${items.length}</span></div>`;
+    const items=byRoom[room],doneCount=items.filter(({a})=>a.labelDone).length;
+    html+=`<div class="room-section"><div class="room-hdr"><span>Room ${esc(room)}</span><span class="room-count">${doneCount}/${items.length}</span></div>`;
     items.forEach(({a,idx})=>{
       html+=`<div class="label-item ${a.labelDone?'done-label':''}">
         <div class="label-check ${a.labelDone?'checked':''}" onclick="toggleLabel(${idx})">${a.labelDone?'✓':''}</div>
@@ -603,84 +503,62 @@ function renderPhase2(){
   });
   document.getElementById('mainContent').innerHTML=html;
 }
-
 function toggleLabel(idx){
-  const a=currentProject.assemblies[idx];
-  if(!a) return;
-  a.labelDone=!a.labelDone;
-  a.labelDoneAt=a.labelDone?tsNow():null;
-  a.labelDoneBy=a.labelDone?assemblerName:null;
-  saveData(); renderPhase2(); updateProgress();
+  const a=currentProject.assemblies[idx];if(!a)return;
+  a.labelDone=!a.labelDone;a.labelDoneAt=a.labelDone?tsNow():null;a.labelDoneBy=a.labelDone?assemblerName:null;
+  saveData();renderPhase2();updateProgress();
 }
 
-/* ── Phase 3: Packing List ── */
+/* Phase 3 */
 function renderPhase3(){
   const byRoom={};
-  currentProject.assemblies.forEach(a=>{
-    const r=a.room||'?';
-    if(!byRoom[r]) byRoom[r]=[];
-    byRoom[r].push(a);
-  });
+  currentProject.assemblies.forEach(a=>{const r=a.room||'?';if(!byRoom[r])byRoom[r]=[];byRoom[r].push(a);});
   const rooms=Object.keys(byRoom).sort();
-  let html=`<div class="print-btn-wrap no-print">
-    <button class="btn btn-print" onclick="window.print()">🖨 Print Packing List</button>
-  </div>
-  <div class="pack-header">${esc(currentProject.name)}${currentProject.num?' — #'+esc(currentProject.num):''}</div>`;
+  const onSite=currentProject.onSiteDate?new Date(currentProject.onSiteDate).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}):'';
+  let html=`<div class="print-btn-wrap no-print"><button class="btn" onclick="window.print()">🖨 Print Packing List</button></div>
+  <div class="pack-header">${esc(currentProject.name)}</div>
+  <div class="pack-subheader">${currentProject.num?'#'+esc(currentProject.num)+' · ':''}${currentProject.assemblies.length} assemblies${onSite?' · On site: '+onSite:''}</div>`;
   rooms.forEach(room=>{
     html+=`<div class="pack-room"><div class="pack-room-title">Room ${esc(room)}</div>`;
     byRoom[room].forEach(a=>{
       const desc=assemblyLine(a);
-      html+=`<div class="pack-item">
-        <div class="pack-label">${esc(a.labelId)}</div>
-        <div class="pack-desc">${esc(desc||a.code)}</div>
-        <div class="pack-status ${a.labelDone?'done':'pending'}">${a.labelDone?'✓':''}</div>
-      </div>`;
+      html+=`<div class="pack-item"><div class="pack-label-id">${esc(a.labelId)}</div><div class="pack-desc">${esc(desc||a.code)}</div><div class="pack-status ${a.labelDone?'done':'pending'}">${a.labelDone?'✓':''}</div></div>`;
     });
     html+=`</div>`;
   });
   document.getElementById('mainContent').innerHTML=html;
 }
 
-/* ── New project ── */
-function openNewProject(){ document.getElementById('newProjectModal').style.display='flex'; document.getElementById('npName').value=''; document.getElementById('npNum').value=''; document.getElementById('npFile').value=''; }
-function closeNewProject(){ document.getElementById('newProjectModal').style.display='none'; }
-
+/* New project */
+function openNewProject(){document.getElementById('newProjectModal').style.display='flex';['npName','npNum','npBoxes','npOnSite'].forEach(id=>document.getElementById(id).value='');document.getElementById('npFile').value='';}
+function closeNewProject(){document.getElementById('newProjectModal').style.display='none';}
 function createProject(){
   const name=document.getElementById('npName').value.trim();
   const num=document.getElementById('npNum').value.trim();
   const file=document.getElementById('npFile').files[0];
-  if(!name){ alert('Enter a project name.'); return; }
-  if(!file){ alert('Select a file.'); return; }
+  if(!name){alert('Enter a project name.');return;}
+  if(!file){alert('Select a file.');return;}
   const isXLSX=/\.xlsx?$/i.test(file.name);
   const reader=new FileReader();
   reader.onload=function(e){
     try{
       let rows;
-      if(isXLSX){
-        const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
-        const ws=wb.Sheets[wb.SheetNames[0]];
-        rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
-      } else {
-        rows=parseCSVText(e.target.result);
-      }
+      if(isXLSX){const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:''});}
+      else{rows=parseCSVText(e.target.result);}
       const assemblies=parseAssemblies(rows);
-      if(!assemblies.length){ alert('No assemblies found. Make sure the file has an ID Label column and data rows.'); return; }
-      const boxes=parseInt(document.getElementById('npBoxes').value)||0;
+      if(!assemblies.length){alert('No assemblies found. Check the file has an ID Label column and data rows.');return;}
+      const boxes=parseInt(document.getElementById('npBoxes').value)||null;
       const onSiteDate=document.getElementById('npOnSite').value||'';
-      const project={id:genId(),name,num,assemblies,createdAt:Date.now(),status:'inprogress',boxCount:boxes||null,onSiteDate};
-      projects.unshift(project);
-      saveData(); closeNewProject();
-      if(!assemblerName){ localStorage.setItem('_pendingProject',project.id); openSetName(); }
+      const project={id:genId(),name,num,assemblies,createdAt:Date.now(),status:'inprogress',boxCount:boxes,onSiteDate};
+      projects.unshift(project);saveData();closeNewProject();
+      if(!assemblerName){localStorage.setItem('_pendingProject',project.id);openSetName();}
       else openProject(project.id);
-    }catch(err){ alert('Error reading file: '+err.message); }
+    }catch(err){alert('Error reading file: '+err.message);}
   };
-  if(isXLSX) reader.readAsArrayBuffer(file);
-  else reader.readAsText(file);
+  if(isXLSX)reader.readAsArrayBuffer(file);else reader.readAsText(file);
 }
 
-/* ── Init ── */
-if(!getGHToken()) openTokenModal();
-else loadFromGitHub();
+loadFromGitHub();
 </script>
 </body>
 </html>
