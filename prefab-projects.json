@@ -15,12 +15,12 @@
         "devices": [
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
-        "batchDone": false,
-        "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "batchDone": true,
+        "labelDone": true,
+        "batchDoneAt": "May 12, 2:04 PM",
+        "batchDoneBy": "James",
+        "labelDoneAt": "May 12, 2:37 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp2wn0gt67co",
@@ -33,12 +33,12 @@
         "devices": [
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
-        "batchDone": false,
-        "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "batchDone": true,
+        "labelDone": true,
+        "batchDoneAt": "May 12, 2:04 PM",
+        "batchDoneBy": "James",
+        "labelDoneAt": "May 12, 2:37 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp2wn0gttle5",
@@ -51,12 +51,12 @@
         "devices": [
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
-        "batchDone": false,
-        "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "batchDone": true,
+        "labelDone": true,
+        "batchDoneAt": "May 12, 2:04 PM",
+        "batchDoneBy": "James",
+        "labelDoneAt": "May 12, 2:37 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp2wn0gtz45y",
@@ -69,12 +69,12 @@
         "devices": [
           "5-20R - DUPLEX / Commercial Grade / GFCI / White (1)"
         ],
-        "batchDone": false,
-        "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "batchDone": true,
+        "labelDone": true,
+        "batchDoneAt": "May 12, 2:04 PM",
+        "batchDoneBy": "James",
+        "labelDoneAt": "May 12, 2:37 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp2wn0gtedy4",
@@ -87,12 +87,12 @@
         "devices": [
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
-        "batchDone": false,
-        "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "batchDone": true,
+        "labelDone": true,
+        "batchDoneAt": "May 12, 2:04 PM",
+        "batchDoneBy": "James",
+        "labelDoneAt": "May 12, 2:37 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp2wn0gtg0gg",
@@ -105,12 +105,12 @@
         "devices": [
           "5-20R - DUPLEX / Commercial Grade / GFCI / White (1)"
         ],
-        "batchDone": false,
-        "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "batchDone": true,
+        "labelDone": true,
+        "batchDoneAt": "May 12, 2:04 PM",
+        "batchDoneBy": "James",
+        "labelDoneAt": "May 12, 2:37 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp2wn0gtgxb6",
@@ -123,12 +123,12 @@
         "devices": [
           "5-20R - DUPLEX / Commercial Grade / Tamper Resistant / White (1)"
         ],
-        "batchDone": false,
-        "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "batchDone": true,
+        "labelDone": true,
+        "batchDoneAt": "May 12, 2:04 PM",
+        "batchDoneBy": "James",
+        "labelDoneAt": "May 12, 2:37 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp2wn0gth64b",
@@ -140,11 +140,11 @@
         "pigtail": "",
         "devices": [],
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 12, 2:37 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp2wn0gt3zl2",
@@ -157,12 +157,12 @@
         "devices": [
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
-        "batchDone": false,
-        "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "batchDone": true,
+        "labelDone": true,
+        "batchDoneAt": "May 12, 2:04 PM",
+        "batchDoneBy": "James",
+        "labelDoneAt": "May 12, 2:37 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp2wn0gtbspl",
@@ -175,12 +175,12 @@
         "devices": [
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
-        "batchDone": false,
-        "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "batchDone": true,
+        "labelDone": true,
+        "batchDoneAt": "May 12, 2:04 PM",
+        "batchDoneBy": "James",
+        "labelDoneAt": "May 12, 2:37 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp2wn0gticcn",
@@ -193,10 +193,10 @@
         "devices": [
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
-        "batchDone": false,
+        "batchDone": true,
         "labelDone": true,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
+        "batchDoneAt": "May 12, 2:04 PM",
+        "batchDoneBy": "James",
         "labelDoneAt": "May 12, 2:37 PM",
         "labelDoneBy": "James"
       }
