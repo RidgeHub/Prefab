@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Assembly Lookup — Ridgeline Electrical</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root {
+    --bg:#0f1117;--surface:#181c27;--surface2:#1e2333;
+    --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+    --accent:#f0a500;--accent2:#e06c1a;
+    --text:#e8eaf0;--text2:#8b91a8;--text3:#555b72;
+    --green:#2ecc8a;--green-bg:rgba(46,204,138,0.1);
+    --red:#e05555;--red-bg:rgba(224,85,85,0.1);
+    --yellow-bg:rgba(240,165,0,0.08);
+    --radius:8px;--radius-lg:12px;
+    --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;min-height:100vh;line-height:1.6}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+  .app{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem}
+  header{margin-bottom:2rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo-mark{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:500;font-size:14px;color:#000}
+  .logo-text{font-size:16px;font-weight:500}
+  .logo-sub{font-size:12px;color:var(--text2);font-family:var(--mono)}
+  .version-tag{font-family:var(--mono);font-size:11px;color:var(--accent);border:1px solid rgba(240,165,0,0.3);border-radius:4px;padding:3px 8px;align-self:center}
+
+  .master-bar{border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:1rem;flex-wrap:wrap}
+  .master-bar.loading{background:var(--surface2);border:1px solid var(--border2)}
+  .master-bar.ok{background:var(--green-bg);border:1px solid rgba(46,204,138,0.2)}
+  .master-bar.err{background:var(--red-bg);border:1px solid rgba(224,85,85,0.2)}
+  .master-bar-left{display:flex;align-items:center;gap:10px}
+  .master-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .master-dot.spin{background:var(--text3);animation:pulse 1s ease-in-out infinite}
+  .master-dot.ok{background:var(--green)}
+  .master-dot.err{background:var(--red)}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+  .master-label{font-size:13px;font-weight:500}
+  .master-label.ok{color:var(--green)}
+  .master-label.err{color:var(--red)}
+  .master-label.loading{color:var(--text2)}
+  .master-meta{font-size:11px;color:var(--text2);font-family:var(--mono);margin-top:1px}
+  .btn-reload{background:transparent;border:1px solid var(--border2);border-radius:var(--radius);padding:5px 10px;font-size:12px;color:var(--text2);cursor:pointer;font-family:var(--mono)}
+  .btn-reload:hover{border-color:var(--text2);color:var(--text)}
+
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem;transition:border-color 0.2s}
+  .card:hover{border-color:var(--border2)}
+  .card-header{display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+  .step-num{width:22px;height:22px;border-radius:50%;background:var(--yellow-bg);border:1px solid rgba(240,165,0,0.3);font-family:var(--mono);font-size:11px;font-weight:500;color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .card-title{font-size:14px;font-weight:500}
+  .card-hint{font-size:12px;color:var(--text2);margin-top:6px;font-family:var(--mono)}
+
+  input[type=text]{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:9px 12px;font-size:13px;font-family:var(--mono);color:var(--text);outline:none;transition:border-color 0.15s}
+  input[type=text]:focus{border-color:var(--accent)}
+  input[type=text]::placeholder{color:var(--text3)}
+  .input-row{display:flex;gap:8px;align-items:center}
+  .input-row input{flex:1}
+
+  button{cursor:pointer;font-family:var(--sans);font-size:13px;transition:all 0.15s}
+  .btn{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:8px 14px;color:var(--text)}
+  .btn:hover{border-color:var(--text2);background:#242840}
+  .btn-accent{background:var(--accent);border:none;border-radius:var(--radius);padding:9px 18px;color:#000;font-weight:600;font-size:13px}
+  .btn-accent:hover{background:#ffc030}
+  .btn-run{width:100%;background:var(--accent);border:none;border-radius:var(--radius);padding:11px;color:#000;font-weight:600;font-size:14px;letter-spacing:0.02em}
+  .btn-run:hover:not(:disabled){background:#ffc030}
+  .btn-run:disabled{background:#2a2510;color:#5a4e1a;cursor:not-allowed}
+
+  .alert{border-radius:var(--radius);padding:9px 12px;font-size:13px;margin-top:10px;font-family:var(--mono)}
+  .alert-ok{background:var(--green-bg);color:var(--green);border:1px solid rgba(46,204,138,0.2)}
+  .alert-err{background:var(--red-bg);color:var(--red);border:1px solid rgba(224,85,85,0.2)}
+  .alert-info{background:var(--surface2);color:var(--text2);border:1px solid var(--border)}
+  .dimmed{opacity:0.35;pointer-events:none;transition:opacity 0.3s}
+
+  .results{margin-top:1.5rem}
+  .tabs{display:flex;gap:2px;margin-bottom:1px}
+  .tab{background:var(--surface);border:1px solid var(--border);border-bottom:none;border-radius:8px 8px 0 0;padding:8px 18px;font-size:13px;color:var(--text2);cursor:pointer;transition:all 0.15s}
+  .tab:hover{color:var(--text)}
+  .tab.active{background:var(--surface2);color:var(--text);border-color:var(--border2);font-weight:500}
+  .tab-badge{display:inline-block;font-size:10px;font-family:var(--mono);background:var(--surface);border-radius:99px;padding:1px 6px;margin-left:6px;color:var(--text3)}
+  .tab.active .tab-badge{background:var(--border);color:var(--text2)}
+  .tab-content{background:var(--surface2);border:1px solid var(--border2);border-radius:0 var(--radius-lg) var(--radius-lg) var(--radius-lg);padding:1rem}
+  .dl-bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+
+  .table-wrap{overflow:auto;max-height:440px;border-radius:var(--radius);border:1px solid var(--border)}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{position:sticky;top:0;z-index:2;background:var(--surface);padding:8px 12px;text-align:left;font-size:10px;font-weight:500;font-family:var(--mono);color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid var(--border2);white-space:nowrap}
+  td{padding:7px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top;word-break:break-word}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:rgba(255,255,255,0.02)}
+  .badge{display:inline-block;font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:99px}
+  .badge-ok{background:var(--green-bg);color:var(--green);border:1px solid rgba(46,204,138,0.2)}
+  .badge-miss{background:var(--red-bg);color:var(--red);border:1px solid rgba(224,85,85,0.2)}
+  .bom-qty{font-family:var(--mono);font-weight:500;color:var(--accent)}
+  .qty-tag{font-family:var(--mono);font-size:11px;color:var(--accent);margin-left:2px}
+  .empty-state{text-align:center;padding:2rem;color:var(--text3);font-family:var(--mono);font-size:12px}
+  @media(max-width:600px){.app{padding:1rem 1rem 3rem}header{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo">
+      <div class="logo-mark">RE</div>
+      <div>
+        <div class="logo-text">Assembly Lookup</div>
+        <div class="logo-sub">Ridgeline Electrical Industries</div>
+      </div>
+    </div>
+    <div class="version-tag">v2.1</div>
+  </header>
+
+  <div class="master-bar loading" id="masterBar">
+    <div class="master-bar-left">
+      <div class="master-dot spin" id="masterDot"></div>
+      <div>
+        <div class="master-label loading" id="masterLabel">Loading master codes…</div>
+        <div class="master-meta" id="masterMeta">RidgeHub/Prefab / master-codes.csv</div>
+      </div>
+    </div>
+    <button class="btn-reload" onclick="fetchMaster()">↺ Reload</button>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="step-num">1</div><div class="card-title">Google Sheet — current project</div></div>
+    <div class="input-row">
+      <input type="text" id="sheetUrl" placeholder="Paste Google Sheet URL…" />
+      <button class="btn-accent" onclick="fetchSheet()">Fetch</button>
+    </div>
+    <p class="card-hint">File → Share → Anyone with the link can view &nbsp;·&nbsp; Col A = Room &nbsp;·&nbsp; B = ID Label &nbsp;·&nbsp; C = Assembly Code</p>
+    <div id="sheetStatus"></div>
+  </div>
+
+  <div class="card" id="runCard">
+    <div class="card-header"><div class="step-num">2</div><div class="card-title">Run lookup &amp; generate bill of materials</div></div>
+    <button class="btn-run" id="runBtn" onclick="runLookup()" disabled>Run lookup →</button>
+  </div>
+
+  <div class="results" id="resultsSection" style="display:none;">
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('filled')" id="tab-filled">Filled sheet <span class="tab-badge" id="cnt-filled">0</span></button>
+      <button class="tab" onclick="showTab('bom')" id="tab-bom">Bill of materials <span class="tab-badge" id="cnt-bom">0</span></button>
+      <button class="tab" onclick="showTab('miss')" id="tab-miss">Unmatched <span class="tab-badge" id="cnt-miss">0</span></button>
+    </div>
+    <div class="tab-content">
+      <div id="pane-filled">
+        <div class="dl-bar">
+          <button class="btn" onclick="downloadCSV('filled')">⬇ Download CSV</button>
+          <button class="btn" onclick="downloadXLSX()">⬇ Download XLSX</button>
+        </div>
+        <div class="table-wrap"><table id="filledTable"><thead></thead><tbody></tbody></table></div>
+      </div>
+      <div id="pane-bom" style="display:none;">
+        <div class="dl-bar"><button class="btn" onclick="downloadCSV('bom')">⬇ Download BOM CSV</button></div>
+        <div class="table-wrap"><table id="bomTable"><thead></thead><tbody></tbody></table></div>
+      </div>
+      <div id="pane-miss" style="display:none;">
+        <div class="table-wrap"><table id="missTable"><thead></thead><tbody></tbody></table></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const MASTER_URL = 'https://raw.githubusercontent.com/RidgeHub/Prefab/main/master-codes.csv';
+let masterMap = {}, projectRows = [];
+let filledData = [], bomData = [], missedCodes = [];
+
+function withQty(item, qty) {
+  return `${item} (${qty})`;
+}
+
+function parseMasterMatrix(text) {
+  const rows = parseCSV(text);
+  if (rows.length < 4) throw new Error('master-codes.csv has too few rows.');
+  const itemNames  = rows[0];
+  const categories = rows[2];
+  const map = {};
+  for (let ri = 3; ri < rows.length; ri++) {
+    const row  = rows[ri];
+    const code = (row[2] || '').trim().toUpperCase();
+    if (!code) continue;
+    const entry = { box:[], plasterRing:[], wireConnector:[], pigtail:[], deviceCover:[], device:[], other:[], rawItems:[] };
+    for (let ci = 3; ci < row.length; ci++) {
+      const val = (row[ci] || '').trim();
+      if (!val || val === '0') continue;
+      const qty  = isNaN(val) ? 1 : Number(val);
+      const cat  = (categories[ci] || '').trim().toLowerCase();
+      const item = (itemNames[ci]  || '').trim();
+      if (!item) continue;
+      entry.rawItems.push({ cat: categories[ci] || '', item, qty });
+      if      (cat === 'box')            entry.box.push({item,qty});
+      else if (cat === 'plaster ring')   entry.plasterRing.push({item,qty});
+      else if (cat === 'wire connector') entry.wireConnector.push({item,qty});
+      else if (cat === 'pigtail')        entry.pigtail.push({item,qty});
+      else if (cat === 'device cover')   entry.deviceCover.push({item,qty});
+      else if (cat === 'device')         entry.device.push({item,qty});
+      else                               entry.other.push({item,qty});
+    }
+    map[code] = entry;
+  }
+  return map;
+}
+
+async function fetchMaster() {
+  setMasterBar('loading','Loading master codes…');
+  try {
+    const res = await fetch(MASTER_URL + '?v=' + Date.now());
+    if (!res.ok) throw new Error(`HTTP ${res.status} — check repo is public and file exists.`);
+    masterMap = parseMasterMatrix(await res.text());
+    setMasterBar('ok', `${Object.keys(masterMap).length} assembly codes loaded`, 'RidgeHub/Prefab / master-codes.csv');
+    checkReady();
+  } catch(e) { setMasterBar('err', `Failed: ${e.message}`); }
+}
+
+function setMasterBar(state, label, meta) {
+  document.getElementById('masterBar').className = `master-bar ${state}`;
+  document.getElementById('masterDot').className = `master-dot ${state==='loading'?'spin':state}`;
+  const lbl = document.getElementById('masterLabel');
+  lbl.className = `master-label ${state}`; lbl.textContent = label;
+  if (meta !== undefined) document.getElementById('masterMeta').textContent = meta;
+}
+
+async function fetchSheet() {
+  const url = document.getElementById('sheetUrl').value.trim();
+  if (!url) { setStatus('sheetStatus','Paste a URL first.','err'); return; }
+  const m = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+  if (!m) { setStatus('sheetStatus','Could not find sheet ID — paste the full Google Sheet URL.','err'); return; }
+  setStatus('sheetStatus','Fetching…','info');
+  try {
+    const res = await fetch(`https://docs.google.com/spreadsheets/d/${m[1]}/export?format=csv`);
+    if (!res.ok) throw new Error('Fetch failed. Make sure the sheet is shared as "Anyone with the link can view".');
+    const text = await res.text();
+    projectRows = parseCSV(text);
+    if (projectRows.length < 2) throw new Error('Sheet appears empty.');
+    setStatus('sheetStatus', `✓ Loaded ${projectRows.length - 1} rows`, 'ok');
+    checkReady();
+  } catch(e) { setStatus('sheetStatus', e.message, 'err'); }
+}
+
+function parseCSV(text) {
+  return text.split('\n').filter(l => l.trim()).map(line => {
+    const cols = []; let cur = '', inQ = false;
+    for (const c of line) {
+      if (c === '"') inQ = !inQ;
+      else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+      else cur += c;
+    }
+    cols.push(cur.trim()); return cols;
+  });
+}
+
+function setStatus(id, msg, type) {
+  document.getElementById(id).innerHTML = msg ? `<div class="alert alert-${type}">${msg}</div>` : '';
+}
+function checkReady() {
+  const ok = projectRows.length > 1 && Object.keys(masterMap).length > 0;
+  document.getElementById('runCard').classList.toggle('dimmed', !ok);
+  document.getElementById('runBtn').disabled = !ok;
+}
+
+function runLookup() {
+  const outHeaders = ['Room','ID Label','Assembly Code','Box','Plaster Ring','Wire Connector','Pigtail','Device Cover','Device 1','Device 2','Device 3','Device 4','Status'];
+  filledData  = [outHeaders];
+  missedCodes = [];
+  const bomRaw = {};
+
+  for (let i = 1; i < projectRows.length; i++) {
+    const r     = projectRows[i];
+    const room  = r[0]||'', label = r[1]||'';
+    const code  = (r[2]||'').trim().toUpperCase();
+    const match = masterMap[code];
+
+    if (!match) {
+      if (code) missedCodes.push(code);
+      filledData.push([room, label, code, '','','','','','','','','', code ? 'NOT FOUND' : '']);
+      continue;
+    }
+
+    const fmt = arr => arr.map(({item,qty}) => withQty(item,qty)).join(' | ');
+
+    const box     = fmt(match.box);
+    const plaster = fmt(match.plasterRing);
+    const wire    = fmt(match.wireConnector);
+    const pigtail = fmt(match.pigtail);
+    const devCov  = fmt(match.deviceCover);
+
+    // devices: up to 4 slots, each with qty in parens if >1
+    const devCells = match.device.slice(0,4).map(({item,qty}) => withQty(item,qty));
+    while (devCells.length < 4) devCells.push('');
+
+    filledData.push([room, label, code, box, plaster, wire, pigtail, devCov, ...devCells, 'OK']);
+
+    // BOM accumulation with actual quantities
+    for (const {item, qty} of match.rawItems) {
+      bomRaw[item] = (bomRaw[item] || 0) + qty;
+    }
+  }
+
+  bomData = [['Item','Total Qty'], ...Object.entries(bomRaw).sort((a,b) => b[1]-a[1])];
+
+  renderFilled(); renderBOM(); renderMiss();
+  document.getElementById('cnt-filled').textContent = filledData.length - 1;
+  document.getElementById('cnt-bom').textContent    = bomData.length - 1;
+  document.getElementById('cnt-miss').textContent   = [...new Set(missedCodes)].length;
+  document.getElementById('resultsSection').style.display = '';
+  showTab('filled');
+  document.getElementById('resultsSection').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function renderFilled() {
+  const t = document.getElementById('filledTable'); t.innerHTML = '';
+  const hr = t.createTHead().insertRow();
+  filledData[0].forEach(h => { const th = document.createElement('th'); th.textContent = h; hr.appendChild(th); });
+  const tbody = t.createTBody();
+  for (let i = 1; i < filledData.length; i++) {
+    const tr = tbody.insertRow();
+    filledData[i].forEach((cell, ci) => {
+      const td = tr.insertCell();
+      const isStatus = ci === filledData[0].length - 1;
+      if (isStatus) {
+        td.innerHTML = cell === 'OK'
+          ? `<span class="badge badge-ok">OK</span>`
+          : cell ? `<span class="badge badge-miss">${cell}</span>` : '';
+      } else {
+        // highlight qty in parens with accent color
+        td.innerHTML = String(cell).replace(/\((\d+)\)/g, '<span class="qty-tag">($1)</span>');
+      }
+    });
+  }
+}
+
+function renderBOM() {
+  const t = document.getElementById('bomTable'); t.innerHTML = '';
+  const hr = t.createTHead().insertRow();
+  ['Item','Total qty'].forEach(h => { const th = document.createElement('th'); th.textContent = h; hr.appendChild(th); });
+  const tbody = t.createTBody();
+  for (let i = 1; i < bomData.length; i++) {
+    const tr = tbody.insertRow();
+    tr.insertCell().textContent = bomData[i][0];
+    tr.insertCell().innerHTML   = `<span class="bom-qty">${bomData[i][1]}</span>`;
+  }
+}
+
+function renderMiss() {
+  const t = document.getElementById('missTable'); t.innerHTML = '';
+  const hr = t.createTHead().insertRow();
+  ['Assembly code','Occurrences'].forEach(h => { const th = document.createElement('th'); th.textContent = h; hr.appendChild(th); });
+  const tbody = t.createTBody();
+  const counts = {};
+  missedCodes.forEach(c => counts[c] = (counts[c]||0)+1);
+  const entries = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  if (!entries.length) {
+    const td = tbody.insertRow().insertCell();
+    td.colSpan = 2; td.className = 'empty-state'; td.textContent = 'All codes matched ✓';
+  } else {
+    entries.forEach(([code,cnt]) => {
+      const tr = tbody.insertRow();
+      tr.insertCell().innerHTML   = `<span class="badge badge-miss">${code}</span>`;
+      tr.insertCell().textContent = cnt;
+    });
+  }
+}
+
+function showTab(name) {
+  ['filled','bom','miss'].forEach(n => {
+    document.getElementById('pane-'+n).style.display = n===name ? '' : 'none';
+    document.getElementById('tab-'+n).classList.toggle('active', n===name);
+  });
+}
+
+function downloadCSV(which) {
+  const data = which === 'filled' ? filledData : bomData;
+  const csv = data.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = which === 'filled' ? 'filled_sheet.csv' : 'bill_of_materials.csv';
+  a.click();
+}
+
+function downloadXLSX() {
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(filledData), 'Filled Sheet');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(bomData), 'Bill of Materials');
+  if (missedCodes.length) {
+    const counts = {};
+    missedCodes.forEach(c => counts[c] = (counts[c]||0)+1);
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Assembly Code','Occurrences'],...Object.entries(counts).sort((a,b)=>b[1]-a[1])]), 'Unmatched');
+  }
+  XLSX.writeFile(wb, 'assembly_lookup_results.xlsx');
+}
+
+fetchMaster();
+</script>
+</body>
+</html>
