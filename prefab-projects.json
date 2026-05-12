@@ -1,5 +1,604 @@
 [
   {
+    "id": "mp30glxuer6j",
+    "name": "The REAL Test Project",
+    "num": "18002",
+    "assemblies": [
+      {
+        "id": "mp30glxuu5e4",
+        "room": "100",
+        "labelId": "100-01",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxu02nq",
+        "room": "100",
+        "labelId": "100-02",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxud497",
+        "room": "100",
+        "labelId": "100-03",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxuw3mi",
+        "room": "100",
+        "labelId": "100-04",
+        "code": "GDGFI",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R - DUPLEX / Commercial Grade / GFCI / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxusc9e",
+        "room": "100",
+        "labelId": "100-05",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxubpxl",
+        "room": "100",
+        "labelId": "100-06",
+        "code": "GDGFI",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R - DUPLEX / Commercial Grade / GFCI / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxurfk3",
+        "room": "100",
+        "labelId": "100-07",
+        "code": "GDTR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R - DUPLEX / Commercial Grade / Tamper Resistant / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxum7ff",
+        "room": "100",
+        "labelId": "100-08",
+        "code": "JBOX",
+        "plaster": "Plaster Ring - Steel / 4x4 / 2G / Ajustable",
+        "wire": "",
+        "pigtail": "",
+        "devices": [],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxu4ppy",
+        "room": "100",
+        "labelId": "100-09",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxus6wx",
+        "room": "100",
+        "labelId": "100-10",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxukhlt",
+        "room": "100",
+        "labelId": "100-11",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxuivs6",
+        "room": "101",
+        "labelId": "101-01",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxul44p",
+        "room": "101",
+        "labelId": "101-02",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxu2e0p",
+        "room": "101",
+        "labelId": "101-03",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxusdfv",
+        "room": "101",
+        "labelId": "101-04",
+        "code": "GDGFI",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R - DUPLEX / Commercial Grade / GFCI / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxudaw9",
+        "room": "101",
+        "labelId": "101-05",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxup4zj",
+        "room": "101",
+        "labelId": "101-06",
+        "code": "GDGFI",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R - DUPLEX / Commercial Grade / GFCI / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxuh9c7",
+        "room": "101",
+        "labelId": "101-07",
+        "code": "GDTR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R - DUPLEX / Commercial Grade / Tamper Resistant / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxu3jtk",
+        "room": "101",
+        "labelId": "101-08",
+        "code": "JBOX",
+        "plaster": "Plaster Ring - Steel / 4x4 / 2G / Ajustable",
+        "wire": "",
+        "pigtail": "",
+        "devices": [],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxue1lv",
+        "room": "101",
+        "labelId": "101-09",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxu8iyu",
+        "room": "101",
+        "labelId": "101-10",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxukp67",
+        "room": "101",
+        "labelId": "101-11",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxubncb",
+        "room": "102",
+        "labelId": "102-01",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxuvi58",
+        "room": "102",
+        "labelId": "102-02",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxu9677",
+        "room": "102",
+        "labelId": "102-03",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxue1ac",
+        "room": "102",
+        "labelId": "102-04",
+        "code": "GDGFI",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R - DUPLEX / Commercial Grade / GFCI / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxu2okm",
+        "room": "102",
+        "labelId": "102-05",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxun5iz",
+        "room": "102",
+        "labelId": "102-06",
+        "code": "GDGFI",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R - DUPLEX / Commercial Grade / GFCI / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxuz60d",
+        "room": "102",
+        "labelId": "102-07",
+        "code": "GDTR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R - DUPLEX / Commercial Grade / Tamper Resistant / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxuxjhj",
+        "room": "102",
+        "labelId": "102-08",
+        "code": "JBOX",
+        "plaster": "Plaster Ring - Steel / 4x4 / 2G / Ajustable",
+        "wire": "",
+        "pigtail": "",
+        "devices": [],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxunt8w",
+        "room": "102",
+        "labelId": "102-09",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxusz2b",
+        "room": "102",
+        "labelId": "102-10",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      },
+      {
+        "id": "mp30glxuz104",
+        "room": "102",
+        "labelId": "102-11",
+        "code": "GDR",
+        "plaster": "Plaster Ring - Steel / 4x4 / 1G / Ajustable",
+        "wire": "Wire Connector / Push-In / 4-Port / Blue (3)",
+        "pigtail": "Pigtail / #12 / Insulated - Black / w/ #10 Fork | Pigtail / #12 / Insulated - White / w/ #10 Fork | Pigtail / #12 / Insulated - Green / w/ #10 Fork",
+        "devices": [
+          "5-20R / DUPLEX / Commercial Grade / White"
+        ],
+        "batchDone": false,
+        "labelDone": false,
+        "batchDoneAt": null,
+        "batchDoneBy": null,
+        "labelDoneAt": null,
+        "labelDoneBy": null
+      }
+    ],
+    "createdAt": 1778613341970,
+    "status": "inprogress",
+    "boxCount": 5,
+    "onSiteDate": "2026-05-15"
+  },
+  {
     "id": "mp30ew01hlup",
     "name": "Test Project",
     "num": "18001",
