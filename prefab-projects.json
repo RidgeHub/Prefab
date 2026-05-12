@@ -194,11 +194,11 @@
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
         "batchDone": false,
-        "labelDone": true,
+        "labelDone": false,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": "May 12, 2:37 PM",
-        "labelDoneBy": "James"
+        "labelDoneAt": null,
+        "labelDoneBy": null
       }
     ],
     "createdAt": 1778606922269
