@@ -1,399 +1,668 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Assembly Lookup — Ridgeline Electrical</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>RidgeHub — Prefab Board</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-  :root {
-    --bg:#0f1117;--surface:#181c27;--surface2:#1e2333;
-    --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
-    --accent:#f0a500;--accent2:#e06c1a;
-    --text:#e8eaf0;--text2:#8b91a8;--text3:#555b72;
-    --green:#2ecc8a;--green-bg:rgba(46,204,138,0.1);
-    --red:#e05555;--red-bg:rgba(224,85,85,0.1);
-    --yellow-bg:rgba(240,165,0,0.08);
-    --radius:8px;--radius-lg:12px;
-    --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;min-height:100vh;line-height:1.6}
-  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
-  .app{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:2rem 1.5rem 4rem}
-  header{margin-bottom:2rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-  .logo{display:flex;align-items:center;gap:10px}
-  .logo-mark{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:500;font-size:14px;color:#000}
-  .logo-text{font-size:16px;font-weight:500}
-  .logo-sub{font-size:12px;color:var(--text2);font-family:var(--mono)}
-  .version-tag{font-family:var(--mono);font-size:11px;color:var(--accent);border:1px solid rgba(240,165,0,0.3);border-radius:4px;padding:3px 8px;align-self:center}
+:root {
+  --bg:#f0ede8;--surface:#faf8f5;--surface2:#e8e4de;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.15);
+  --text:#1a1714;--text2:#6b6560;--text3:#a8a29c;
+  --accent:#c84b2f;--accent2:#e8813a;
+  --green:#2a7a4b;--green-bg:rgba(42,122,75,0.1);
+  --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+  --seg1:#1a1714;--seg2:#1a1714;--seg3:#1a1714;--seg4:#1a1714;
+  --gang:#2a7a4b;
+  --col-plaster:#1a6fba;--col-device:#c84b2f;--col-wire:#7b3fa0;
+  --radius:10px;--card-radius:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(0,0,0,0.04) 1px,transparent 1px);background-size:24px 24px;pointer-events:none;z-index:0}
+.app{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh}
 
-  .master-bar{border-radius:var(--radius);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:1rem;flex-wrap:wrap}
-  .master-bar.loading{background:var(--surface2);border:1px solid var(--border2)}
-  .master-bar.ok{background:var(--green-bg);border:1px solid rgba(46,204,138,0.2)}
-  .master-bar.err{background:var(--red-bg);border:1px solid rgba(224,85,85,0.2)}
-  .master-bar-left{display:flex;align-items:center;gap:10px}
-  .master-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-  .master-dot.spin{background:var(--text3);animation:pulse 1s ease-in-out infinite}
-  .master-dot.ok{background:var(--green)}
-  .master-dot.err{background:var(--red)}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-  .master-label{font-size:13px;font-weight:500}
-  .master-label.ok{color:var(--green)}
-  .master-label.err{color:var(--red)}
-  .master-label.loading{color:var(--text2)}
-  .master-meta{font-size:11px;color:var(--text2);font-family:var(--mono);margin-top:1px}
-  .btn-reload{background:transparent;border:1px solid var(--border2);border-radius:var(--radius);padding:5px 10px;font-size:12px;color:var(--text2);cursor:pointer;font-family:var(--mono)}
-  .btn-reload:hover{border-color:var(--text2);color:var(--text)}
+/* Header */
+header{padding:.875rem 1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--accent);background:var(--surface);position:sticky;top:0;z-index:100;gap:8px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-mark{width:32px;height:32px;border-radius:6px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:500;color:#fff;flex-shrink:0}
+.logo-text{font-size:13px;font-weight:500;color:var(--text2)}
+.project-title{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
+.header-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.btn{background:none;border:1px solid var(--border2);border-radius:6px;padding:8px 14px;color:var(--text2);font-family:var(--sans);font-size:13px;cursor:pointer;white-space:nowrap;transition:all 0.15s}
+.btn:hover{background:var(--surface2)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
+.btn-primary:hover{background:#b03d24}
+.btn-green{background:var(--green);border-color:var(--green);color:#fff;font-weight:500}
+.btn-green:hover{background:#1e5c38}
+.btn-print{background:#1a6fba;border-color:#1a6fba;color:#fff;font-weight:500}
+.btn-print:hover{background:#155a99}
+.sync-status{font-family:var(--mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--text3);flex-shrink:0}
+.sync-dot.synced{background:var(--green)}.sync-dot.syncing{background:var(--accent2);animation:blink 1s infinite}.sync-dot.error{background:var(--accent)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem;transition:border-color 0.2s}
-  .card:hover{border-color:var(--border2)}
-  .card-header{display:flex;align-items:center;gap:10px;margin-bottom:1rem}
-  .step-num{width:22px;height:22px;border-radius:50%;background:var(--yellow-bg);border:1px solid rgba(240,165,0,0.3);font-family:var(--mono);font-size:11px;font-weight:500;color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .card-title{font-size:14px;font-weight:500}
-  .card-hint{font-size:12px;color:var(--text2);margin-top:6px;font-family:var(--mono)}
+/* Assembler bar */
+.assembler-bar{background:var(--surface2);border-bottom:1px solid var(--border);padding:7px 1rem;font-size:12px;color:var(--text2);display:flex;align-items:center;justify-content:space-between}
+.assembler-name{font-family:var(--mono);color:var(--text);font-weight:500}
 
-  input[type=text]{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:9px 12px;font-size:13px;font-family:var(--mono);color:var(--text);outline:none;transition:border-color 0.15s}
-  input[type=text]:focus{border-color:var(--accent)}
-  input[type=text]::placeholder{color:var(--text3)}
-  .input-row{display:flex;gap:8px;align-items:center}
-  .input-row input{flex:1}
+/* Phase tabs */
+.phase-tabs{display:flex;border-bottom:1px solid var(--border2);background:var(--surface);position:sticky;top:57px;z-index:99}
+.phase-tab{flex:1;padding:11px 6px;font-size:13px;font-weight:500;text-align:center;cursor:pointer;border-bottom:3px solid transparent;color:var(--text2);background:none;border-top:none;border-left:none;border-right:none;font-family:var(--sans);transition:all 0.15s}
+.phase-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 
-  button{cursor:pointer;font-family:var(--sans);font-size:13px;transition:all 0.15s}
-  .btn{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:8px 14px;color:var(--text)}
-  .btn:hover{border-color:var(--text2);background:#242840}
-  .btn-accent{background:var(--accent);border:none;border-radius:var(--radius);padding:9px 18px;color:#000;font-weight:600;font-size:13px}
-  .btn-accent:hover{background:#ffc030}
-  .btn-run{width:100%;background:var(--accent);border:none;border-radius:var(--radius);padding:11px;color:#000;font-weight:600;font-size:14px;letter-spacing:0.02em}
-  .btn-run:hover:not(:disabled){background:#ffc030}
-  .btn-run:disabled{background:#2a2510;color:#5a4e1a;cursor:not-allowed}
+/* Progress bar */
+.progress-wrap{padding:.75rem 1rem;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;position:sticky;top:104px;z-index:98}
+.progress-label{font-family:var(--mono);font-size:12px;color:var(--text2);white-space:nowrap}
+.progress-bar-outer{flex:1;height:7px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--green);border-radius:99px;transition:width 0.4s}
+.progress-pct{font-family:var(--mono);font-size:12px;color:var(--green);white-space:nowrap;font-weight:500}
 
-  .alert{border-radius:var(--radius);padding:9px 12px;font-size:13px;margin-top:10px;font-family:var(--mono)}
-  .alert-ok{background:var(--green-bg);color:var(--green);border:1px solid rgba(46,204,138,0.2)}
-  .alert-err{background:var(--red-bg);color:var(--red);border:1px solid rgba(224,85,85,0.2)}
-  .alert-info{background:var(--surface2);color:var(--text2);border:1px solid var(--border)}
-  .dimmed{opacity:0.35;pointer-events:none;transition:opacity 0.3s}
+/* Content */
+.content{padding:1rem;display:flex;flex-direction:column;gap:10px;padding-bottom:80px}
 
-  .results{margin-top:1.5rem}
-  .tabs{display:flex;gap:2px;margin-bottom:1px}
-  .tab{background:var(--surface);border:1px solid var(--border);border-bottom:none;border-radius:8px 8px 0 0;padding:8px 18px;font-size:13px;color:var(--text2);cursor:pointer;transition:all 0.15s}
-  .tab:hover{color:var(--text)}
-  .tab.active{background:var(--surface2);color:var(--text);border-color:var(--border2);font-weight:500}
-  .tab-badge{display:inline-block;font-size:10px;font-family:var(--mono);background:var(--surface);border-radius:99px;padding:1px 6px;margin-left:6px;color:var(--text3)}
-  .tab.active .tab-badge{background:var(--border);color:var(--text2)}
-  .tab-content{background:var(--surface2);border:1px solid var(--border2);border-radius:0 var(--radius-lg) var(--radius-lg) var(--radius-lg);padding:1rem}
-  .dl-bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+/* Project list */
+.project-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:1.1rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;transition:all 0.15s}
+.project-card:hover{border-color:var(--accent);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.project-name{font-size:16px;font-weight:700;margin-bottom:2px}
+.project-meta{font-size:12px;color:var(--text2);font-family:var(--mono);margin-bottom:8px}
+.project-prog{display:flex;align-items:center;gap:8px}
+.project-prog .progress-bar-outer{width:130px;flex:none}
 
-  .table-wrap{overflow:auto;max-height:440px;border-radius:var(--radius);border:1px solid var(--border)}
-  table{width:100%;border-collapse:collapse;font-size:12px}
-  th{position:sticky;top:0;z-index:2;background:var(--surface);padding:8px 12px;text-align:left;font-size:10px;font-weight:500;font-family:var(--mono);color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid var(--border2);white-space:nowrap}
-  td{padding:7px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top;word-break:break-word}
-  tr:last-child td{border-bottom:none}
-  tr:hover td{background:rgba(255,255,255,0.02)}
-  .badge{display:inline-block;font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:99px}
-  .badge-ok{background:var(--green-bg);color:var(--green);border:1px solid rgba(46,204,138,0.2)}
-  .badge-miss{background:var(--red-bg);color:var(--red);border:1px solid rgba(224,85,85,0.2)}
-  .bom-qty{font-family:var(--mono);font-weight:500;color:var(--accent)}
-  .qty-tag{font-family:var(--mono);font-size:11px;color:var(--accent);margin-left:2px}
-  .empty-state{text-align:center;padding:2rem;color:var(--text3);font-family:var(--mono);font-size:12px}
-  @media(max-width:600px){.app{padding:1rem 1rem 3rem}header{flex-direction:column}}
+/* Batch items */
+.batch-section{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden}
+.batch-section-header{padding:9px 14px;background:var(--surface2);border-bottom:1px solid var(--border2);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text2);font-family:var(--mono)}
+.batch-item{padding:16px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;transition:background 0.15s}
+.batch-item:last-child{border-bottom:none}
+.batch-item.done-batch{background:var(--green-bg)}
+.batch-check{width:32px;height:32px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.2s;font-size:16px}
+.batch-check:hover{border-color:var(--green)}
+.batch-check.checked{background:var(--green);border-color:var(--green);color:#fff}
+.batch-info{flex:1;min-width:0}
+.batch-line{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.batch-qty{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--accent);flex-shrink:0}
+.batch-qty-label{font-size:12px;color:var(--text3);font-family:var(--mono);margin-right:4px}
+.batch-desc{font-size:16px;line-height:1.5;display:flex;flex-wrap:wrap;align-items:baseline;gap:3px}
+.batch-signoff{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:5px}
+.seg{font-weight:600}
+.seg-sep{color:var(--text3);font-size:13px;font-weight:400;margin:0 1px}
+.seg1{color:var(--seg1)}.seg2{color:var(--seg2)}.seg3{color:var(--seg3)}.seg4{color:var(--seg4)}
+.seg-gang{color:var(--gang);font-weight:700}
+.seg-plain{color:var(--text2)}
+
+/* Label list */
+.room-section{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden}
+.room-header{padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border2);font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;justify-content:space-between}
+.room-count{font-size:11px;color:var(--text3);font-family:var(--mono);font-weight:400}
+.label-item{padding:14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;transition:background 0.15s}
+.label-item:last-child{border-bottom:none}
+.label-item.done-label{background:var(--green-bg)}
+.label-check{width:28px;height:28px;border-radius:6px;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.2s;font-size:14px}
+.label-check:hover{border-color:var(--green)}
+.label-check.checked{background:var(--green);border-color:var(--green);color:#fff}
+.label-info{flex:1;min-width:0}
+.label-id{font-family:var(--mono);font-size:14px;font-weight:700;margin-bottom:4px;color:var(--text)}
+.label-desc{font-size:15px;display:flex;flex-wrap:wrap;align-items:baseline;gap:3px;line-height:1.5}
+.label-signoff{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:4px}
+
+/* Packing list */
+.pack-header{font-size:16px;font-weight:700;margin-bottom:1rem;padding-bottom:8px;border-bottom:2px solid var(--text)}
+.pack-room{margin-bottom:1.25rem}
+.pack-room-title{font-size:13px;font-weight:700;padding:6px 0;border-bottom:1px solid var(--border2);margin-bottom:6px;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.05em;color:var(--text2)}
+.pack-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);font-size:14px}
+.pack-item:last-child{border-bottom:none}
+.pack-label{font-family:var(--mono);font-weight:700;width:90px;flex-shrink:0;color:var(--text)}
+.pack-desc{flex:1;color:var(--text2)}
+.pack-status{font-size:11px;font-family:var(--mono);flex-shrink:0;width:50px;text-align:right}
+.pack-status.done{color:var(--green);font-weight:600}
+.pack-status.pending{color:var(--text3)}
+.print-btn-wrap{margin-bottom:1rem}
+
+/* Empty */
+.empty{text-align:center;padding:3rem 1rem;color:var(--text3);font-family:var(--mono);font-size:13px}
+.empty-icon{font-size:40px;margin-bottom:12px}
+
+/* Modals */
+.modal-overlay{position:fixed;inset:0;background:rgba(26,23,20,0.55);z-index:200;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
+.modal{background:var(--surface);border-radius:16px 16px 0 0;width:100%;max-width:540px;padding:1.5rem;max-height:85vh;overflow-y:auto}
+.modal-title{font-size:17px;font-weight:700;margin-bottom:1rem}
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text2);font-family:var(--mono)}
+input[type=text],input[type=file],select{background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:11px;font-size:15px;font-family:var(--sans);color:var(--text);outline:none;width:100%}
+input:focus{border-color:var(--accent)}
+.modal-actions{display:flex;gap:8px;margin-top:6px}
+.modal-actions .btn{flex:1;padding:12px;font-size:15px;text-align:center}
+.info-box{background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:14px}
+
+@media print {
+  header,.assembler-bar,.phase-tabs,.progress-wrap,.btn,.print-btn-wrap,body::before{display:none!important}
+  body{background:#fff;font-size:12px}
+  .pack-room-title{font-size:13px}
+  .content{padding:0}
+}
 </style>
 </head>
 <body>
 <div class="app">
   <header>
     <div class="logo">
-      <div class="logo-mark">RE</div>
+      <div class="logo-mark">PF</div>
       <div>
-        <div class="logo-text">Assembly Lookup</div>
-        <div class="logo-sub">Ridgeline Electrical Industries</div>
+        <div class="logo-text" id="logoSub">Ridgeline Electrical — Prefab</div>
+        <div class="project-title" id="projectTitleEl" style="display:none;"></div>
       </div>
     </div>
-    <div class="version-tag">v2.1</div>
+    <div class="header-right">
+      <div class="sync-status no-print"><div class="sync-dot" id="syncDot"></div><span id="syncText">—</span></div>
+      <button class="btn no-print" onclick="openTokenModal()" id="tokenBtn">⚙ GitHub</button>
+      <button class="btn no-print" id="backBtn" onclick="showProjectList()" style="display:none;">← Projects</button>
+      <button class="btn btn-primary no-print" id="newProjectBtn" onclick="openNewProject()">+ New Project</button>
+    </div>
   </header>
 
-  <div class="master-bar loading" id="masterBar">
-    <div class="master-bar-left">
-      <div class="master-dot spin" id="masterDot"></div>
-      <div>
-        <div class="master-label loading" id="masterLabel">Loading master codes…</div>
-        <div class="master-meta" id="masterMeta">RidgeHub/Prefab / master-codes.csv</div>
-      </div>
-    </div>
-    <button class="btn-reload" onclick="fetchMaster()">↺ Reload</button>
+  <div id="assemblerBar" class="assembler-bar" style="display:none;">
+    <span>Assembler: <span class="assembler-name" id="assemblerNameDisplay"></span></span>
+    <button class="btn no-print" style="padding:4px 10px;font-size:12px;" onclick="openSetName()">Change</button>
   </div>
 
-  <div class="card">
-    <div class="card-header"><div class="step-num">1</div><div class="card-title">Google Sheet — current project</div></div>
-    <div class="input-row">
-      <input type="text" id="sheetUrl" placeholder="Paste Google Sheet URL…" />
-      <button class="btn-accent" onclick="fetchSheet()">Fetch</button>
-    </div>
-    <p class="card-hint">File → Share → Anyone with the link can view &nbsp;·&nbsp; Col A = Room &nbsp;·&nbsp; B = ID Label &nbsp;·&nbsp; C = Assembly Code</p>
-    <div id="sheetStatus"></div>
+  <div id="phaseTabs" class="phase-tabs" style="display:none;">
+    <button class="phase-tab active" onclick="showPhase(1)" id="ptab1">① Batch Build</button>
+    <button class="phase-tab" onclick="showPhase(2)" id="ptab2">② Label & Sort</button>
+    <button class="phase-tab" onclick="showPhase(3)" id="ptab3">③ Packing List</button>
   </div>
 
-  <div class="card" id="runCard">
-    <div class="card-header"><div class="step-num">2</div><div class="card-title">Run lookup &amp; generate bill of materials</div></div>
-    <button class="btn-run" id="runBtn" onclick="runLookup()" disabled>Run lookup →</button>
+  <div id="progressWrap" class="progress-wrap" style="display:none;">
+    <div class="progress-label" id="progressLabel">0 / 0</div>
+    <div class="progress-bar-outer"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-pct" id="progressPct">0%</div>
   </div>
 
-  <div class="results" id="resultsSection" style="display:none;">
-    <div class="tabs">
-      <button class="tab active" onclick="showTab('filled')" id="tab-filled">Filled sheet <span class="tab-badge" id="cnt-filled">0</span></button>
-      <button class="tab" onclick="showTab('bom')" id="tab-bom">Bill of materials <span class="tab-badge" id="cnt-bom">0</span></button>
-      <button class="tab" onclick="showTab('miss')" id="tab-miss">Unmatched <span class="tab-badge" id="cnt-miss">0</span></button>
+  <div class="content" id="mainContent">
+    <div class="empty"><div class="empty-icon">📦</div>No projects yet.<br/>Tap "+ New Project" to get started.</div>
+  </div>
+</div>
+
+<!-- New project modal -->
+<div class="modal-overlay" id="newProjectModal" style="display:none;" onclick="if(event.target===this)closeNewProject()">
+  <div class="modal">
+    <div class="modal-title">New Prefab Project</div>
+    <div class="info-box">Upload the filled sheet from the Assembly Lookup app (.xlsx or .csv). Needs columns: Room, ID Label, Assembly Code, Plaster Ring, Wire Connector, Pigtail, Device 1–4, Status.</div>
+    <div class="form-group"><label>Project Name</label><input type="text" id="npName" placeholder="e.g. Chernoff Cosmetic — Phase 2"/></div>
+    <div class="form-group"><label>Project Number</label><input type="text" id="npNum" placeholder="e.g. 2024-041"/></div>
+    <div class="form-group"><label>Assembly File (.xlsx or .csv)</label><input type="file" id="npFile" accept=".csv,.xlsx,.xls"/></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeNewProject()">Cancel</button>
+      <button class="btn btn-primary" onclick="createProject()">Create Project</button>
     </div>
-    <div class="tab-content">
-      <div id="pane-filled">
-        <div class="dl-bar">
-          <button class="btn" onclick="downloadCSV('filled')">⬇ Download CSV</button>
-          <button class="btn" onclick="downloadXLSX()">⬇ Download XLSX</button>
-        </div>
-        <div class="table-wrap"><table id="filledTable"><thead></thead><tbody></tbody></table></div>
-      </div>
-      <div id="pane-bom" style="display:none;">
-        <div class="dl-bar"><button class="btn" onclick="downloadCSV('bom')">⬇ Download BOM CSV</button></div>
-        <div class="table-wrap"><table id="bomTable"><thead></thead><tbody></tbody></table></div>
-      </div>
-      <div id="pane-miss" style="display:none;">
-        <div class="table-wrap"><table id="missTable"><thead></thead><tbody></tbody></table></div>
-      </div>
+  </div>
+</div>
+
+<!-- GitHub token modal -->
+<div class="modal-overlay" id="tokenModal" style="display:none;" onclick="if(event.target===this)closeTokenModal()">
+  <div class="modal">
+    <div class="modal-title">GitHub Token</div>
+    <div class="info-box">Enter your GitHub personal access token (repo scope). Saved in this browser — enter once per device.</div>
+    <div class="form-group"><label>Personal Access Token</label><input type="password" id="ghTokenInput" placeholder="ghp_…"/></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeTokenModal()">Cancel</button>
+      <button class="btn btn-green" onclick="saveToken()">Save &amp; Sync</button>
+    </div>
+  </div>
+</div>
+
+<!-- Set name modal -->
+<div class="modal-overlay" id="nameModal" style="display:none;" onclick="if(event.target===this)closeSetName()">
+  <div class="modal">
+    <div class="modal-title">Your Name</div>
+    <div class="form-group"><label>Assembler Name</label><input type="text" id="nameInput" placeholder="e.g. James"/></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeSetName()">Cancel</button>
+      <button class="btn btn-green" onclick="saveName()">Set Name</button>
     </div>
   </div>
 </div>
 
 <script>
-const MASTER_URL = 'https://raw.githubusercontent.com/RidgeHub/Prefab/main/master-codes.csv';
-let masterMap = {}, projectRows = [];
-let filledData = [], bomData = [], missedCodes = [];
+const STORAGE_KEY  = 'ridgehub_prefab_v2';
+const REPO         = 'RidgeHub/Prefab';
+const GH_FILE      = 'prefab-projects.json';
+const GH_API       = `https://api.github.com/repos/${REPO}/contents/${GH_FILE}`;
+let projects = [], currentProject = null, currentPhase = 1;
+let assemblerName = localStorage.getItem('prefab_assembler') || '';
+let ghSha = null;
 
-function withQty(item, qty) {
-  return `${item} (${qty})`;
+function getGHToken(){ return localStorage.getItem('prefab_gh_token')||''; }
+
+function saveLocal(){ localStorage.setItem(STORAGE_KEY, JSON.stringify({projects, sha:ghSha})); }
+
+function loadLocal(){
+  try{
+    const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
+    projects=d.projects||[]; ghSha=d.sha||null;
+  }catch(e){ projects=[]; }
 }
 
-function parseMasterMatrix(text) {
-  const rows = parseCSV(text);
-  if (rows.length < 4) throw new Error('master-codes.csv has too few rows.');
-  const itemNames  = rows[0];
-  const categories = rows[2];
-  const map = {};
-  for (let ri = 3; ri < rows.length; ri++) {
-    const row  = rows[ri];
-    const code = (row[2] || '').trim().toUpperCase();
-    if (!code) continue;
-    const entry = { box:[], plasterRing:[], wireConnector:[], pigtail:[], deviceCover:[], device:[], other:[], rawItems:[] };
-    for (let ci = 3; ci < row.length; ci++) {
-      const val = (row[ci] || '').trim();
-      if (!val || val === '0') continue;
-      const qty  = isNaN(val) ? 1 : Number(val);
-      const cat  = (categories[ci] || '').trim().toLowerCase();
-      const item = (itemNames[ci]  || '').trim();
-      if (!item) continue;
-      entry.rawItems.push({ cat: categories[ci] || '', item, qty });
-      if      (cat === 'box')            entry.box.push({item,qty});
-      else if (cat === 'plaster ring')   entry.plasterRing.push({item,qty});
-      else if (cat === 'wire connector') entry.wireConnector.push({item,qty});
-      else if (cat === 'pigtail')        entry.pigtail.push({item,qty});
-      else if (cat === 'device cover')   entry.deviceCover.push({item,qty});
-      else if (cat === 'device')         entry.device.push({item,qty});
-      else                               entry.other.push({item,qty});
-    }
-    map[code] = entry;
+async function loadFromGitHub(){
+  const token=getGHToken();
+  if(!token){ loadLocal(); showProjectList(); return; }
+  setSyncStatus('syncing','Loading…');
+  try{
+    const res=await fetch(GH_API,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});
+    if(res.status===404){ projects=[]; ghSha=null; setSyncStatus('synced','Ready'); showProjectList(); return; }
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    ghSha=data.sha;
+    projects=JSON.parse(atob(data.content.replace(/\n/g,'')));
+    saveLocal();
+    setSyncStatus('synced','Synced');
+    showProjectList();
+  }catch(e){
+    setSyncStatus('error','Load failed');
+    loadLocal(); showProjectList();
   }
-  return map;
 }
 
-async function fetchMaster() {
-  setMasterBar('loading','Loading master codes…');
-  try {
-    const res = await fetch(MASTER_URL + '?v=' + Date.now());
-    if (!res.ok) throw new Error(`HTTP ${res.status} — check repo is public and file exists.`);
-    masterMap = parseMasterMatrix(await res.text());
-    setMasterBar('ok', `${Object.keys(masterMap).length} assembly codes loaded`, 'RidgeHub/Prefab / master-codes.csv');
-    checkReady();
-  } catch(e) { setMasterBar('err', `Failed: ${e.message}`); }
+async function saveData(){
+  saveLocal();
+  const token=getGHToken();
+  if(!token) return;
+  setSyncStatus('syncing','Saving…');
+  try{
+    const body={message:'Update prefab projects',content:btoa(unescape(encodeURIComponent(JSON.stringify(projects,null,2))))};
+    if(ghSha) body.sha=ghSha;
+    const res=await fetch(GH_API,{method:'PUT',headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    ghSha=(await res.json()).content.sha;
+    setSyncStatus('synced','Saved ✓');
+  }catch(e){ setSyncStatus('error','Save failed'); }
 }
 
-function setMasterBar(state, label, meta) {
-  document.getElementById('masterBar').className = `master-bar ${state}`;
-  document.getElementById('masterDot').className = `master-dot ${state==='loading'?'spin':state}`;
-  const lbl = document.getElementById('masterLabel');
-  lbl.className = `master-label ${state}`; lbl.textContent = label;
-  if (meta !== undefined) document.getElementById('masterMeta').textContent = meta;
+function setSyncStatus(state,text){
+  const dot=document.getElementById('syncDot');
+  const lbl=document.getElementById('syncText');
+  if(!dot||!lbl) return;
+  dot.className='sync-dot'+(state?' '+state:'');
+  lbl.textContent=text;
+}
+function genId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+
+/* ── GitHub token modal ── */
+function openTokenModal(){ document.getElementById('ghTokenInput').value=getGHToken(); document.getElementById('tokenModal').style.display='flex'; }
+function closeTokenModal(){ document.getElementById('tokenModal').style.display='none'; }
+function saveToken(){
+  const t=document.getElementById('ghTokenInput').value.trim();
+  if(!t){ alert('Enter a token.'); return; }
+  localStorage.setItem('prefab_gh_token',t);
+  closeTokenModal();
+  loadFromGitHub();
 }
 
-async function fetchSheet() {
-  const url = document.getElementById('sheetUrl').value.trim();
-  if (!url) { setStatus('sheetStatus','Paste a URL first.','err'); return; }
-  const m = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
-  if (!m) { setStatus('sheetStatus','Could not find sheet ID — paste the full Google Sheet URL.','err'); return; }
-  setStatus('sheetStatus','Fetching…','info');
-  try {
-    const res = await fetch(`https://docs.google.com/spreadsheets/d/${m[1]}/export?format=csv`);
-    if (!res.ok) throw new Error('Fetch failed. Make sure the sheet is shared as "Anyone with the link can view".');
-    const text = await res.text();
-    projectRows = parseCSV(text);
-    if (projectRows.length < 2) throw new Error('Sheet appears empty.');
-    setStatus('sheetStatus', `✓ Loaded ${projectRows.length - 1} rows`, 'ok');
-    checkReady();
-  } catch(e) { setStatus('sheetStatus', e.message, 'err'); }
+/* ── Assembler name ── */
+function openSetName(){ document.getElementById('nameInput').value=assemblerName; document.getElementById('nameModal').style.display='flex'; }
+function closeSetName(){ document.getElementById('nameModal').style.display='none'; }
+function saveName(){
+  const n=document.getElementById('nameInput').value.trim();
+  if(!n){ alert('Enter your name.'); return; }
+  assemblerName=n; localStorage.setItem('prefab_assembler',n);
+  document.getElementById('assemblerNameDisplay').textContent=assemblerName;
+  closeSetName();
+}
+function updateAssemblerBar(){
+  const show=!!currentProject;
+  document.getElementById('assemblerBar').style.display=show?'flex':'none';
+  document.getElementById('assemblerNameDisplay').textContent=assemblerName||'Not set';
 }
 
-function parseCSV(text) {
-  return text.split('\n').filter(l => l.trim()).map(line => {
-    const cols = []; let cur = '', inQ = false;
-    for (const c of line) {
-      if (c === '"') inQ = !inQ;
-      else if (c === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
-      else cur += c;
-    }
+/* ── File parsing ── */
+function parseCSVText(text){
+  return text.split('\n').filter(l=>l.trim()).map(line=>{
+    const cols=[]; let cur='',inQ=false;
+    for(const c of line){ if(c==='"')inQ=!inQ; else if(c===','&&!inQ){cols.push(cur.trim());cur='';}else cur+=c; }
     cols.push(cur.trim()); return cols;
   });
 }
 
-function setStatus(id, msg, type) {
-  document.getElementById(id).innerHTML = msg ? `<div class="alert alert-${type}">${msg}</div>` : '';
-}
-function checkReady() {
-  const ok = projectRows.length > 1 && Object.keys(masterMap).length > 0;
-  document.getElementById('runCard').classList.toggle('dimmed', !ok);
-  document.getElementById('runBtn').disabled = !ok;
-}
+function parseAssemblies(rows){
+  if(rows.length<2) throw new Error('File appears empty');
+  const hdr=rows[0].map(h=>String(h||'').toLowerCase().trim());
+  const ci=(names)=>{ for(const n of names){ const i=hdr.findIndex(h=>h.includes(n)); if(i!==-1)return i; } return -1; };
+  const iRoom=ci(['room']), iLabel=ci(['id label','label','id']), iCode=ci(['assembly code','code','assembly']);
+  const iPlaster=ci(['plaster']), iWire=ci(['wire connector','wire']), iPigtail=ci(['pigtail']);
+  const iD1=ci(['device 1']), iD2=ci(['device 2']), iD3=ci(['device 3']), iD4=ci(['device 4']);
+  const iStatus=ci(['status']);
 
-function runLookup() {
-  const outHeaders = ['Room','ID Label','Assembly Code','Box','Plaster Ring','Wire Connector','Pigtail','Device Cover','Device 1','Device 2','Device 3','Device 4','Status'];
-  filledData  = [outHeaders];
-  missedCodes = [];
-  const bomRaw = {};
-
-  for (let i = 1; i < projectRows.length; i++) {
-    const r     = projectRows[i];
-    const room  = r[0]||'', label = r[1]||'';
-    const code  = (r[2]||'').trim().toUpperCase();
-    const match = masterMap[code];
-
-    if (!match) {
-      if (code) missedCodes.push(code);
-      filledData.push([room, label, code, '','','','','','','','','', code ? 'NOT FOUND' : '']);
-      continue;
-    }
-
-    const fmt = arr => arr.map(({item,qty}) => withQty(item,qty)).join(' | ');
-
-    const box     = fmt(match.box);
-    const plaster = fmt(match.plasterRing);
-    const wire    = fmt(match.wireConnector);
-    const pigtail = fmt(match.pigtail);
-    const devCov  = fmt(match.deviceCover);
-
-    // devices: up to 4 slots, each with qty in parens if >1
-    const devCells = match.device.slice(0,4).map(({item,qty}) => withQty(item,qty));
-    while (devCells.length < 4) devCells.push('');
-
-    filledData.push([room, label, code, box, plaster, wire, pigtail, devCov, ...devCells, 'OK']);
-
-    // BOM accumulation with actual quantities
-    for (const {item, qty} of match.rawItems) {
-      bomRaw[item] = (bomRaw[item] || 0) + qty;
-    }
-  }
-
-  bomData = [['Item','Total Qty'], ...Object.entries(bomRaw).sort((a,b) => b[1]-a[1])];
-
-  renderFilled(); renderBOM(); renderMiss();
-  document.getElementById('cnt-filled').textContent = filledData.length - 1;
-  document.getElementById('cnt-bom').textContent    = bomData.length - 1;
-  document.getElementById('cnt-miss').textContent   = [...new Set(missedCodes)].length;
-  document.getElementById('resultsSection').style.display = '';
-  showTab('filled');
-  document.getElementById('resultsSection').scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-function renderFilled() {
-  const t = document.getElementById('filledTable'); t.innerHTML = '';
-  const hr = t.createTHead().insertRow();
-  filledData[0].forEach(h => { const th = document.createElement('th'); th.textContent = h; hr.appendChild(th); });
-  const tbody = t.createTBody();
-  for (let i = 1; i < filledData.length; i++) {
-    const tr = tbody.insertRow();
-    filledData[i].forEach((cell, ci) => {
-      const td = tr.insertCell();
-      const isStatus = ci === filledData[0].length - 1;
-      if (isStatus) {
-        td.innerHTML = cell === 'OK'
-          ? `<span class="badge badge-ok">OK</span>`
-          : cell ? `<span class="badge badge-miss">${cell}</span>` : '';
-      } else {
-        // highlight qty in parens with accent color
-        td.innerHTML = String(cell).replace(/\((\d+)\)/g, '<span class="qty-tag">($1)</span>');
-      }
+  const assemblies=[];
+  for(let i=1;i<rows.length;i++){
+    const r=rows[i];
+    const get=(idx)=>idx!==-1?String(r[idx]||'').trim():'';
+    const status=get(iStatus);
+    if(status.toUpperCase()==='NOT FOUND') continue;
+    const label=get(iLabel);
+    if(!label) continue;
+    const devices=[get(iD1),get(iD2),get(iD3),get(iD4)].filter(d=>d);
+    assemblies.push({
+      id:genId(), room:get(iRoom)||'?', labelId:label, code:get(iCode),
+      plaster:get(iPlaster), wire:get(iWire), pigtail:get(iPigtail),
+      devices, batchDone:false, labelDone:false,
+      batchDoneAt:null, batchDoneBy:null, labelDoneAt:null, labelDoneBy:null
     });
   }
+  return assemblies;
 }
 
-function renderBOM() {
-  const t = document.getElementById('bomTable'); t.innerHTML = '';
-  const hr = t.createTHead().insertRow();
-  ['Item','Total qty'].forEach(h => { const th = document.createElement('th'); th.textContent = h; hr.appendChild(th); });
-  const tbody = t.createTBody();
-  for (let i = 1; i < bomData.length; i++) {
-    const tr = tbody.insertRow();
-    tr.insertCell().textContent = bomData[i][0];
-    tr.insertCell().innerHTML   = `<span class="bom-qty">${bomData[i][1]}</span>`;
-  }
+/* ── Text formatting ── */
+function stripAdj(s){ return s.replace(/[\/,]?\s*Adj(ustable)?/gi,'').replace(/Adj(ustable)?\s*[\/,]?\s*/gi,'').trim(); }
+
+function getGang(s){
+  const m=s.match(/\b([1-4])\s*[Gg](ang)?\b/);
+  return m?m[1]+'G':'';
 }
 
-function renderMiss() {
-  const t = document.getElementById('missTable'); t.innerHTML = '';
-  const hr = t.createTHead().insertRow();
-  ['Assembly code','Occurrences'].forEach(h => { const th = document.createElement('th'); th.textContent = h; hr.appendChild(th); });
-  const tbody = t.createTBody();
-  const counts = {};
-  missedCodes.forEach(c => counts[c] = (counts[c]||0)+1);
-  const entries = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
-  if (!entries.length) {
-    const td = tbody.insertRow().insertCell();
-    td.colSpan = 2; td.className = 'empty-state'; td.textContent = 'All codes matched ✓';
-  } else {
-    entries.forEach(([code,cnt]) => {
-      const tr = tbody.insertRow();
-      tr.insertCell().innerHTML   = `<span class="badge badge-miss">${code}</span>`;
-      tr.insertCell().textContent = cnt;
+function formatDevice(s){
+  return s.replace(/\s*\(\d+\)\s*/g,'').trim().split('/').map(p=>p.trim()).filter(p=>p);
+}
+
+function formatWire(s){ return s.replace(/\s*\(\d+\)\s*/g,'').trim(); }
+
+/* ── Compact single-line description ── */
+// Returns plain text: "1G / 5-20R - Duplex - White"
+function assemblyLine(a){
+  const gang=a.plaster?getGang(stripAdj(a.plaster)):'';
+  const devParts=a.devices.length?formatDevice(a.devices[0]).join(' - '):'';
+  const parts=[gang,devParts].filter(p=>p);
+  return parts.join(' / ');
+}
+
+/* ── Colored HTML description ── */
+// "1G / 5-20R - Duplex - GFCI - White"
+function assemblyHTML(a){
+  const gang=a.plaster?getGang(stripAdj(a.plaster)):'';
+  const gangHTML=gang?`<span class="seg seg-gang">${esc(gang)}</span>`:'';
+
+  // Grade keywords to extract and show smaller
+  const gradeWords=/hospital\s+grade|commercial\s+grade|specification\s+grade|residential\s+grade/gi;
+
+  const devHTMLParts=a.devices.map(d=>{
+    const parts=formatDevice(d);
+    let grade='';
+    const filtered=parts.filter(p=>{
+      if(gradeWords.test(p)){ grade=p; return false; }
+      return true;
     });
-  }
-}
-
-function showTab(name) {
-  ['filled','bom','miss'].forEach(n => {
-    document.getElementById('pane-'+n).style.display = n===name ? '' : 'none';
-    document.getElementById('tab-'+n).classList.toggle('active', n===name);
+    const main=filtered.map(p=>`<span class="seg">${esc(p)}</span>`).join('<span class="seg-sep"> - </span>');
+    const gradeHTML=grade?` <span style="font-size:11px;color:var(--text3);font-family:var(--mono);font-weight:400;">${esc(grade)}</span>`:'';
+    return main+gradeHTML;
   });
+
+  const pieces=[];
+  if(gangHTML) pieces.push(gangHTML);
+  if(devHTMLParts.length) pieces.push(devHTMLParts.join('<span class="seg-sep"> + </span>'));
+
+  return pieces.join('<span class="seg-sep"> / </span>');
 }
 
-function downloadCSV(which) {
-  const data = which === 'filled' ? filledData : bomData;
-  const csv = data.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-  a.download = which === 'filled' ? 'filled_sheet.csv' : 'bill_of_materials.csv';
-  a.click();
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function tsNow(){ return new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}); }
+
+/* ── Batch grouping — keyed by index to avoid special char issues ── */
+function buildBatches(assemblies){
+  const map=new Map();
+  assemblies.forEach((a,idx)=>{
+    const gang=a.plaster?getGang(stripAdj(a.plaster)):'';
+    const devKey=a.devices.map(d=>formatDevice(d).join('|')).join('::');
+    const key=`${gang}||${devKey}`;
+    if(!map.has(key)) map.set(key,{key, gang, devices:a.devices, wire:a.wire, pigtail:a.pigtail, indices:[], count:0});
+    map.get(key).indices.push(idx);
+    map.get(key).count++;
+  });
+  return Array.from(map.values());
 }
 
-function downloadXLSX() {
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(filledData), 'Filled Sheet');
-  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(bomData), 'Bill of Materials');
-  if (missedCodes.length) {
-    const counts = {};
-    missedCodes.forEach(c => counts[c] = (counts[c]||0)+1);
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['Assembly Code','Occurrences'],...Object.entries(counts).sort((a,b)=>b[1]-a[1])]), 'Unmatched');
+function isBatchDone(batch, assemblies){
+  return batch.indices.every(i=>assemblies[i].batchDone);
+}
+
+/* ── Project list ── */
+function showProjectList(){
+  currentProject=null;
+  document.getElementById('phaseTabs').style.display='none';
+  document.getElementById('progressWrap').style.display='none';
+  document.getElementById('backBtn').style.display='none';
+  document.getElementById('newProjectBtn').style.display='';
+  document.getElementById('projectTitleEl').style.display='none';
+  document.getElementById('logoSub').style.display='';
+  updateAssemblerBar();
+  const el=document.getElementById('mainContent');
+  if(!projects.length){ el.innerHTML='<div class="empty"><div class="empty-icon">📦</div>No projects yet.<br/>Tap "+ New Project" to upload an assembly file.</div>'; return; }
+  el.innerHTML=projects.map(p=>{
+    const total=p.assemblies.length, done=p.assemblies.filter(a=>a.labelDone).length;
+    const pct=total?Math.round((done/total)*100):0;
+    return `<div class="project-card" onclick="openProject('${p.id}')">
+      <div style="flex:1;">
+        <div class="project-name">${esc(p.name)}</div>
+        <div class="project-meta">${p.num?'#'+esc(p.num)+' · ':''}${total} assemblies</div>
+        <div class="project-prog">
+          <div class="progress-bar-outer"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--text2)">${done}/${total}</span>
+        </div>
+      </div>
+      <div style="color:var(--text3);font-size:22px;padding-left:8px;">›</div>
+    </div>`;
+  }).join('');
+}
+
+function openProject(id){
+  if(!assemblerName){ 
+    localStorage.setItem('_pendingProject',id);
+    openSetName(); return; 
   }
-  XLSX.writeFile(wb, 'assembly_lookup_results.xlsx');
+  currentProject=projects.find(p=>p.id===id);
+  if(!currentProject) return;
+  document.getElementById('phaseTabs').style.display='flex';
+  document.getElementById('progressWrap').style.display='flex';
+  document.getElementById('backBtn').style.display='';
+  document.getElementById('newProjectBtn').style.display='none';
+  document.getElementById('projectTitleEl').textContent=currentProject.name+(currentProject.num?' — #'+currentProject.num:'');
+  document.getElementById('projectTitleEl').style.display='';
+  document.getElementById('logoSub').style.display='none';
+  updateAssemblerBar();
+  showPhase(1);
 }
 
-fetchMaster();
+// After setting name, check if we had a pending project
+const _origSaveName = saveName;
+function saveName(){
+  const n=document.getElementById('nameInput').value.trim();
+  if(!n){ alert('Enter your name.'); return; }
+  assemblerName=n; localStorage.setItem('prefab_assembler',n);
+  document.getElementById('assemblerNameDisplay').textContent=assemblerName;
+  closeSetName();
+  const pending=localStorage.getItem('_pendingProject');
+  if(pending){ localStorage.removeItem('_pendingProject'); openProject(pending); }
+}
+
+/* ── Phase navigation ── */
+function showPhase(n){
+  currentPhase=n;
+  [1,2,3].forEach(i=>document.getElementById('ptab'+i).classList.toggle('active',i===n));
+  if(n===1) renderPhase1();
+  else if(n===2) renderPhase2();
+  else renderPhase3();
+  updateProgress();
+}
+
+function updateProgress(){
+  if(!currentProject) return;
+  const total=currentProject.assemblies.length;
+  const done=currentProject.assemblies.filter(a=>a.labelDone).length;
+  const pct=total?Math.round((done/total)*100):0;
+  document.getElementById('progressLabel').textContent=`${done} / ${total} labeled`;
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressPct').textContent=pct+'%';
+}
+
+/* ── Phase 1: Batch Build ── */
+function renderPhase1(){
+  const batches=buildBatches(currentProject.assemblies);
+  const pending=batches.filter(b=>!isBatchDone(b,currentProject.assemblies));
+  const done=batches.filter(b=>isBatchDone(b,currentProject.assemblies));
+  let html='';
+
+  const renderBatch=(b)=>{
+    const isDone=isBatchDone(b,currentProject.assemblies);
+    const firstA=currentProject.assemblies[b.indices[0]];
+    const signoff=isDone&&firstA.batchDoneBy?`✓ ${esc(firstA.batchDoneBy)} · ${esc(firstA.batchDoneAt)}`:'';
+    return `<div class="batch-item ${isDone?'done-batch':''}">
+      <div class="batch-check ${isDone?'checked':''}" onclick="toggleBatch(${b.indices.map(i=>i).join(',')})">
+        ${isDone?'✓':''}
+      </div>
+      <div class="batch-info">
+        <div class="batch-line">
+          <span class="batch-qty">${b.count}</span>
+          <span class="batch-qty-label">Qty</span>
+          <span class="batch-desc">${assemblyHTML(firstA)}</span>
+        </div>
+        <div style="font-size:12px;color:var(--text3);font-family:var(--mono);margin-top:6px;">+ Wire Connectors &nbsp;·&nbsp; + Black, White &amp; Green Pigtails</div>
+        ${signoff?`<div class="batch-signoff">${signoff}</div>`:''}
+      </div>
+    </div>`;
+  };
+
+  if(pending.length){
+    html+=`<div class="batch-section"><div class="batch-section-header">To Build — ${pending.length} type${pending.length!==1?'s':''}</div>`;
+    html+=pending.map(renderBatch).join('');
+    html+=`</div>`;
+  }
+  if(done.length){
+    html+=`<div class="batch-section" style="margin-top:10px;"><div class="batch-section-header">Done — ${done.length} type${done.length!==1?'s':''}</div>`;
+    html+=done.map(renderBatch).join('');
+    html+=`</div>`;
+  }
+  if(!batches.length) html='<div class="empty">No assemblies found.</div>';
+  document.getElementById('mainContent').innerHTML=html;
+}
+
+function toggleBatch(...indices){
+  const assemblies=currentProject.assemblies;
+  const allDone=indices.every(i=>assemblies[i].batchDone);
+  const newDone=!allDone;
+  const ts=tsNow();
+  indices.forEach(i=>{
+    if(!assemblies[i]) return;
+    assemblies[i].batchDone=newDone;
+    assemblies[i].batchDoneAt=newDone?ts:null;
+    assemblies[i].batchDoneBy=newDone?assemblerName:null;
+  });
+  saveData(); renderPhase1(); updateProgress();
+}
+
+/* ── Phase 2: Label & Sort ── */
+function renderPhase2(){
+  const byRoom={};
+  currentProject.assemblies.forEach((a,idx)=>{
+    const r=a.room||'?';
+    if(!byRoom[r]) byRoom[r]=[];
+    byRoom[r].push({a,idx});
+  });
+  const rooms=Object.keys(byRoom).sort();
+  let html='';
+  rooms.forEach(room=>{
+    const items=byRoom[room];
+    const doneCount=items.filter(({a})=>a.labelDone).length;
+    html+=`<div class="room-section">
+      <div class="room-header"><span>Room ${esc(room)}</span><span class="room-count">${doneCount}/${items.length}</span></div>`;
+    items.forEach(({a,idx})=>{
+      html+=`<div class="label-item ${a.labelDone?'done-label':''}">
+        <div class="label-check ${a.labelDone?'checked':''}" onclick="toggleLabel(${idx})">${a.labelDone?'✓':''}</div>
+        <div class="label-info">
+          <div class="label-id">${esc(a.labelId)}</div>
+          <div class="label-desc">${assemblyHTML(a)}</div>
+          ${a.labelDone&&a.labelDoneBy?`<div class="label-signoff">✓ ${esc(a.labelDoneBy)} · ${esc(a.labelDoneAt)}</div>`:''}
+        </div>
+      </div>`;
+    });
+    html+=`</div>`;
+  });
+  document.getElementById('mainContent').innerHTML=html;
+}
+
+function toggleLabel(idx){
+  const a=currentProject.assemblies[idx];
+  if(!a) return;
+  a.labelDone=!a.labelDone;
+  a.labelDoneAt=a.labelDone?tsNow():null;
+  a.labelDoneBy=a.labelDone?assemblerName:null;
+  saveData(); renderPhase2(); updateProgress();
+}
+
+/* ── Phase 3: Packing List ── */
+function renderPhase3(){
+  const byRoom={};
+  currentProject.assemblies.forEach(a=>{
+    const r=a.room||'?';
+    if(!byRoom[r]) byRoom[r]=[];
+    byRoom[r].push(a);
+  });
+  const rooms=Object.keys(byRoom).sort();
+  let html=`<div class="print-btn-wrap no-print">
+    <button class="btn btn-print" onclick="window.print()">🖨 Print Packing List</button>
+  </div>
+  <div class="pack-header">${esc(currentProject.name)}${currentProject.num?' — #'+esc(currentProject.num):''}</div>`;
+  rooms.forEach(room=>{
+    html+=`<div class="pack-room"><div class="pack-room-title">Room ${esc(room)}</div>`;
+    byRoom[room].forEach(a=>{
+      const desc=assemblyLine(a);
+      html+=`<div class="pack-item">
+        <div class="pack-label">${esc(a.labelId)}</div>
+        <div class="pack-desc">${esc(desc||a.code)}</div>
+        <div class="pack-status ${a.labelDone?'done':'pending'}">${a.labelDone?'✓':''}</div>
+      </div>`;
+    });
+    html+=`</div>`;
+  });
+  document.getElementById('mainContent').innerHTML=html;
+}
+
+/* ── New project ── */
+function openNewProject(){ document.getElementById('newProjectModal').style.display='flex'; document.getElementById('npName').value=''; document.getElementById('npNum').value=''; document.getElementById('npFile').value=''; }
+function closeNewProject(){ document.getElementById('newProjectModal').style.display='none'; }
+
+function createProject(){
+  const name=document.getElementById('npName').value.trim();
+  const num=document.getElementById('npNum').value.trim();
+  const file=document.getElementById('npFile').files[0];
+  if(!name){ alert('Enter a project name.'); return; }
+  if(!file){ alert('Select a file.'); return; }
+  const isXLSX=/\.xlsx?$/i.test(file.name);
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      let rows;
+      if(isXLSX){
+        const wb=XLSX.read(new Uint8Array(e.target.result),{type:'array'});
+        const ws=wb.Sheets[wb.SheetNames[0]];
+        rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+      } else {
+        rows=parseCSVText(e.target.result);
+      }
+      const assemblies=parseAssemblies(rows);
+      if(!assemblies.length){ alert('No assemblies found. Make sure the file has an ID Label column and data rows.'); return; }
+      const project={id:genId(),name,num,assemblies,createdAt:Date.now()};
+      projects.unshift(project);
+      saveData(); closeNewProject();
+      if(!assemblerName){ localStorage.setItem('_pendingProject',project.id); openSetName(); }
+      else openProject(project.id);
+    }catch(err){ alert('Error reading file: '+err.message); }
+  };
+  if(isXLSX) reader.readAsArrayBuffer(file);
+  else reader.readAsText(file);
+}
+
+/* ── Init ── */
+if(!getGHToken()) openTokenModal();
+else loadFromGitHub();
 </script>
 </body>
 </html>
