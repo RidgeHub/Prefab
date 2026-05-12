@@ -139,10 +139,10 @@
         "wire": "",
         "pigtail": "",
         "devices": [],
-        "batchDone": true,
+        "batchDone": false,
         "labelDone": true,
-        "batchDoneAt": "May 12, 2:04 PM",
-        "batchDoneBy": "James",
+        "batchDoneAt": null,
+        "batchDoneBy": null,
         "labelDoneAt": "May 12, 2:37 PM",
         "labelDoneBy": "James"
       },
