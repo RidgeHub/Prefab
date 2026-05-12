@@ -245,6 +245,7 @@ function updateAssemblerBar(){
 
 /* ── CSV Parser ── */
 function parseFilledCSV(text){
+  console.log('Parsing CSV, first 200 chars:', text.slice(0,200));
   const rows = text.split('\n').filter(l=>l.trim()).map(line=>{
     const cols=[]; let cur='',inQ=false;
     for(const c of line){ if(c==='"')inQ=!inQ; else if(c===','&&!inQ){cols.push(cur.trim());cur='';}else cur+=c; }
@@ -252,16 +253,19 @@ function parseFilledCSV(text){
   });
   if(rows.length<2) throw new Error('CSV appears empty');
   const hdr=rows[0].map(h=>h.toLowerCase());
+  console.log('Headers found:', hdr);
   const col=(name)=>{ const candidates=name.split('|'); for(const c of candidates){ const i=hdr.findIndex(h=>h.includes(c)); if(i!==-1)return i; } return -1; };
   const iRoom=col('room'), iLabel=col('id label|label'), iCode=col('assembly code|code');
   const iPlaster=col('plaster'), iWire=col('wire'), iPigtail=col('pigtail');
   const iD1=col('device 1'), iD2=col('device 2'), iD3=col('device 3'), iD4=col('device 4');
 
+  console.log('Total rows (excl header):', rows.length-1);
   const assemblies=[];
   for(let i=1;i<rows.length;i++){
     const r=rows[i];
     const get=(idx)=>idx!==-1?(r[idx]||'').trim():'';
     const status=get(hdr.findIndex(h=>h==='status'));
+    console.log('Row',i,'status:', JSON.stringify(status), 'label:', get(iLabel));
     if(status==='NOT FOUND'||status==='') continue;
     const devices=[get(iD1),get(iD2),get(iD3),get(iD4)].filter(d=>d&&d!=='');
     assemblies.push({
@@ -576,7 +580,10 @@ function createProject(){
       } else {
         assemblies = parseFilledCSV(e.target.result);
       }
-      if(!assemblies.length){ alert('No valid assemblies found. Make sure Status column shows OK.'); return; }
+      if(!assemblies.length){ 
+        alert('No valid assemblies found.\n\nMake sure:\n1. The Status column contains OK\n2. The first sheet has headers: Room, ID Label, Assembly Code, Device 1, etc.'); 
+        return; 
+      }
       const project={id:genId(),name,num,assemblies,createdAt:Date.now(),batchStates:{}};
       projects.unshift(project);
       saveData(); closeNewProject();
