@@ -15,10 +15,10 @@
         "devices": [
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
-        "batchDone": true,
+        "batchDone": false,
         "labelDone": true,
-        "batchDoneAt": "May 12, 2:04 PM",
-        "batchDoneBy": "James",
+        "batchDoneAt": null,
+        "batchDoneBy": null,
         "labelDoneAt": "May 12, 2:37 PM",
         "labelDoneBy": "James"
       },
@@ -33,10 +33,10 @@
         "devices": [
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
-        "batchDone": true,
+        "batchDone": false,
         "labelDone": true,
-        "batchDoneAt": "May 12, 2:04 PM",
-        "batchDoneBy": "James",
+        "batchDoneAt": null,
+        "batchDoneBy": null,
         "labelDoneAt": "May 12, 2:37 PM",
         "labelDoneBy": "James"
       },
@@ -51,10 +51,10 @@
         "devices": [
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
-        "batchDone": true,
+        "batchDone": false,
         "labelDone": true,
-        "batchDoneAt": "May 12, 2:04 PM",
-        "batchDoneBy": "James",
+        "batchDoneAt": null,
+        "batchDoneBy": null,
         "labelDoneAt": "May 12, 2:37 PM",
         "labelDoneBy": "James"
       },
@@ -87,10 +87,10 @@
         "devices": [
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
-        "batchDone": true,
+        "batchDone": false,
         "labelDone": true,
-        "batchDoneAt": "May 12, 2:04 PM",
-        "batchDoneBy": "James",
+        "batchDoneAt": null,
+        "batchDoneBy": null,
         "labelDoneAt": "May 12, 2:37 PM",
         "labelDoneBy": "James"
       },
@@ -123,10 +123,10 @@
         "devices": [
           "5-20R - DUPLEX / Commercial Grade / Tamper Resistant / White (1)"
         ],
-        "batchDone": true,
+        "batchDone": false,
         "labelDone": true,
-        "batchDoneAt": "May 12, 2:04 PM",
-        "batchDoneBy": "James",
+        "batchDoneAt": null,
+        "batchDoneBy": null,
         "labelDoneAt": "May 12, 2:37 PM",
         "labelDoneBy": "James"
       },
@@ -157,10 +157,10 @@
         "devices": [
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
-        "batchDone": true,
+        "batchDone": false,
         "labelDone": true,
-        "batchDoneAt": "May 12, 2:04 PM",
-        "batchDoneBy": "James",
+        "batchDoneAt": null,
+        "batchDoneBy": null,
         "labelDoneAt": "May 12, 2:37 PM",
         "labelDoneBy": "James"
       },
@@ -175,10 +175,10 @@
         "devices": [
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
-        "batchDone": true,
+        "batchDone": false,
         "labelDone": true,
-        "batchDoneAt": "May 12, 2:04 PM",
-        "batchDoneBy": "James",
+        "batchDoneAt": null,
+        "batchDoneBy": null,
         "labelDoneAt": "May 12, 2:37 PM",
         "labelDoneBy": "James"
       },
@@ -193,10 +193,10 @@
         "devices": [
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
-        "batchDone": true,
+        "batchDone": false,
         "labelDone": true,
-        "batchDoneAt": "May 12, 2:04 PM",
-        "batchDoneBy": "James",
+        "batchDoneAt": null,
+        "batchDoneBy": null,
         "labelDoneAt": "May 12, 2:37 PM",
         "labelDoneBy": "James"
       }
