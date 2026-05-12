@@ -3,199 +3,196 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<title>RidgeHub — Foreman Receiving</title>
+<title>Ridgeline Electrical — Foreman Receiving</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root {
-  --bg:#f0ede8;--surface:#faf8f5;--surface2:#e8e4de;
-  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.15);
-  --text:#1a1714;--text2:#6b6560;--text3:#a8a29c;
-  --accent:#c84b2f;--green:#2a7a4b;--green-bg:rgba(42,122,75,0.1);
-  --yellow:#8a6a1a;--yellow-bg:rgba(240,192,64,0.12);
+:root{
+  --bg:#0f1117;--surface:#181c27;--surface2:#1e2333;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --accent:#c84b2f;--accent2:#e8813a;
+  --text:#e8eaf0;--text2:#8b91a8;--text3:#555b72;
+  --green:#2ecc8a;--green-bg:rgba(46,204,138,0.08);
+  --yellow:#f0c040;--yellow-bg:rgba(240,192,64,0.08);
+  --blue:#5b9cf6;--blue-bg:rgba(91,156,246,0.08);
+  --red:#e05555;--red-bg:rgba(224,85,85,0.08);
   --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
-  --radius:12px;
+  --radius:12px;--card-radius:8px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;min-height:100vh}
-body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(0,0,0,0.04) 1px,transparent 1px);background-size:24px 24px;pointer-events:none;z-index:0}
-.app{position:relative;z-index:1;max-width:600px;margin:0 auto;padding:0 0 4rem}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+.app{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh}
+/* Shared header */
+.site-header{padding:.875rem 1.25rem;background:var(--surface);border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.site-header-left{display:flex;align-items:center;gap:10px}
+.site-logo-mark{width:32px;height:32px;border-radius:7px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:500;color:#fff;flex-shrink:0;text-decoration:none}
+.site-breadcrumb{display:flex;align-items:center;gap:6px;font-size:13px}
+.site-breadcrumb a{color:var(--text2);text-decoration:none;font-size:13px}
+.site-breadcrumb a:hover{color:var(--text)}
+.site-breadcrumb-sep{color:var(--text3)}
+.site-breadcrumb-current{color:var(--text);font-weight:600}
+.site-header-right{display:flex;align-items:center;gap:8px}
+/* Buttons */
+.btn{background:none;border:1px solid var(--border2);border-radius:6px;padding:7px 13px;font-size:12px;color:var(--text2);cursor:pointer;font-family:var(--sans);white-space:nowrap;transition:all 0.15s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.btn:hover{background:var(--surface2);border-color:rgba(255,255,255,0.2);color:var(--text)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
+.btn-primary:hover{background:#b03d24;border-color:#b03d24;color:#fff}
+.btn-green{background:var(--green);border-color:var(--green);color:#000;font-weight:600}
+.btn-green:hover{background:#25b879;border-color:#25b879}
+.btn-print{background:#1a6fba;border-color:#1a6fba;color:#fff;font-weight:500}
+.btn-print:hover{background:#155a99;border-color:#155a99}
+/* Content area */
+.content{padding:1.25rem;display:flex;flex-direction:column;gap:12px;padding-bottom:80px}
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);transition:border-color 0.2s}
+.card:hover{border-color:var(--border2)}
+.card-header{padding:10px 16px;background:var(--surface2);border-bottom:1px solid var(--border);border-radius:var(--radius) var(--radius) 0 0;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);font-family:var(--mono)}
+/* Form elements */
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text2);font-family:var(--mono)}
+input[type=text],input[type=date],input[type=number],input[type=password],input[type=file],select,textarea{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:10px 12px;font-size:14px;font-family:var(--sans);color:var(--text);outline:none;transition:border-color 0.15s;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--accent)}
+input::placeholder{color:var(--text3)}
+/* Sync status */
+.sync-status{font-family:var(--mono);font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0}
+.sync-dot.synced{background:var(--green)}.sync-dot.syncing{background:var(--accent2);animation:blink 1s infinite}.sync-dot.error{background:var(--red)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+/* Progress */
+.progress-bar-outer{flex:1;height:5px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.progress-bar-fill{height:100%;background:var(--green);border-radius:99px;transition:width 0.4s}
+/* Badges */
+.badge{display:inline-block;font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:99px}
+.badge-ok{background:var(--green-bg);color:var(--green);border:1px solid rgba(46,204,138,0.2)}
+.badge-miss{background:var(--red-bg);color:var(--red);border:1px solid rgba(224,85,85,0.2)}
+/* Empty / loading */
+.empty-state{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-family:var(--mono);font-size:12px}
+.empty-icon{font-size:36px;margin-bottom:10px}
+.loading-state{text-align:center;padding:2rem;color:var(--text3);font-family:var(--mono);font-size:12px}
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+.modal{background:var(--surface);border-radius:16px 16px 0 0;border:1px solid var(--border2);border-bottom:none;width:100%;max-width:540px;padding:1.5rem;max-height:88vh;overflow-y:auto}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:1.25rem}
+.modal-actions{display:flex;gap:8px;margin-top:16px}
+.modal-actions .btn{flex:1;justify-content:center;padding:11px;font-size:14px}
+.info-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:12px}
 
-header{padding:1rem 1.25rem;background:var(--surface);border-bottom:2px solid var(--accent);display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-.logo-mark{width:32px;height:32px;border-radius:6px;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:500;color:#fff;flex-shrink:0}
-.header-text{}
-.header-title{font-size:15px;font-weight:700}
-.header-sub{font-size:11px;color:var(--text2);font-family:var(--mono)}
-
-.content{padding:1rem 1.25rem;display:flex;flex-direction:column;gap:12px}
-
-/* Project cards */
+.name-bar{background:var(--surface2);border-bottom:1px solid var(--border);padding:10px 1.25rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.name-bar-label{font-size:12px;color:var(--text2);white-space:nowrap;font-family:var(--mono)}
+.name-input-wrap{display:flex;gap:6px;flex:1}
+.name-input-wrap input{flex:1;min-width:0;padding:8px 10px;font-size:14px}
 .project-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden}
 .project-card-header{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.project-name{font-size:16px;font-weight:700;margin-bottom:2px}
+.project-name{font-size:16px;font-weight:700;margin-bottom:3px}
 .project-meta{font-size:11px;color:var(--text2);font-family:var(--mono);display:flex;gap:10px;flex-wrap:wrap}
-.status-pill{font-size:11px;font-family:var(--mono);padding:3px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0}
-.pill-shipped{background:rgba(232,129,58,0.15);color:#c06010;border:1px solid rgba(232,129,58,0.3)}
-.pill-received{background:var(--green-bg);color:var(--green);border:1px solid rgba(42,122,75,0.3)}
-.pill-inprogress{background:rgba(91,156,246,0.12);color:#1a5fba;border:1px solid rgba(91,156,246,0.3)}
-.pill-ready{background:var(--yellow-bg);color:var(--yellow);border:1px solid rgba(240,192,64,0.3)}
-
-.project-details{padding:10px 1.25rem;display:flex;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
-.detail-item{display:flex;flex-direction:column;gap:2px}
-.detail-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);font-family:var(--mono)}
+.status-pill{font-size:10px;font-family:var(--mono);padding:3px 10px;border-radius:99px;white-space:nowrap;flex-shrink:0;font-weight:500}
+.pill-shipped{background:rgba(232,129,58,0.12);color:var(--accent2);border:1px solid rgba(232,129,58,0.25)}
+.pill-received{background:var(--green-bg);color:var(--green);border:1px solid rgba(46,204,138,0.25)}
+.pill-ready{background:var(--yellow-bg);color:var(--yellow);border:1px solid rgba(240,192,64,0.25)}
+.project-details{padding:10px 1.25rem;display:flex;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.detail-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);font-family:var(--mono);margin-bottom:3px}
 .detail-value{font-size:13px;font-weight:500;color:var(--text)}
-
 .project-action{padding:1rem 1.25rem}
-.btn-received{width:100%;padding:14px;font-size:16px;font-weight:700;background:var(--green);color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:var(--sans);transition:background 0.15s;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-received:hover{background:#1e5c38}
-.btn-received:active{background:#164830}
-.received-info{background:var(--green-bg);border:1px solid rgba(42,122,75,0.2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--green);font-family:var(--mono);line-height:1.6}
-
-/* Name prompt */
-.name-bar{background:var(--yellow-bg);border-bottom:1px solid rgba(240,192,64,0.3);padding:10px 1.25rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.name-bar-label{font-size:13px;color:var(--yellow);font-weight:500;white-space:nowrap}
-.name-input-wrap{display:flex;gap:6px;flex:1}
-.name-input-wrap input{flex:1;background:var(--surface);border:1px solid var(--border2);border-radius:6px;padding:7px 10px;font-size:14px;font-family:var(--sans);color:var(--text);outline:none;min-width:0}
-.name-input-wrap input:focus{border-color:var(--green)}
-.btn-set-name{background:var(--green);border:none;border-radius:6px;padding:7px 14px;font-size:13px;font-weight:600;color:#fff;cursor:pointer;white-space:nowrap;font-family:var(--sans)}
-
-.empty-state{text-align:center;padding:3rem 1.25rem;color:var(--text3);font-family:var(--mono);font-size:13px}
-.empty-icon{font-size:40px;margin-bottom:12px}
-.loading{text-align:center;padding:2rem;color:var(--text3);font-family:var(--mono);font-size:12px}
+.btn-received{width:100%;padding:15px;font-size:16px;font-weight:700;background:var(--green);color:#000;border:none;border-radius:8px;cursor:pointer;font-family:var(--sans);transition:background 0.15s}
+.btn-received:hover{background:#25b879}
+.received-info{background:var(--green-bg);border:1px solid rgba(46,204,138,0.2);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--green);font-family:var(--mono);line-height:1.7}
 </style>
 </head>
 <body>
 <div class="app">
-  <header>
-    <div class="logo-mark">✅</div>
-    <div class="header-text">
-      <div class="header-title">Foreman Receiving</div>
-      <div class="header-sub">Ridgeline Electrical — Prefab</div>
+  <div class="site-header">
+    <div class="site-header-left">
+      <a href="index.html" class="site-logo-mark">RE</a>
+      <div class="site-breadcrumb">
+        <a href="index.html">Prefab Hub</a>
+        <span class="site-breadcrumb-sep">&#8250;</span>
+        <span class="site-breadcrumb-current">Foreman Receiving</span>
+      </div>
     </div>
-  </header>
+  </div>
 
   <div class="name-bar" id="nameBar">
     <div class="name-bar-label">Your name:</div>
     <div class="name-input-wrap">
-      <input type="text" id="foremanNameInput" placeholder="Enter your name…"/>
-      <button class="btn-set-name" onclick="setForemanName()">Set</button>
+      <input type="text" id="foremanNameInput" placeholder="Enter your name..."/>
+      <button class="btn btn-green" onclick="setForemanName()">Set</button>
     </div>
   </div>
 
   <div class="content" id="content">
-    <div class="loading">Loading shipments…</div>
+    <div class="loading-state">Loading shipments...</div>
   </div>
 </div>
 
 <script>
-const RAW      = 'https://raw.githubusercontent.com/RidgeHub/Prefab/main/prefab-projects.json';
-const GH_API   = 'https://api.github.com/repos/RidgeHub/Prefab/contents/prefab-projects.json';
-const GH_TOKEN = 'FOREMAN_WEBHOOK_PLACEHOLDER'; // replaced server-side if needed
-
-let projects = [], ghSha = null;
-let foremanName = localStorage.getItem('foreman_name') || '';
+const RAW='https://raw.githubusercontent.com/RidgeHub/Prefab/main/prefab-projects.json';
+const GH_API='https://api.github.com/repos/RidgeHub/Prefab/contents/prefab-projects.json';
+let projects=[],ghSha=null;
+let foremanName=localStorage.getItem('foreman_name')||'';
 
 function setForemanName(){
-  const n = document.getElementById('foremanNameInput').value.trim();
-  if(!n){ alert('Please enter your name.'); return; }
-  foremanName = n;
-  localStorage.setItem('foreman_name', n);
-  updateNameBar();
+  const n=document.getElementById('foremanNameInput').value.trim();
+  if(!n){alert('Please enter your name.');return;}
+  foremanName=n;localStorage.setItem('foreman_name',n);updateNameBar();
 }
-
 function updateNameBar(){
-  const bar = document.getElementById('nameBar');
+  const bar=document.getElementById('nameBar');
   if(foremanName){
-    bar.innerHTML = `<div class="name-bar-label">Signed in as:</div><strong style="color:var(--yellow);">${esc(foremanName)}</strong><button onclick="localStorage.removeItem('foreman_name');foremanName='';updateNameBar();" style="background:none;border:none;font-size:12px;color:var(--text3);cursor:pointer;margin-left:auto;">Change</button>`;
+    bar.innerHTML='<div class="name-bar-label">Signed in as:</div><strong style="color:var(--green);font-family:var(--mono);">'+esc(foremanName)+'</strong><button onclick="localStorage.removeItem('foreman_name');foremanName='';updateNameBar();" class="btn" style="margin-left:auto;font-size:11px;padding:4px 10px;">Change</button>';
   } else {
-    bar.innerHTML = `<div class="name-bar-label">Your name:</div><div class="name-input-wrap"><input type="text" id="foremanNameInput" placeholder="Enter your name…"/><button class="btn-set-name" onclick="setForemanName()">Set</button></div>`;
+    bar.innerHTML='<div class="name-bar-label">Your name:</div><div class="name-input-wrap"><input type="text" id="foremanNameInput" placeholder="Enter your name..."/><button class="btn btn-green" onclick="setForemanName()">Set</button></div>';
   }
 }
-
 async function loadProjects(){
   try{
-    const res = await fetch(RAW + '?v=' + Date.now());
-    if(!res.ok) throw new Error('HTTP ' + res.status);
-    projects = await res.json();
-    // get sha for saves
-    const meta = await fetch(GH_API, {headers:{Accept:'application/vnd.github.v3+json'}});
-    if(meta.ok){ ghSha = (await meta.json()).sha; }
+    const res=await fetch(RAW+'?v='+Date.now());
+    if(!res.ok) throw new Error();
+    projects=await res.json();
+    try{const meta=await fetch(GH_API,{headers:{Accept:'application/vnd.github.v3+json'}});if(meta.ok)ghSha=(await meta.json()).sha;}catch(e){}
     renderProjects();
   }catch(e){
-    document.getElementById('content').innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div>Could not load shipments.<br/>Check your connection.</div>';
+    document.getElementById('content').innerHTML='<div class="empty-state"><div class="empty-icon">&#9888;&#65039;</div>Could not load shipments.</div>';
   }
 }
-
 function renderProjects(){
-  const content = document.getElementById('content');
-  // Show only shipped or received projects
-  const relevant = projects.filter(p => p.status === 'shipped' || p.status === 'received' || p.status === 'ready');
-  if(!relevant.length){
-    content.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div>No shipments to receive yet.<br/>Check back when items are shipped.</div>';
-    return;
-  }
-  content.innerHTML = relevant.map(p => {
-    const status = p.status || 'inprogress';
-    const pillClass = `pill-${status}`;
-    const pillLabel = {inprogress:'In Progress',ready:'Ready for Delivery',shipped:'Shipped',received:'Received'}[status]||status;
-    const isShipped = status === 'shipped';
-    const isReceived = status === 'received';
-    const total = p.assemblies.length;
-    const boxes = p.boxCount || '—';
-    const onSite = p.onSiteDate ? new Date(p.onSiteDate).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '—';
-
-    const actionHTML = isShipped
-      ? `<div class="project-action"><button class="btn-received" onclick="markReceived('${p.id}')">✅ Mark as Received</button></div>`
-      : isReceived
-      ? `<div class="project-action"><div class="received-info">✓ Received by ${esc(p.receivedBy||'—')} on ${esc(p.receivedAt||'—')}</div></div>`
-      : `<div class="project-action"><div style="font-size:12px;color:var(--text3);font-family:var(--mono);text-align:center;padding:4px;">Not yet shipped</div></div>`;
-
-    return `<div class="project-card" id="proj-${p.id}">
-      <div class="project-card-header">
-        <div>
-          <div class="project-name">${esc(p.name)}</div>
-          <div class="project-meta">${p.num?'#'+esc(p.num)+'&nbsp;·&nbsp;':''} ${total} assemblies</div>
-        </div>
-        <div class="status-pill ${pillClass}">${pillLabel}</div>
-      </div>
-      <div class="project-details">
-        <div class="detail-item"><div class="detail-label">Boxes</div><div class="detail-value">📦 ${boxes}</div></div>
-        <div class="detail-item"><div class="detail-label">Needed on Site</div><div class="detail-value">${onSite}</div></div>
-      </div>
-      ${actionHTML}
-    </div>`;
+  const content=document.getElementById('content');
+  const relevant=projects.filter(p=>p.status==='shipped'||p.status==='received'||p.status==='ready');
+  if(!relevant.length){content.innerHTML='<div class="empty-state"><div class="empty-icon">&#128235;</div>No shipments to receive yet.</div>';return;}
+  content.innerHTML=relevant.map(p=>{
+    const status=p.status||'inprogress';
+    const pillLabel={inprogress:'In Progress',ready:'Ready for Delivery',shipped:'Shipped',received:'Received'}[status]||status;
+    const isShipped=status==='shipped',isReceived=status==='received';
+    const boxes=p.boxCount||'-';
+    const onSite=p.onSiteDate?new Date(p.onSiteDate).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}):'-';
+    const actionHTML=isShipped
+      ?'<div class="project-action"><button class="btn-received" onclick="markReceived(''+p.id+'')">&#9989; Mark as Received</button></div>'
+      :isReceived
+      ?'<div class="project-action"><div class="received-info">&#10003; Received by '+esc(p.receivedBy||'-')+' on '+esc(p.receivedAt||'-')+'</div></div>'
+      :'<div class="project-action"><div style="font-size:12px;color:var(--text3);font-family:var(--mono);text-align:center;">Not yet shipped</div></div>';
+    return '<div class="project-card" id="proj-'+p.id+'"><div class="project-card-header"><div><div class="project-name">'+esc(p.name)+'</div><div class="project-meta">'+(p.num?'#'+esc(p.num)+'&nbsp;&middot;&nbsp;':'')+p.assemblies.length+' assemblies</div></div><div class="status-pill pill-'+status+'">'+pillLabel+'</div></div><div class="project-details"><div><div class="detail-label">Boxes</div><div class="detail-value">&#128230; '+boxes+'</div></div><div><div class="detail-label">Needed on Site</div><div class="detail-value">'+onSite+'</div></div></div>'+actionHTML+'</div>';
   }).join('');
 }
-
 async function markReceived(projectId){
-  if(!foremanName){ alert('Please enter your name first.'); return; }
+  if(!foremanName){alert('Please enter your name first.');return;}
   if(!confirm('Mark this delivery as received?')) return;
-  const project = projects.find(p => p.id === projectId);
+  const project=projects.find(p=>p.id===projectId);
   if(!project) return;
-  project.status = 'received';
-  project.receivedBy = foremanName;
-  project.receivedAt = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
-
-  // Try to save back to GitHub using public token approach
-  // Since foreman doesn't have token, we save optimistically and show success
-  // Admin save happens next time prefab board is opened
-  localStorage.setItem('foreman_pending_received', JSON.stringify({projectId, receivedBy:foremanName, receivedAt:project.receivedAt}));
-
-  // Try save with stored token if available
-  const token = localStorage.getItem('prefab_gh_token') || '';
-  if(token && ghSha){
+  project.status='received';
+  project.receivedBy=foremanName;
+  project.receivedAt=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+  localStorage.setItem('foreman_pending',JSON.stringify({projectId,receivedBy:foremanName,receivedAt:project.receivedAt}));
+  const token=localStorage.getItem('prefab_gh_token')||'';
+  if(token&&ghSha){
     try{
-      const body = {message:'Mark received: '+project.name, content:btoa(unescape(encodeURIComponent(JSON.stringify(projects,null,2)))), sha:ghSha};
-      const res = await fetch(GH_API,{method:'PUT',headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
-      if(res.ok){ ghSha=(await res.json()).content.sha; localStorage.removeItem('foreman_pending_received'); }
+      const body={message:'Mark received: '+project.name,content:btoa(unescape(encodeURIComponent(JSON.stringify(projects,null,2)))),sha:ghSha};
+      const res=await fetch(GH_API,{method:'PUT',headers:{Authorization:'token '+token,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+      if(res.ok){ghSha=(await res.json()).content.sha;localStorage.removeItem('foreman_pending');}
     }catch(e){}
   }
   renderProjects();
 }
-
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-updateNameBar();
-loadProjects();
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+updateNameBar();loadProjects();
 </script>
 </body>
 </html>
