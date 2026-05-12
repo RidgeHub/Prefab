@@ -25,13 +25,13 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 .app{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh}
 
 /* Header */
-header{padding:.875rem 1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--accent);background:var(--surface);position:sticky;top:0;z-index:100;gap:8px;flex-wrap:wrap}
+header{padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--accent);background:var(--surface);position:sticky;top:0;z-index:100;gap:6px;flex-wrap:nowrap}
 .logo{display:flex;align-items:center;gap:8px}
 .logo-mark{width:32px;height:32px;border-radius:6px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:500;color:#fff;flex-shrink:0}
-.logo-text{font-size:13px;font-weight:500;color:var(--text2)}
-.project-title{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
-.header-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.btn{background:none;border:1px solid var(--border2);border-radius:6px;padding:8px 14px;color:var(--text2);font-family:var(--sans);font-size:13px;cursor:pointer;white-space:nowrap;transition:all 0.15s}
+.logo-text{font-size:12px;font-weight:500;color:var(--text2);white-space:nowrap}
+.project-title{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-0.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
+.header-right{display:flex;align-items:center;gap:5px;flex-wrap:nowrap;flex-shrink:0}
+.btn{background:none;border:1px solid var(--border2);border-radius:6px;padding:7px 10px;color:var(--text2);font-family:var(--sans);font-size:12px;cursor:pointer;white-space:nowrap;transition:all 0.15s}
 .btn:hover{background:var(--surface2)}
 .btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
 .btn-primary:hover{background:#b03d24}
@@ -39,6 +39,10 @@ header{padding:.875rem 1rem;display:flex;align-items:center;justify-content:spac
 .btn-green:hover{background:#1e5c38}
 .btn-print{background:#1a6fba;border-color:#1a6fba;color:#fff;font-weight:500}
 .btn-print:hover{background:#155a99}
+.sync-status{font-family:var(--mono);font-size:10px;color:var(--text3);display:flex;align-items:center;gap:4px}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--text3);flex-shrink:0}
+.sync-dot.synced{background:var(--green)}.sync-dot.syncing{background:var(--accent2);animation:blink 1s infinite}.sync-dot.error{background:var(--accent)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 
 /* Assembler bar */
 .assembler-bar{background:var(--surface2);border-bottom:1px solid var(--border);padding:7px 1rem;font-size:12px;color:var(--text2);display:flex;align-items:center;justify-content:space-between}
@@ -151,6 +155,8 @@ input:focus{border-color:var(--accent)}
       </div>
     </div>
     <div class="header-right">
+      <div class="sync-status no-print"><div class="sync-dot" id="syncDot"></div><span id="syncText">—</span></div>
+      <button class="btn no-print" onclick="openTokenModal()" id="tokenBtn">⚙ GitHub</button>
       <button class="btn no-print" id="backBtn" onclick="showProjectList()" style="display:none;">← Projects</button>
       <button class="btn btn-primary no-print" id="newProjectBtn" onclick="openNewProject()">+ New Project</button>
     </div>
@@ -193,6 +199,19 @@ input:focus{border-color:var(--accent)}
   </div>
 </div>
 
+<!-- GitHub token modal -->
+<div class="modal-overlay" id="tokenModal" style="display:none;" onclick="if(event.target===this)closeTokenModal()">
+  <div class="modal">
+    <div class="modal-title">GitHub Token</div>
+    <div class="info-box">Enter your GitHub personal access token (repo scope). Saved in this browser — enter once per device.</div>
+    <div class="form-group"><label>Personal Access Token</label><input type="password" id="ghTokenInput" placeholder="ghp_…"/></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeTokenModal()">Cancel</button>
+      <button class="btn btn-green" onclick="saveToken()">Save &amp; Sync</button>
+    </div>
+  </div>
+</div>
+
 <!-- Set name modal -->
 <div class="modal-overlay" id="nameModal" style="display:none;" onclick="if(event.target===this)closeSetName()">
   <div class="modal">
@@ -206,13 +225,79 @@ input:focus{border-color:var(--accent)}
 </div>
 
 <script>
-const STORAGE_KEY = 'ridgehub_prefab_v2';
+const STORAGE_KEY  = 'ridgehub_prefab_v2';
+const REPO         = 'RidgeHub/Prefab';
+const GH_FILE      = 'prefab-projects.json';
+const GH_API       = `https://api.github.com/repos/${REPO}/contents/${GH_FILE}`;
 let projects = [], currentProject = null, currentPhase = 1;
 let assemblerName = localStorage.getItem('prefab_assembler') || '';
+let ghSha = null;
 
-function loadData(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); }catch(e){ return []; } }
-function saveData(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(projects)); }
+function getGHToken(){ return localStorage.getItem('prefab_gh_token')||''; }
+
+function saveLocal(){ localStorage.setItem(STORAGE_KEY, JSON.stringify({projects, sha:ghSha})); }
+
+function loadLocal(){
+  try{
+    const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');
+    projects=d.projects||[]; ghSha=d.sha||null;
+  }catch(e){ projects=[]; }
+}
+
+async function loadFromGitHub(){
+  const token=getGHToken();
+  if(!token){ loadLocal(); showProjectList(); return; }
+  setSyncStatus('syncing','Loading…');
+  try{
+    const res=await fetch(GH_API,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});
+    if(res.status===404){ projects=[]; ghSha=null; setSyncStatus('synced','Ready'); showProjectList(); return; }
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    ghSha=data.sha;
+    projects=JSON.parse(atob(data.content.replace(/\n/g,'')));
+    saveLocal();
+    setSyncStatus('synced','Synced');
+    showProjectList();
+  }catch(e){
+    setSyncStatus('error','Load failed');
+    loadLocal(); showProjectList();
+  }
+}
+
+async function saveData(){
+  saveLocal();
+  const token=getGHToken();
+  if(!token) return;
+  setSyncStatus('syncing','Saving…');
+  try{
+    const body={message:'Update prefab projects',content:btoa(unescape(encodeURIComponent(JSON.stringify(projects,null,2))))};
+    if(ghSha) body.sha=ghSha;
+    const res=await fetch(GH_API,{method:'PUT',headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    ghSha=(await res.json()).content.sha;
+    setSyncStatus('synced','Saved ✓');
+  }catch(e){ setSyncStatus('error','Save failed'); }
+}
+
+function setSyncStatus(state,text){
+  const dot=document.getElementById('syncDot');
+  const lbl=document.getElementById('syncText');
+  if(!dot||!lbl) return;
+  dot.className='sync-dot'+(state?' '+state:'');
+  lbl.textContent=text;
+}
 function genId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+
+/* ── GitHub token modal ── */
+function openTokenModal(){ document.getElementById('ghTokenInput').value=getGHToken(); document.getElementById('tokenModal').style.display='flex'; }
+function closeTokenModal(){ document.getElementById('tokenModal').style.display='none'; }
+function saveToken(){
+  const t=document.getElementById('ghTokenInput').value.trim();
+  if(!t){ alert('Enter a token.'); return; }
+  localStorage.setItem('prefab_gh_token',t);
+  closeTokenModal();
+  loadFromGitHub();
+}
 
 /* ── Assembler name ── */
 function openSetName(){ document.getElementById('nameInput').value=assemblerName; document.getElementById('nameModal').style.display='flex'; }
@@ -350,7 +435,14 @@ function showProjectList(){
   document.getElementById('logoSub').style.display='';
   updateAssemblerBar();
   const el=document.getElementById('mainContent');
-  if(!projects.length){ el.innerHTML='<div class="empty"><div class="empty-icon">📦</div>No projects yet.<br/>Tap "+ New Project" to upload an assembly file.</div>'; return; }
+  const hasToken=!!getGHToken();
+  if(!projects.length){
+    var tokenBtn = hasToken
+      ? '<div style="background:#edf7f2;border:1px solid #a0d4b8;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#2a7a4b;">✓ GitHub connected</div><button onclick="loadFromGitHub()" style="width:100%;padding:12px;font-size:15px;font-weight:600;background:#2a7a4b;color:#fff;border:none;border-radius:8px;cursor:pointer;margin-bottom:10px;">↺ Sync from GitHub</button>'
+      : '<div style="background:#fff8e6;border:1px solid #f0d080;border-radius:10px;padding:14px;margin-bottom:12px;text-align:left;"><div style="font-weight:600;font-size:15px;margin-bottom:6px;">⚙ Connect GitHub</div><div style="font-size:13px;color:#6b6560;margin-bottom:12px;">Enter your token to sync projects across devices.</div><button onclick="openTokenModal()" style="width:100%;padding:12px;font-size:15px;font-weight:600;background:#2a7a4b;color:#fff;border:none;border-radius:8px;cursor:pointer;">Enter GitHub Token</button></div>';
+    el.innerHTML = '<div style="padding:1.5rem;"><div style="font-size:40px;text-align:center;margin-bottom:12px;">📦</div>' + tokenBtn + '<button onclick="openNewProject()" style="width:100%;padding:12px;font-size:15px;font-weight:600;background:#c84b2f;color:#fff;border:none;border-radius:8px;cursor:pointer;">+ New Project</button></div>';
+    return;
+  }
   el.innerHTML=projects.map(p=>{
     const total=p.assemblies.length, done=p.assemblies.filter(a=>a.labelDone).length;
     const pct=total?Math.round((done/total)*100):0;
@@ -576,8 +668,8 @@ function createProject(){
 }
 
 /* ── Init ── */
-projects=loadData();
-showProjectList();
+if(!getGHToken()) openTokenModal();
+else loadFromGitHub();
 </script>
 </body>
 </html>
