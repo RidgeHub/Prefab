@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RidgeHub — Material Orders</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#f0ede8;--surface:#faf8f5;--surface2:#e8e4de;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.15);
+  --text:#1a1714;--text2:#6b6560;--text3:#a8a29c;
+  --accent:#c84b2f;--green:#2a7a4b;
+  --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+  --radius:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(0,0,0,0.04) 1px,transparent 1px);background-size:24px 24px;pointer-events:none;z-index:0}
+.app{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:0 0 4rem}
+header{padding:.875rem 1.25rem;background:var(--surface);border-bottom:2px solid var(--accent);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-mark{width:30px;height:30px;border-radius:6px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:500;color:#fff}
+.logo-text{font-size:15px;font-weight:700}
+.logo-sub{font-size:10px;color:var(--text2);font-family:var(--mono)}
+.btn{background:none;border:1px solid var(--border2);border-radius:6px;padding:7px 14px;font-size:13px;color:var(--text2);cursor:pointer;font-family:var(--sans);white-space:nowrap}
+.btn:hover{background:var(--surface2)}
+.btn-print{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
+.btn-print:hover{background:#b03d24}
+.content{padding:1rem 1.25rem;display:flex;flex-direction:column;gap:12px}
+.project-selector{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:1rem}
+.project-selector label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text2);font-family:var(--mono);display:block;margin-bottom:6px}
+.project-selector select{background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:9px 10px;font-size:14px;font-family:var(--sans);color:var(--text);outline:none;width:100%}
+.project-selector select:focus{border-color:var(--accent)}
+.order-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.order-title{font-size:18px;font-weight:700;margin-bottom:2px}
+.order-meta{font-size:12px;color:var(--text2);font-family:var(--mono)}
+.category-section{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden}
+.category-header{padding:9px 14px;background:var(--surface2);border-bottom:1px solid var(--border2);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text2);font-family:var(--mono)}
+.order-item{display:flex;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);gap:12px}
+.order-item:last-child{border-bottom:none}
+.order-qty{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--accent);width:50px;flex-shrink:0;text-align:right}
+.order-name{flex:1;font-size:13px;line-height:1.4}
+.empty-state{text-align:center;padding:2rem;color:var(--text3);font-family:var(--mono);font-size:12px}
+.loading{text-align:center;padding:2rem;color:var(--text3);font-family:var(--mono);font-size:12px}
+.print-date{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:4px;display:none}
+
+@media print{
+  header .btn, .project-selector, body::before{display:none!important}
+  .print-date{display:block!important}
+  body{background:#fff}
+  .content{padding:0}
+  .app{max-width:100%}
+  .order-item{padding:6px 14px}
+  .order-qty{font-size:13px}
+  .order-name{font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo">
+      <div class="logo-mark">📦</div>
+      <div>
+        <div class="logo-text">Material Orders</div>
+        <div class="logo-sub">Ridgeline Electrical — Prefab</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <a href="index.html" class="btn">← Hub</a>
+      <button class="btn btn-print" onclick="window.print()">🖨 Print</button>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="project-selector">
+      <label>Select Project</label>
+      <select id="projectSelect" onchange="renderOrder()">
+        <option value="">Loading projects…</option>
+      </select>
+    </div>
+
+    <div id="orderContent">
+      <div class="loading">Select a project to view its material order.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const RAW = 'https://raw.githubusercontent.com/RidgeHub/Prefab/main/prefab-projects.json';
+let projects = [];
+
+const CATEGORY_ORDER = ['Plaster Ring','Device','Wire Connector','Pigtail','Device Cover','Other'];
+const CATEGORY_LABELS = {
+  'Plaster Ring':'Plaster Rings',
+  'Device':'Devices',
+  'Wire Connector':'Wire Connectors',
+  'Pigtail':'Pigtails',
+  'Device Cover':'Device Covers',
+  'Other':'Other Items'
+};
+
+async function loadProjects(){
+  try{
+    const res = await fetch(RAW + '?v=' + Date.now());
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    projects = await res.json();
+    const sel = document.getElementById('projectSelect');
+    sel.innerHTML = '<option value="">— Select a project —</option>' +
+      projects.map(p => `<option value="${p.id}">${esc(p.name)}${p.num?' (#'+esc(p.num)+')':''}</option>`).join('');
+  }catch(e){
+    document.getElementById('orderContent').innerHTML = '<div class="empty-state">Could not load projects.</div>';
+  }
+}
+
+function stripQty(s){ return s.replace(/\s*\(\d+\)\s*/g,'').trim(); }
+function getQty(s){ const m=s.match(/\((\d+)\)/); return m?parseInt(m[1]):1; }
+function stripAdj(s){ return s.replace(/[\/,]?\s*Adj(ustable)?/gi,'').replace(/Adj(ustable)?\s*[\/,]?\s*/gi,'').trim(); }
+
+function renderOrder(){
+  const id = document.getElementById('projectSelect').value;
+  const el = document.getElementById('orderContent');
+  if(!id){ el.innerHTML = '<div class="loading">Select a project to view its material order.</div>'; return; }
+  const project = projects.find(p=>p.id===id);
+  if(!project){ el.innerHTML = '<div class="empty-state">Project not found.</div>'; return; }
+
+  // Build BOM from assemblies
+  const bom = {}; // {category: {itemName: qty}}
+  project.assemblies.forEach(a => {
+    const addItem = (raw, category) => {
+      if(!raw) return;
+      // Handle pipe-separated pigtails
+      const items = raw.includes('|') ? raw.split('|') : [raw];
+      items.forEach(item => {
+        const name = stripAdj(stripQty(item.trim()));
+        const qty  = getQty(item);
+        if(!name) return;
+        if(!bom[category]) bom[category] = {};
+        bom[category][name] = (bom[category][name]||0) + qty;
+      });
+    };
+    addItem(a.plaster, 'Plaster Ring');
+    addItem(a.wire, 'Wire Connector');
+    addItem(a.pigtail, 'Pigtail');
+    a.devices.forEach(d => addItem(d, 'Device'));
+  });
+
+  // Render
+  const onSite = project.onSiteDate ? new Date(project.onSiteDate).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '';
+  let html = `<div class="order-header">
+    <div>
+      <div class="order-title">${esc(project.name)}</div>
+      <div class="order-meta">${project.num?'Project #'+esc(project.num)+' · ':''}${project.assemblies.length} assemblies${onSite?' · Needed: '+onSite:''}</div>
+      <div class="print-date">Printed: ${new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</div>
+    </div>
+  </div>`;
+
+  const cats = CATEGORY_ORDER.filter(c => bom[c] && Object.keys(bom[c]).length);
+  if(!cats.length){ html += '<div class="empty-state">No materials found in this project.</div>'; el.innerHTML=html; return; }
+
+  cats.forEach(cat => {
+    const items = Object.entries(bom[cat]).sort((a,b)=>b[1]-a[1]);
+    html += `<div class="category-section">
+      <div class="category-header">${CATEGORY_LABELS[cat]||cat}</div>
+      ${items.map(([name,qty])=>`<div class="order-item">
+        <div class="order-qty">${qty}</div>
+        <div class="order-name">${esc(name)}</div>
+      </div>`).join('')}
+    </div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+loadProjects();
+</script>
+</body>
+</html>
