@@ -123,10 +123,10 @@
         "devices": [
           "5-20R - DUPLEX / Commercial Grade / Tamper Resistant / White (1)"
         ],
-        "batchDone": true,
+        "batchDone": false,
         "labelDone": false,
-        "batchDoneAt": "May 12, 1:34 PM",
-        "batchDoneBy": "James",
+        "batchDoneAt": null,
+        "batchDoneBy": null,
         "labelDoneAt": null,
         "labelDoneBy": null
       },
