@@ -140,11 +140,11 @@
         "pigtail": "",
         "devices": [],
         "batchDone": false,
-        "labelDone": true,
+        "labelDone": false,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": "May 12, 2:37 PM",
-        "labelDoneBy": "James"
+        "labelDoneAt": null,
+        "labelDoneBy": null
       },
       {
         "id": "mp2wn0gt3zl2",
