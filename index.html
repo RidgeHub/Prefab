@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>RidgeHub — Prefab</title>
+<title>Ridgeline Electrical — Prefab Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root {
+:root{
   --bg:#0f1117;--surface:#181c27;--surface2:#1e2333;
   --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
   --accent:#c84b2f;--accent2:#e8813a;
   --text:#e8eaf0;--text2:#8b91a8;--text3:#555b72;
-  --green:#2ecc8a;--green-bg:rgba(46,204,138,0.1);
-  --yellow:#f0c040;--yellow-bg:rgba(240,192,64,0.1);
-  --blue:#5b9cf6;--blue-bg:rgba(91,156,246,0.1);
-  --red:#e05555;--red-bg:rgba(224,85,85,0.1);
+  --green:#2ecc8a;--green-bg:rgba(46,204,138,0.08);
+  --yellow:#f0c040;--yellow-bg:rgba(240,192,64,0.08);
+  --blue:#5b9cf6;--blue-bg:rgba(91,156,246,0.08);
+  --red:#e05555;--red-bg:rgba(224,85,85,0.08);
   --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
   --radius:12px;
 }
@@ -23,78 +23,70 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
 .app{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
 
-/* Header */
-.hub-header{margin-bottom:2.5rem}
-.hub-logo{display:flex;align-items:center;gap:12px;margin-bottom:6px}
-.hub-mark{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:16px;font-weight:500;color:#fff}
-.hub-title{font-size:26px;font-weight:700;letter-spacing:-0.5px}
-.hub-sub{font-size:13px;color:var(--text2);font-family:var(--mono);margin-left:56px}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:12px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-mark{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:15px;font-weight:500;color:#fff;flex-shrink:0}
+.logo-info{}
+.logo-title{font-size:22px;font-weight:700;letter-spacing:-0.4px;line-height:1.2}
+.logo-sub{font-size:12px;color:var(--text2);font-family:var(--mono)}
 
-/* Section labels */
 .section-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);font-family:var(--mono);margin-bottom:10px;margin-top:2rem}
 
-/* Tool cards */
 .tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .tool-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:1.25rem;text-decoration:none;color:var(--text);transition:all 0.2s;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
-.tool-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
-.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.tool-card:hover{border-color:rgba(255,255,255,0.25);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.4)}
+.tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--radius) var(--radius) 0 0}
 .tool-card.lookup::before{background:linear-gradient(90deg,var(--blue),#7b9ef6)}
 .tool-card.board::before{background:linear-gradient(90deg,var(--accent),var(--accent2))}
 .tool-card.foreman::before{background:linear-gradient(90deg,var(--green),#5be8a8)}
 .tool-card.orders::before{background:linear-gradient(90deg,var(--yellow),#f0a040)}
-.tool-icon{font-size:28px}
-.tool-name{font-size:15px;font-weight:600}
+.tool-icon{font-size:26px}
+.tool-name{font-size:14px;font-weight:600}
 .tool-desc{font-size:12px;color:var(--text2);line-height:1.5}
-.tool-arrow{position:absolute;top:1.25rem;right:1.25rem;color:var(--text3);font-size:18px}
+.tool-arrow{position:absolute;top:1.25rem;right:1.25rem;color:var(--text3);font-size:16px}
 
-/* Project status overview */
 .projects-wrap{display:flex;flex-direction:column;gap:8px}
-.project-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.project-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap;transition:border-color 0.2s}
 .project-row:hover{border-color:var(--border2)}
-.project-status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.status-inprogress{background:var(--blue)}
-.status-ready{background:var(--yellow)}
-.status-shipped{background:var(--accent2)}
-.status-received{background:var(--green)}
+.project-status-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.dot-inprogress{background:var(--blue)}.dot-ready{background:var(--yellow)}.dot-shipped{background:var(--accent2)}.dot-received{background:var(--green)}
 .project-row-info{flex:1;min-width:0}
-.project-row-name{font-size:14px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.project-row-meta{font-size:11px;color:var(--text2);font-family:var(--mono);display:flex;gap:10px;flex-wrap:wrap}
-.project-row-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.project-row-name{font-size:14px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.project-row-meta{font-size:11px;color:var(--text3);font-family:var(--mono);display:flex;gap:10px;flex-wrap:wrap}
+.project-row-right{display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap}
 .status-badge{font-size:10px;font-family:var(--mono);padding:3px 9px;border-radius:99px;font-weight:500;white-space:nowrap}
-.badge-inprogress{background:var(--blue-bg);color:var(--blue)}
-.badge-ready{background:var(--yellow-bg);color:var(--yellow)}
-.badge-shipped{background:rgba(232,129,58,0.15);color:var(--accent2)}
-.badge-received{background:var(--green-bg);color:var(--green)}
+.badge-inprogress{background:var(--blue-bg);color:var(--blue);border:1px solid rgba(91,156,246,0.2)}
+.badge-ready{background:var(--yellow-bg);color:var(--yellow);border:1px solid rgba(240,192,64,0.2)}
+.badge-shipped{background:rgba(232,129,58,0.1);color:var(--accent2);border:1px solid rgba(232,129,58,0.2)}
+.badge-received{background:var(--green-bg);color:var(--green);border:1px solid rgba(46,204,138,0.2)}
 .progress-mini{display:flex;align-items:center;gap:6px}
-.progress-mini-bar{width:60px;height:4px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.progress-mini-bar{width:55px;height:3px;background:var(--surface2);border-radius:99px;overflow:hidden}
 .progress-mini-fill{height:100%;border-radius:99px;background:var(--green);transition:width 0.3s}
 .progress-mini-label{font-family:var(--mono);font-size:10px;color:var(--text3)}
 .due-chip{font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:99px}
-.due-ok{background:var(--green-bg);color:var(--green)}
-.due-soon{background:var(--yellow-bg);color:var(--yellow)}
-.due-late{background:var(--red-bg);color:var(--red)}
+.due-ok{background:var(--green-bg);color:var(--green)}.due-soon{background:var(--yellow-bg);color:var(--yellow)}.due-late{background:var(--red-bg);color:var(--red)}
 .boxes-chip{font-size:10px;font-family:var(--mono);color:var(--text3)}
-
 .empty-state{text-align:center;padding:2rem;color:var(--text3);font-family:var(--mono);font-size:12px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border)}
-
 .loading{text-align:center;padding:1.5rem;color:var(--text3);font-family:var(--mono);font-size:12px}
 
 @media(max-width:600px){
   .tools-grid{grid-template-columns:1fr}
   .app{padding:1.25rem 1rem 3rem}
-  .hub-title{font-size:20px}
+  .logo-title{font-size:17px}
 }
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="hub-header">
-    <div class="hub-logo">
-      <div class="hub-mark">RH</div>
-      <div class="hub-title">RidgeHub Prefab</div>
+  <header>
+    <div class="logo">
+      <div class="logo-mark">RE</div>
+      <div class="logo-info">
+        <div class="logo-title">Ridgeline Electrical</div>
+        <div class="logo-sub">Prefab Hub</div>
+      </div>
     </div>
-    <div class="hub-sub">Ridgeline Electrical Industries</div>
-  </div>
+  </header>
 
   <div class="section-label">Tools</div>
   <div class="tools-grid">
@@ -102,7 +94,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="tool-arrow">›</div>
       <div class="tool-icon">🔍</div>
       <div class="tool-name">Assembly Lookup</div>
-      <div class="tool-desc">Upload a project sheet and auto-fill assembly components. Generate a bill of materials.</div>
+      <div class="tool-desc">Auto-fill assembly components from a project sheet and generate a bill of materials.</div>
     </a>
     <a href="prefab-board.html" class="tool-card board">
       <div class="tool-arrow">›</div>
@@ -114,7 +106,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="tool-arrow">›</div>
       <div class="tool-icon">✅</div>
       <div class="tool-name">Foreman Receiving</div>
-      <div class="tool-desc">Mark prefab deliveries as received on site. No login required.</div>
+      <div class="tool-desc">Mark prefab deliveries received on site. No login required.</div>
     </a>
     <a href="material-order.html" class="tool-card orders">
       <div class="tool-arrow">›</div>
@@ -125,70 +117,57 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   </div>
 
   <div class="section-label" style="margin-top:2rem;">Active Projects</div>
-  <div id="projectsWrap">
+  <div id="projectsWrap" class="projects-wrap">
     <div class="loading">Loading projects…</div>
   </div>
 </div>
 
 <script>
-const RAW = 'https://raw.githubusercontent.com/RidgeHub/Prefab/main/prefab-projects.json';
-
-const STATUS_LABELS = {
-  inprogress: 'In Progress',
-  ready: 'Ready for Delivery',
-  shipped: 'Shipped',
-  received: 'Received'
-};
-
-async function loadProjects(){
-  try{
-    const res = await fetch(RAW + '?v=' + Date.now());
-    if(!res.ok) throw new Error('HTTP ' + res.status);
-    const projects = await res.json();
-    renderProjects(projects);
-  }catch(e){
-    document.getElementById('projectsWrap').innerHTML =
-      '<div class="empty-state">Could not load projects — check GitHub connection.</div>';
-  }
-}
+const RAW='https://raw.githubusercontent.com/RidgeHub/Prefab/main/prefab-projects.json';
+const STATUS_LABELS={inprogress:'In Progress',ready:'Ready for Delivery',shipped:'Shipped',received:'Received'};
 
 function daysUntil(d){
   if(!d) return null;
-  const today = new Date(); today.setHours(0,0,0,0);
-  return Math.floor((new Date(d) - today) / (1000*60*60*24));
+  const today=new Date(); today.setHours(0,0,0,0);
+  return Math.floor((new Date(d)-today)/(1000*60*60*24));
+}
+
+async function loadProjects(){
+  try{
+    const res=await fetch(RAW+'?v='+Date.now());
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    renderProjects(await res.json());
+  }catch(e){
+    document.getElementById('projectsWrap').innerHTML='<div class="empty-state">Could not load projects.</div>';
+  }
 }
 
 function renderProjects(projects){
-  const wrap = document.getElementById('projectsWrap');
-  if(!projects.length){
-    wrap.innerHTML = '<div class="empty-state">No active projects yet. Create one in the Prefab Board.</div>';
-    return;
-  }
-  wrap.innerHTML = projects.map(p => {
-    const total = p.assemblies.length;
-    const done  = p.assemblies.filter(a => a.labelDone).length;
-    const pct   = total ? Math.round((done/total)*100) : 0;
-    const status = p.status || 'inprogress';
-    const days  = daysUntil(p.onSiteDate);
-    let dueHTML = '';
+  const wrap=document.getElementById('projectsWrap');
+  if(!projects.length){wrap.innerHTML='<div class="empty-state">No projects yet. Create one in the Prefab Board.</div>';return;}
+  wrap.innerHTML=projects.map(p=>{
+    const total=p.assemblies.length,done=p.assemblies.filter(a=>a.labelDone).length;
+    const pct=total?Math.round((done/total)*100):0;
+    const status=p.status||'inprogress';
+    const days=daysUntil(p.onSiteDate);
+    let dueHTML='';
     if(p.onSiteDate){
-      const cls = days < 0 ? 'due-late' : days <= 3 ? 'due-soon' : 'due-ok';
-      const label = days < 0 ? `${Math.abs(days)}d overdue` : days === 0 ? 'Due today' : `${days}d to site`;
-      dueHTML = `<span class="due-chip ${cls}">${label}</span>`;
+      const cls=days<0?'due-late':days<=3?'due-soon':'due-ok';
+      const lbl=days<0?`${Math.abs(days)}d overdue`:days===0?'Due today':`${days}d to site`;
+      dueHTML=`<span class="due-chip ${cls}">${lbl}</span>`;
     }
-    const boxHTML = p.boxCount ? `<span class="boxes-chip">📦 ${p.boxCount} box${p.boxCount>1?'es':''}</span>` : '';
+    const boxHTML=p.boxCount?`<span class="boxes-chip">📦 ${p.boxCount} box${p.boxCount>1?'es':''}</span>`:'';
     return `<div class="project-row">
-      <div class="project-status-dot status-${status}"></div>
+      <div class="project-status-dot dot-${status}"></div>
       <div class="project-row-info">
-        <div class="project-row-name">${esc(p.name)}${p.num?' <span style="color:var(--text3);font-weight:400;font-size:12px;">#'+esc(p.num)+'</span>':''}</div>
+        <div class="project-row-name">${esc(p.name)}${p.num?` <span style="color:var(--text3);font-weight:400;font-size:11px;">#${esc(p.num)}</span>`:''}</div>
         <div class="project-row-meta">
           <span>${total} assemblies</span>
           ${p.onSiteDate?`<span>On site: ${new Date(p.onSiteDate).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>`:''}
         </div>
       </div>
       <div class="project-row-right">
-        ${dueHTML}
-        ${boxHTML}
+        ${dueHTML}${boxHTML}
         <div class="progress-mini">
           <div class="progress-mini-bar"><div class="progress-mini-fill" style="width:${pct}%"></div></div>
           <div class="progress-mini-label">${pct}%</div>
@@ -199,8 +178,7 @@ function renderProjects(projects){
   }).join('');
 }
 
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 loadProjects();
 </script>
 </body>
