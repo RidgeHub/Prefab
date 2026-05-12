@@ -70,11 +70,11 @@
           "5-20R - DUPLEX / Commercial Grade / GFCI / White (1)"
         ],
         "batchDone": true,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": "May 12, 2:04 PM",
         "batchDoneBy": "James",
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 12, 2:37 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp2wn0gtedy4",
@@ -88,11 +88,11 @@
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
         "batchDone": true,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": "May 12, 2:04 PM",
         "batchDoneBy": "James",
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 12, 2:37 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp2wn0gtg0gg",
