@@ -429,6 +429,14 @@ function isBatchDone(batch, assemblies){
 }
 
 /* ── Project list ── */
+function updateStatus(projectId, status){
+  const p = projects.find(x=>x.id===projectId);
+  if(!p) return;
+  p.status = status;
+  saveData();
+  showProjectList();
+}
+
 function showProjectList(){
   currentProject=null;
   document.getElementById('phaseTabs').style.display='none';
@@ -657,7 +665,9 @@ function createProject(){
       }
       const assemblies=parseAssemblies(rows);
       if(!assemblies.length){ alert('No assemblies found. Make sure the file has an ID Label column and data rows.'); return; }
-      const project={id:genId(),name,num,assemblies,createdAt:Date.now()};
+      const boxes=parseInt(document.getElementById('npBoxes').value)||0;
+      const onSiteDate=document.getElementById('npOnSite').value||'';
+      const project={id:genId(),name,num,assemblies,createdAt:Date.now(),status:'inprogress',boxCount:boxes||null,onSiteDate};
       projects.unshift(project);
       saveData(); closeNewProject();
       if(!assemblerName){ localStorage.setItem('_pendingProject',project.id); openSetName(); }
