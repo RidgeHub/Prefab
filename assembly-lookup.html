@@ -110,27 +110,7 @@
   </div>
 </div>
 <div class="app">
-  <header>
-    <div class="logo">
-      <div class="logo-mark">REI</div>
-      <div>
-        <div class="logo-text">Assembly Creator</div>
-        <div class="logo-sub">Ridgeline Electrical Industries</div>
-      </div>
-    </div>
-    <div class="version-tag">v2.1</div>
-  </header>
 
-  <div class="master-bar loading" id="masterBar">
-    <div class="master-bar-left">
-      <div class="master-dot spin" id="masterDot"></div>
-      <div>
-        <div class="master-label loading" id="masterLabel">Loading master codes…</div>
-        <div class="master-meta" id="masterMeta">RidgeHub/Prefab / master-codes.csv</div>
-      </div>
-    </div>
-    <button class="btn-reload" onclick="fetchMaster()">↺ Reload</button>
-  </div>
 
   <div class="card">
     <div class="card-header"><div class="step-num">1</div><div class="card-title">Google Sheet — current project</div></div>
@@ -145,6 +125,17 @@
   <div class="card" id="runCard">
     <div class="card-header"><div class="step-num">2</div><div class="card-title">Run lookup &amp; generate bill of materials</div></div>
     <button class="btn-run" id="runBtn" onclick="runLookup()" disabled>Run lookup →</button>
+  </div>
+
+  <div class="master-bar loading" id="masterBar">
+    <div class="master-bar-left">
+      <div class="master-dot spin" id="masterDot"></div>
+      <div>
+        <div class="master-label loading" id="masterLabel">Loading master codes…</div>
+        <div class="master-meta" id="masterMeta">RidgeHub/Prefab / master-codes.csv</div>
+      </div>
+    </div>
+    <button class="btn-reload" onclick="fetchMaster()">↺ Reload</button>
   </div>
 
   <div class="results" id="resultsSection" style="display:none;">
