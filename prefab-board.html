@@ -58,14 +58,14 @@ header{padding:.875rem 1rem;display:flex;align-items:center;justify-content:spac
 .content{padding:1rem;display:flex;flex-direction:column;gap:10px;padding-bottom:80px}
 
 /* Project list */
-.project-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:1rem;display:flex;align-items:center;gap:10px;transition:all 0.15s}
+.project-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:1rem;display:flex;align-items:center;gap:10px;transition:all 0.15s;min-width:0}
 .project-card:hover{border-color:var(--accent)}
 .project-card-info{flex:1;cursor:pointer;min-width:0}
 .project-name{font-size:15px;font-weight:700;margin-bottom:2px}
 .project-meta{font-size:11px;color:var(--text2);font-family:var(--mono);margin-bottom:8px}
 .project-prog{display:flex;align-items:center;gap:8px}
 .project-prog .progress-bar-outer{width:100px;flex:none}
-.status-select{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 8px;font-size:11px;font-family:var(--mono);color:var(--text2);cursor:pointer;flex-shrink:0}
+.status-select{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 8px;font-size:11px;font-family:var(--mono);color:var(--text2);cursor:pointer;flex-shrink:0;width:auto;max-width:145px}
 
 /* Batch items */
 .batch-section{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden}
