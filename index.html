@@ -22,15 +22,12 @@
 body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;min-height:100vh}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
 .app{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
-
 header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:12px}
 .logo{display:flex;align-items:center;gap:12px}
 .logo-mark{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:15px;font-weight:500;color:#fff;flex-shrink:0}
 .logo-title{font-size:22px;font-weight:700;letter-spacing:-0.4px;line-height:1.2}
 .logo-sub{font-size:12px;color:var(--text2);font-family:var(--mono)}
-
 .section-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);font-family:var(--mono);margin-bottom:10px;margin-top:2rem}
-
 .tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .tool-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:1.25rem;text-decoration:none;color:var(--text);transition:all 0.2s;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
 .tool-card:hover{border-color:rgba(255,255,255,0.25);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.4)}
@@ -39,48 +36,35 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .tool-card.board::before{background:linear-gradient(90deg,var(--accent),var(--accent2))}
 .tool-card.foreman::before{background:linear-gradient(90deg,var(--green),#5be8a8)}
 .tool-card.orders::before{background:linear-gradient(90deg,var(--yellow),#f0a040)}
+.tool-card.labels::before{background:linear-gradient(90deg,#9b59b6,#c84b8a)}
 .tool-icon{font-size:26px}
 .tool-name{font-size:14px;font-weight:600}
 .tool-desc{font-size:12px;color:var(--text2);line-height:1.5}
 .tool-arrow{position:absolute;top:1.25rem;right:1.25rem;color:var(--text3);font-size:16px}
-
-/* Project rows — stacked layout for clean mobile */
 .projects-wrap{display:flex;flex-direction:column;gap:8px}
 .project-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;display:flex;flex-direction:column;gap:8px;transition:border-color 0.2s}
 .project-row:hover{border-color:var(--border2)}
-
 .project-row-top{display:flex;align-items:center;gap:10px}
 .project-status-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.dot-inprogress{background:var(--blue)}.dot-ready{background:var(--yellow)}.dot-shipped{background:var(--accent2)}.dot-received{background:var(--green)}
+.dot-inprogress{background:var(--blue)}.dot-ready{background:var(--yellow)}.dot-shipped{background:var(--accent2)}
 .project-row-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
 .project-row-num{color:var(--text3);font-weight:400;font-size:11px;white-space:nowrap}
-
 .project-row-bottom{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .status-badge{font-size:10px;font-family:var(--mono);padding:3px 9px;border-radius:99px;font-weight:500;white-space:nowrap}
 .badge-inprogress{background:var(--blue-bg);color:var(--blue);border:1px solid rgba(91,156,246,0.2)}
 .badge-ready{background:var(--yellow-bg);color:var(--yellow);border:1px solid rgba(240,192,64,0.2)}
 .badge-shipped{background:rgba(232,129,58,0.1);color:var(--accent2);border:1px solid rgba(232,129,58,0.2)}
-.badge-received{background:var(--green-bg);color:var(--green);border:1px solid rgba(46,204,138,0.2)}
 
 .progress-mini{display:flex;align-items:center;gap:6px;margin-left:auto}
 .progress-mini-bar{width:48px;height:3px;background:var(--surface2);border-radius:99px;overflow:hidden}
 .progress-mini-fill{height:100%;border-radius:99px;background:var(--green);transition:width 0.3s}
 .progress-mini-label{font-family:var(--mono);font-size:10px;color:var(--text3);white-space:nowrap}
-
 .due-chip{font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:99px;white-space:nowrap}
-.due-ok{background:var(--green-bg);color:var(--green)}
-.due-soon{background:var(--yellow-bg);color:var(--yellow)}
-.due-late{background:var(--red-bg);color:var(--red)}
+.due-ok{background:var(--green-bg);color:var(--green)}.due-soon{background:var(--yellow-bg);color:var(--yellow)}.due-late{background:var(--red-bg);color:var(--red)}
 .boxes-chip{font-size:10px;font-family:var(--mono);color:var(--text3);white-space:nowrap}
-
 .empty-state{text-align:center;padding:2rem;color:var(--text3);font-family:var(--mono);font-size:12px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border)}
 .loading{text-align:center;padding:1.5rem;color:var(--text3);font-family:var(--mono);font-size:12px}
-
-@media(max-width:600px){
-  .tools-grid{grid-template-columns:1fr}
-  .app{padding:1.25rem 1rem 3rem}
-  .logo-title{font-size:17px}
-}
+@media(max-width:600px){.tools-grid{grid-template-columns:1fr}.app{padding:1.25rem 1rem 3rem}.logo-title{font-size:17px}}
 </style>
 </head>
 <body>
@@ -94,67 +78,26 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
       </div>
     </div>
   </header>
-
   <div class="section-label">Tools</div>
   <div class="tools-grid">
-    <a href="assembly-lookup.html" class="tool-card lookup">
-      <div class="tool-arrow">›</div>
-      <div class="tool-icon">🔍</div>
-      <div class="tool-name">Assembly Lookup</div>
-      <div class="tool-desc">Auto-fill assembly components from a project sheet and generate a bill of materials.</div>
-    </a>
-    <a href="prefab-board.html" class="tool-card board">
-      <div class="tool-arrow">›</div>
-      <div class="tool-icon">📋</div>
-      <div class="tool-name">Prefab Board</div>
-      <div class="tool-desc">Batch build, label & sort, and pack assemblies by room. Track progress per project.</div>
-    </a>
-    <a href="foreman.html" class="tool-card foreman">
-      <div class="tool-arrow">›</div>
-      <div class="tool-icon">✅</div>
-      <div class="tool-name">Foreman Receiving</div>
-      <div class="tool-desc">Mark prefab deliveries received on site. No login required.</div>
-    </a>
-    <a href="material-order.html" class="tool-card orders">
-      <div class="tool-arrow">›</div>
-      <div class="tool-icon">📦</div>
-      <div class="tool-name">Material Orders</div>
-      <div class="tool-desc">View and print material order summaries pulled from active project assemblies.</div>
-    </a>
-  </div>
+    <a href="assembly-lookup.html" class="tool-card lookup"><div class="tool-arrow">&rsaquo;</div><div class="tool-icon">&#128269;</div><div class="tool-name">Assembly Lookup</div><div class="tool-desc">Auto-fill assembly components from a project sheet and generate a bill of materials.</div></a>
+    <a href="prefab-board.html" class="tool-card board"><div class="tool-arrow">&rsaquo;</div><div class="tool-icon">&#128203;</div><div class="tool-name">Prefab Board</div><div class="tool-desc">Batch build, label &amp; sort, and pack assemblies by room. Track progress per project.</div></a>
 
+    <a href="material-order.html" class="tool-card orders"><div class="tool-arrow">&rsaquo;</div><div class="tool-icon">&#128230;</div><div class="tool-name">Material Orders</div><div class="tool-desc">View and print material order summaries pulled from active project assemblies.</div></a>
+    <a href="labels.html" class="tool-card labels"><div class="tool-arrow">&rsaquo;</div><div class="tool-icon">&#127991;&#65039;</div><div class="tool-name">Label Generator</div><div class="tool-desc">Print 4&#215;2 Avery labels for all assemblies in a project. 10 labels per page.</div></a>
+  </div>
   <div class="section-label" style="margin-top:2rem;">Active Projects</div>
-  <div id="projectsWrap" class="projects-wrap">
-    <div class="loading">Loading projects…</div>
-  </div>
+  <div id="projectsWrap" class="projects-wrap"><div class="loading">Loading projects&#8230;</div></div>
 </div>
-
 <script>
 const RAW='https://raw.githubusercontent.com/RidgeHub/Prefab/main/prefab-projects.json';
-const STATUS_LABELS={inprogress:'In Progress',ready:'Ready for Delivery',shipped:'Shipped',received:'Received'};
-
-function daysUntil(d){
-  if(!d)return null;
-  const today=new Date();today.setHours(0,0,0,0);
-  return Math.floor((new Date(d)-today)/(1000*60*60*24));
-}
-
-function dueLabel(days){
-  if(days<0)return`${Math.abs(days)} day${Math.abs(days)!==1?'s':''} overdue`;
-  if(days===0)return'Due today';
-  return`${days} day${days!==1?'s':''} to site`;
-}
-
+const STATUS_LABELS={inprogress:'In Progress',ready:'Ready for Delivery',shipped:'Shipped'};
+function daysUntil(d){if(!d)return null;const today=new Date();today.setHours(0,0,0,0);return Math.floor((new Date(d)-today)/(1000*60*60*24));}
+function dueLabel(days){if(days<0)return Math.abs(days)+' day'+(Math.abs(days)!==1?'s':'')+' overdue';if(days===0)return'Due today';return days+' day'+(days!==1?'s':'')+' to site';}
 async function loadProjects(){
-  try{
-    const res=await fetch(RAW+'?v='+Date.now());
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    renderProjects(await res.json());
-  }catch(e){
-    document.getElementById('projectsWrap').innerHTML='<div class="empty-state">Could not load projects.</div>';
-  }
+  try{const res=await fetch(RAW+'?v='+Date.now());if(!res.ok)throw new Error('HTTP '+res.status);renderProjects(await res.json());}
+  catch(e){document.getElementById('projectsWrap').innerHTML='<div class="empty-state">Could not load projects.</div>';}
 }
-
 function renderProjects(projects){
   const wrap=document.getElementById('projectsWrap');
   if(!projects.length){wrap.innerHTML='<div class="empty-state">No projects yet. Create one in the Prefab Board.</div>';return;}
@@ -164,31 +107,12 @@ function renderProjects(projects){
     const status=p.status||'inprogress';
     const days=daysUntil(p.onSiteDate);
     let dueHTML='';
-    if(p.onSiteDate&&days!==null){
-      const cls=days<0?'due-late':days<=3?'due-soon':'due-ok';
-      dueHTML=`<span class="due-chip ${cls}">${dueLabel(days)}</span>`;
-    }
-    const boxHTML=p.boxCount?`<span class="boxes-chip">📦 ${p.boxCount} box${p.boxCount>1?'es':''}</span>`:'';
-    const numHTML=p.num?`<span class="project-row-num">#${esc(p.num)}</span>`:'';
-    return `<div class="project-row">
-      <div class="project-row-top">
-        <div class="project-status-dot dot-${status}"></div>
-        <div class="project-row-name">${esc(p.name)}</div>
-        ${numHTML}
-      </div>
-      <div class="project-row-bottom">
-        <span class="status-badge badge-${status}">${STATUS_LABELS[status]||status}</span>
-        ${dueHTML}
-        ${boxHTML}
-        <div class="progress-mini">
-          <div class="progress-mini-bar"><div class="progress-mini-fill" style="width:${pct}%"></div></div>
-          <div class="progress-mini-label">${done}/${total}</div>
-        </div>
-      </div>
-    </div>`;
+    if(p.onSiteDate&&days!==null){const cls=days<0?'due-late':days<=3?'due-soon':'due-ok';dueHTML='<span class="due-chip '+cls+'">'+dueLabel(days)+'</span>';}
+    const boxHTML=p.boxCount?'<span class="boxes-chip">&#128230; '+p.boxCount+' box'+(p.boxCount>1?'es':'')+'</span>':''
+    const numHTML=p.num?'<span class="project-row-num">#'+esc(p.num)+'</span>':''
+    return '<div class="project-row"><div class="project-row-top"><div class="project-status-dot dot-'+status+'"></div><div class="project-row-name">'+esc(p.name)+'</div>'+numHTML+'</div><div class="project-row-bottom"><span class="status-badge badge-'+status+'">'+( STATUS_LABELS[status]||status)+'</span>'+dueHTML+boxHTML+'<div class="progress-mini"><div class="progress-mini-bar"><div class="progress-mini-fill" style="width:'+pct+'%"></div></div><div class="progress-mini-label">'+done+'/'+total+'</div></div></div></div>';
   }).join('');
 }
-
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 loadProjects();
 </script>
