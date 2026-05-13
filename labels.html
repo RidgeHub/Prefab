@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><!DOCTYPE html>
-<html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -85,7 +83,7 @@ select:focus{border-color:var(--accent)}
   .label-cell {
     width: 4in;
     height: 2in;
-    padding: 0.1in 0.14in 0.08in 0.14in;
+    padding: 0.16in 0.2in 0.14in 0.2in;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -119,7 +117,7 @@ select:focus{border-color:var(--accent)}
     background: #fff;
     border: 1px solid #ccc;
     border-radius: 8px;
-    padding: 12px 14px;
+    padding: 16px 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -282,7 +280,283 @@ function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 loadProjects();
 </script>
 </body>
-</html>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ridgeline Electrical — Prefab Labels</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#0f1117;--surface:#181c27;--surface2:#1e2333;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --accent:#c84b2f;--accent2:#e8813a;
+  --text:#e8eaf0;--text2:#8b91a8;--text3:#555b72;
+  --green:#2ecc8a;
+  --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+  --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+.app{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh}
+
+/* Header */
+.site-header{padding:.875rem 1.25rem;background:var(--surface);border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.site-header-left{display:flex;align-items:center;gap:10px}
+.logo-mark{width:32px;height:32px;border-radius:7px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:500;color:#fff;text-decoration:none;flex-shrink:0}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:13px}
+.breadcrumb a{color:var(--text2);text-decoration:none}
+.breadcrumb a:hover{color:var(--text)}
+.breadcrumb-sep{color:var(--text3)}
+.breadcrumb-current{color:var(--text);font-weight:600}
+.site-header-right{display:flex;align-items:center;gap:8px}
+.btn{background:none;border:1px solid var(--border2);border-radius:6px;padding:7px 13px;font-size:12px;color:var(--text2);cursor:pointer;font-family:var(--sans);white-space:nowrap;transition:all 0.15s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.btn:hover{background:var(--surface2);color:var(--text)}
+.btn-print{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:500}
+.btn-print:hover{background:#b03d24}
+
+/* Content */
+.content{padding:1.25rem;display:flex;flex-direction:column;gap:12px;padding-bottom:80px}
+.project-selector{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:1.25rem;display:flex;flex-direction:column;gap:8px}
+.form-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text2);font-family:var(--mono)}
+select{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:10px 12px;font-size:14px;font-family:var(--sans);color:var(--text);outline:none;width:100%}
+select:focus{border-color:var(--accent)}
+.info-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.info-chip{font-size:11px;font-family:var(--mono);color:var(--text3);padding:3px 8px;background:var(--surface2);border-radius:99px;border:1px solid var(--border)}
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--text3);font-family:var(--mono);font-size:12px}
+.empty-icon{font-size:36px;margin-bottom:10px}
+.loading{text-align:center;padding:2rem;color:var(--text3);font-family:var(--mono);font-size:12px}
+
+/* Label preview (screen) */
+.label-preview-wrap{display:flex;flex-direction:column;gap:12px}
+.preview-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.preview-title{font-size:13px;font-weight:600;color:var(--text2);font-family:var(--mono)}
+
+/* ═══════════════════════════════════════════
+   PRINT STYLES — Avery 5163 / 8163
+   4" × 2" labels, 2 columns × 5 rows = 10 per page
+   Page: 8.5" × 11", margins: 0.19" top, 0.15" left/right
+   Label: 4" wide × 2" tall, gap: 0.19" between cols, 0" between rows
+   ═══════════════════════════════════════════ */
+@media print {
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background: #fff !important; }
+  body::before { display: none !important; }
+  .app { display: block; }
+  .site-header, .content > *:not(#labelSheet) { display: none !important; }
+  #labelSheet { display: block !important; }
+
+  .label-sheet {
+    width: 8.5in;
+    margin: 0;
+    padding: 0.19in 0.15in 0 0.15in;
+  }
+  .label-page {
+    display: grid;
+    grid-template-columns: 4in 4in;
+    grid-template-rows: repeat(5, 2in);
+    column-gap: 0.19in;
+    row-gap: 0;
+    page-break-after: always;
+  }
+  .label-page:last-child { page-break-after: avoid; }
+  .label-cell {
+    width: 4in;
+    height: 2in;
+    padding: 0.16in 0.2in 0.14in 0.2in;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .label-cell.empty { border: 1px dashed #eee; background: #fff; }
+  .label-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .label-id { font-size: 26pt; font-weight: 700; line-height: 1; color: #000; letter-spacing: -0.5px; }
+  .label-room { font-size: 9.5pt; color: #555; margin-top: 2px; font-weight: 400; }
+  .label-height { font-size: 14pt; font-weight: 600; color: #000; text-align: right; line-height: 1; padding-top: 3px; white-space: nowrap; }
+  .label-middle { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 2px 0; }
+  .label-desc { font-size: 12.5pt; font-weight: 600; color: #000; line-height: 1.3; }
+  .label-grade { font-size: 9pt; color: #666; margin-top: 2px; font-style: italic; }
+  .label-bottom { font-size: 8.5pt; color: #888; border-top: 0.5px solid #e0e0e0; padding-top: 4px; letter-spacing: 0.02em; text-transform: uppercase; }
+}
+
+/* Screen preview of labels */
+@media screen {
+  #labelSheet { display: block; }
+  .label-sheet { display: flex; flex-direction: column; gap: 16px; }
+  .label-page {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .label-cell {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100px;
+    font-family: 'DM Sans', sans-serif;
+    color: #000;
+  }
+  .label-cell.empty { border: 1px dashed #eee; background: #fafafa; min-height: 100px; }
+  .label-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .label-id { font-size: 24px; font-weight: 700; line-height: 1; color: #000; }
+  .label-room { font-size: 12px; color: #666; margin-top: 2px; }
+  .label-height { font-size: 16px; font-weight: 600; color: #000; text-align: right; white-space: nowrap; }
+  .label-middle { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 6px 0; }
+  .label-desc { font-size: 14px; font-weight: 600; color: #000; line-height: 1.4; }
+  .label-grade { font-size: 12px; color: #888; margin-top: 2px; font-style: italic; }
+  .label-bottom { font-size: 11px; color: #999; border-top: 1px solid #eee; padding-top: 5px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .page-divider { font-size: 11px; color: var(--text3); font-family: var(--mono); padding: 4px 0; text-align: center; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="site-header">
+    <div class="site-header-left">
+      <a href="index.html" class="logo-mark">RE</a>
+      <div class="breadcrumb">
+        <a href="index.html">Prefab Hub</a>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">Label Generator</span>
+      </div>
+    </div>
+    <div class="site-header-right">
+      <button class="btn btn-print no-print" onclick="window.print()" id="printBtn" style="display:none;">🖨 Print Labels</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="project-selector">
+      <div class="form-label">Select Project</div>
+      <select id="projectSelect" onchange="renderLabels()">
+        <option value="">Loading projects…</option>
+      </select>
+      <div class="info-row" id="infoRow" style="display:none;">
+        <span class="info-chip" id="infoCount"></span>
+        <span class="info-chip" id="infoPages"></span>
+        <span class="info-chip" id="infoHeight"></span>
+      </div>
+    </div>
+
+    <div id="labelSheet">
+      <div class="empty-state"><div class="empty-icon">🏷️</div>Select a project above to generate labels.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const RAW = 'https://raw.githubusercontent.com/RidgeHub/Prefab/main/prefab-projects.json';
+const LABELS_PER_PAGE = 10;
+const gradeRe = /hospital\s+grade|commercial\s+grade|specification\s+grade|residential\s+grade/gi;
+let projects = [];
+
+async function loadProjects(){
+  try{
+    const res = await fetch(RAW + '?v=' + Date.now());
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    projects = await res.json();
+    const sel = document.getElementById('projectSelect');
+    sel.innerHTML = '<option value="">— Select a project —</option>' +
+      projects.map(p => `<option value="${p.id}">${esc(p.name)}${p.num?' (#'+esc(p.num)+')':''}</option>`).join('');
+  } catch(e) {
+    document.getElementById('labelSheet').innerHTML = '<div class="empty-state">Could not load projects.</div>';
+  }
+}
+
+function stripQty(s){ return s.replace(/\s*\(\d+\)\s*/g,'').trim(); }
+function stripAdj(s){ return s.replace(/[\/,]?\s*Adj(ustable)?/gi,'').replace(/Adj(ustable)?\s*[\/,]?\s*/gi,'').trim(); }
+function getGang(s){ const m=s.match(/\b([1-4])\s*[Gg](ang)?\b/); return m?m[1]+'G':''; }
+
+function formatAssemblyDesc(a){
+  const gang = a.plaster ? getGang(stripAdj(a.plaster)) : '';
+  let grade = '';
+  const devParts = (a.devices||[]).map(d => {
+    const parts = stripQty(d).split('/').map(p=>p.trim()).filter(p=>p);
+    const filtered = parts.filter(p => {
+      gradeRe.lastIndex = 0;
+      if(gradeRe.test(p)){ grade = p; return false; }
+      return true;
+    });
+    gradeRe.lastIndex = 0;
+    return filtered.join(' - ');
+  }).filter(p=>p);
+  const pieces = [];
+  if(gang) pieces.push(gang);
+  if(devParts.length) pieces.push(devParts.join(' + '));
+  return { desc: pieces.join(' / '), grade };
+}
+
+function renderLabels(){
+  const id = document.getElementById('projectSelect').value;
+  const sheet = document.getElementById('labelSheet');
+  const infoRow = document.getElementById('infoRow');
+
+  if(!id){
+    sheet.innerHTML = '<div class="empty-state"><div class="empty-icon">🏷️</div>Select a project above.</div>';
+    infoRow.style.display = 'none';
+    document.getElementById('printBtn').style.display = 'none';
+    return;
+  }
+
+  const project = projects.find(p=>p.id===id);
+  if(!project) return;
+
+  const assemblies = project.assemblies || [];
+  const hasHeight = assemblies.some(a => a.height);
+  const totalPages = Math.ceil(assemblies.length / LABELS_PER_PAGE);
+
+  // Info chips
+  infoRow.style.display = 'flex';
+  document.getElementById('infoCount').textContent = assemblies.length + ' labels';
+  document.getElementById('infoPages').textContent = totalPages + ' page' + (totalPages!==1?'s':'');
+  document.getElementById('infoHeight').textContent = hasHeight ? '✓ Heights found' : '⚠ No height column';
+  document.getElementById('printBtn').style.display = '';
+
+  // Build pages
+  let html = '<div class="label-sheet">';
+  for(let page = 0; page < totalPages; page++){
+    const pageAssemblies = assemblies.slice(page * LABELS_PER_PAGE, (page+1) * LABELS_PER_PAGE);
+    // Pad to 10
+    while(pageAssemblies.length < LABELS_PER_PAGE) pageAssemblies.push(null);
+
+    if(page > 0) html += `<div class="page-divider no-print">— Page ${page+1} —</div>`;
+    html += '<div class="label-page">';
+
+    pageAssemblies.forEach(a => {
+      if(!a){ html += '<div class="label-cell empty"></div>'; return; }
+      const {desc, grade} = formatAssemblyDesc(a);
+      html += `<div class="label-cell">
+        <div class="label-top">
+          <div>
+            <div class="label-id">${esc(a.labelId)}</div>
+            <div class="label-room">Room ${esc(a.room)}</div>
+          </div>
+          ${a.height ? `<div class="label-height">${esc(a.height)}</div>` : ''}
+        </div>
+        <div class="label-middle">
+          <div class="label-desc">${esc(desc||a.code)}</div>
+          ${grade ? `<div class="label-grade">${esc(grade)}</div>` : ''}
+        </div>
+        <div class="label-bottom">${esc(project.name)}</div>
+      </div>`;
+    });
+
+    html += '</div>';
+  }
+  html += '</div>';
+  sheet.innerHTML = html;
+}
 
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 loadProjects();
