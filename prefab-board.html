@@ -65,7 +65,7 @@ header{padding:.875rem 1rem;display:flex;align-items:center;justify-content:spac
 .project-meta{font-size:11px;color:var(--text2);font-family:var(--mono);margin-bottom:8px}
 .project-prog{display:flex;align-items:center;gap:8px}
 .project-prog .progress-bar-outer{width:100px;flex:none}
-.status-select{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 8px;font-size:11px;font-family:var(--mono);color:var(--text2);cursor:pointer;flex-shrink:0;width:auto}
+.status-select{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 8px;font-size:11px;font-family:var(--mono);color:var(--text2);cursor:pointer;flex-shrink:0}
 
 /* Batch items */
 .batch-section{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden}
@@ -82,6 +82,7 @@ header{padding:.875rem 1rem;display:flex;align-items:center;justify-content:spac
 .batch-qty-label{font-size:13px;color:#1a1714;font-family:var(--mono);font-weight:500;margin-right:2px}
 .batch-desc{font-size:16px;line-height:1.5;display:flex;flex-wrap:wrap;align-items:baseline;gap:3px;color:var(--text)}
 .batch-footer{font-size:12px;color:var(--text3);font-family:var(--mono);margin-top:6px}
+.batch-grade{font-size:12px;color:var(--text3);font-family:var(--mono);margin-top:3px;padding-left:2px}
 .batch-signoff{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:4px}
 .seg{font-weight:500;color:var(--text)}
 .seg-sep{color:var(--text3);font-size:13px;margin:0 1px}
@@ -235,8 +236,8 @@ const GH_API=`https://api.github.com/repos/${REPO}/contents/${GH_FILE}`;
 let projects=[],currentProject=null,currentPhase=1;
 let assemblerName=localStorage.getItem('prefab_assembler')||'';
 let ghSha=null;
-const STATUS_LABELS={inprogress:'In Progress',ready:'Ready for Delivery',shipped:'Shipped',received:'Received'};
-const STATUS_COLORS={inprogress:'#5b9cf6',ready:'#f0c040',shipped:'#e8813a',received:'#2ecc8a'};
+const STATUS_LABELS={inprogress:'In Progress',ready:'Ready for Delivery',shipped:'Shipped'};
+const STATUS_COLORS={inprogress:'#5b9cf6',ready:'#f0c040',shipped:'#e8813a'};
 
 function getGHToken(){return localStorage.getItem('prefab_gh_token')||'';}
 function saveLocal(){localStorage.setItem(STORAGE_KEY,JSON.stringify({projects,sha:ghSha}));}
@@ -315,6 +316,8 @@ function parseAssemblies(rows){
   const iRoom=ci(['room']),iLabel=ci(['id label','label','id']),iCode=ci(['assembly code','code','assembly']);
   const iPlaster=ci(['plaster']),iWire=ci(['wire connector','wire']),iPigtail=ci(['pigtail']);
   const iD1=ci(['device 1']),iD2=ci(['device 2']),iD3=ci(['device 3']),iD4=ci(['device 4']),iStatus=ci(['status']);
+  // Height column: any column containing '- Prefab'
+  const iHeight=hdr.findIndex(h=>h.includes('- prefab'));
   const assemblies=[];
   for(let i=1;i<rows.length;i++){
     const r=rows[i];
@@ -324,6 +327,7 @@ function parseAssemblies(rows){
     assemblies.push({id:genId(),room:get(iRoom)||'?',labelId:label,code:get(iCode),
       plaster:get(iPlaster),wire:get(iWire),pigtail:get(iPigtail),
       devices:[get(iD1),get(iD2),get(iD3),get(iD4)].filter(d=>d),
+      height:get(iHeight)||'',
       batchDone:false,labelDone:false,batchDoneAt:null,batchDoneBy:null,labelDoneAt:null,labelDoneBy:null});
   }
   return assemblies;
@@ -340,6 +344,8 @@ function assemblyLine(a){
   return [gang,devParts].filter(p=>p).join(' / ');
 }
 const gradeRe=/hospital\s+grade|commercial\s+grade|specification\s+grade|residential\s+grade/gi;
+
+// For label & sort: inline single line
 function assemblyHTML(a){
   const gang=a.plaster?getGang(stripAdj(a.plaster)):'';
   const gangHTML=gang?`<span class="seg-gang">${esc(gang)}</span>`:'';
@@ -347,13 +353,34 @@ function assemblyHTML(a){
     const parts=formatDevice(d);let grade='';
     const filtered=parts.filter(p=>{if(gradeRe.test(p)){grade=p;return false;}return true;});
     gradeRe.lastIndex=0;
-    const main=filtered.map(p=>`<span class="seg">${esc(p)}</span>`).join('<span class="seg-sep"> - </span>');
-    return main+(grade?`<span class="seg-grade">${esc(grade)}</span>`:'');
+    return filtered.map(p=>`<span class="seg">${esc(p)}</span>`).join('<span class="seg-sep"> - </span>');
   });
   const pieces=[];
   if(gangHTML)pieces.push(gangHTML);
   if(devHTMLParts.length)pieces.push(devHTMLParts.join('<span class="seg-sep"> + </span>'));
   return pieces.join('<span class="seg-sep"> / </span>');
+}
+
+// For batch build: stacked layout with grade and wire/pigtail below
+function batchItemHTML(a){
+  const gang=a.plaster?getGang(stripAdj(a.plaster)):'';
+  const gangHTML=gang?`<span class="seg-gang">${esc(gang)}</span>`:'';
+  let grade='';
+  const devHTMLParts=a.devices.map(d=>{
+    const parts=formatDevice(d);
+    const filtered=parts.filter(p=>{
+      gradeRe.lastIndex=0;
+      if(gradeRe.test(p)){grade=p;return false;}return true;
+    });
+    gradeRe.lastIndex=0;
+    return filtered.map(p=>`<span class="seg">${esc(p)}</span>`).join('<span class="seg-sep"> - </span>');
+  });
+  const pieces=[];
+  if(gangHTML)pieces.push(gangHTML);
+  if(devHTMLParts.length)pieces.push(devHTMLParts.join('<span class="seg-sep"> + </span>'));
+  const mainLine=pieces.join('<span class="seg-sep"> / </span>');
+  const gradeLine=grade?`<div class="batch-grade">${esc(grade)}</div>`:'';
+  return mainLine+'</span>'+gradeLine;
 }
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
@@ -409,7 +436,6 @@ function showProjectList(){
         <option value="inprogress" ${status==='inprogress'?'selected':''}>In Progress</option>
         <option value="ready" ${status==='ready'?'selected':''}>Ready for Delivery</option>
         <option value="shipped" ${status==='shipped'?'selected':''}>Shipped</option>
-        <option value="received" ${status==='received'?'selected':''}>Received</option>
       </select>
     </div>`;
   }).join('');
@@ -441,6 +467,15 @@ function updateProgress(){
   document.getElementById('progressLabel').textContent=`${done} / ${total} labeled`;
   document.getElementById('progressFill').style.width=pct+'%';
   document.getElementById('progressPct').textContent=pct+'%';
+  if(total>0&&done===total&&!currentProject._completionPrompted){
+    currentProject._completionPrompted=true;
+    setTimeout(()=>{
+      if(confirm('All assemblies labeled! Mark this project as complete and remove it from the list?')){
+        projects=projects.filter(p=>p.id!==currentProject.id);
+        saveData();showProjectList();
+      }
+    },400);
+  }
 }
 
 /* Phase 1 */
@@ -454,13 +489,27 @@ function renderPhase1(){
     const firstA=currentProject.assemblies[b.indices[0]];
     const signoff=isDone&&firstA.batchDoneBy?`✓ ${esc(firstA.batchDoneBy)} · ${esc(firstA.batchDoneAt)}`:'';
     const indicesStr=b.indices.join(',');
+    const gang=firstA.plaster?getGang(stripAdj(firstA.plaster)):'';
+    const gangHTML=gang?`<span class="seg-gang">${esc(gang)}</span>`:'';
+    let grade='';
+    const devHTMLParts=firstA.devices.map(d=>{
+      const parts=formatDevice(d);
+      const filtered=parts.filter(p=>{gradeRe.lastIndex=0;if(gradeRe.test(p)){grade=p;return false;}return true;});
+      gradeRe.lastIndex=0;
+      return filtered.map(p=>`<span class="seg">${esc(p)}</span>`).join('<span class="seg-sep"> - </span>');
+    });
+    const pieces=[];
+    if(gangHTML)pieces.push(gangHTML);
+    if(devHTMLParts.length)pieces.push(devHTMLParts.join('<span class="seg-sep"> + </span>'));
+    const mainDesc=pieces.join('<span class="seg-sep"> / </span>');
     return `<div class="batch-item ${isDone?'done-batch':''}">
       <div class="batch-check ${isDone?'checked':''}" onclick="toggleBatch('${indicesStr}')">${isDone?'✓':''}</div>
       <div class="batch-info">
         <div class="batch-line">
           <span class="batch-qty">${b.count}</span><span class="batch-qty-label">Qty</span>
-          <span class="batch-desc">${assemblyHTML(firstA)}</span>
+          <span class="batch-desc">${mainDesc}</span>
         </div>
+        ${grade?`<div class="batch-grade">${esc(grade)}</div>`:''}
         <div class="batch-footer">+ Wire Connectors &nbsp;·&nbsp; + Black, White &amp; Green Pigtails</div>
         ${signoff?`<div class="batch-signoff">${signoff}</div>`:''}
       </div>
@@ -560,5 +609,7 @@ function createProject(){
 
 loadFromGitHub();
 </script>
+</body>
+</html>
 </body>
 </html>
