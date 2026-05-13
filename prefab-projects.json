@@ -739,11 +739,11 @@
         "pigtail": "",
         "devices": [],
         "batchDone": true,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": "May 12, 9:33 PM",
         "batchDoneBy": "James",
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 12, 9:33 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp30ew010fbc",
@@ -757,11 +757,11 @@
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
         "batchDone": true,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": "May 12, 9:33 PM",
         "batchDoneBy": "James",
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 12, 9:33 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp30ew01biqj",
