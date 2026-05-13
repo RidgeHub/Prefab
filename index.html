@@ -21,12 +21,12 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;min-height:100vh}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
-.app{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:12px}
+.app{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:1.5rem 1.5rem 4rem}
+header{display:flex;align-items:center;justify-content:space-between;padding:.875rem 1.5rem;background:var(--surface);border-bottom:1px solid var(--border2);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px}
 .logo{display:flex;align-items:center;gap:12px}
-.logo-mark{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:15px;font-weight:500;color:#fff;flex-shrink:0}
-.logo-title{font-size:22px;font-weight:700;letter-spacing:-0.4px;line-height:1.2}
-.logo-sub{font-size:12px;color:var(--text2);font-family:var(--mono)}
+.logo-mark{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:500;color:#fff;flex-shrink:0}
+.logo-title{font-size:16px;font-weight:700;letter-spacing:-0.3px;line-height:1.2}
+.logo-sub{font-size:11px;color:var(--text2);font-family:var(--mono)}
 .section-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);font-family:var(--mono);margin-bottom:10px;margin-top:2rem}
 .tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .tool-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:1.25rem;text-decoration:none;color:var(--text);transition:all 0.2s;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
@@ -64,20 +64,20 @@ header{display:flex;align-items:center;justify-content:space-between;margin-bott
 .boxes-chip{font-size:10px;font-family:var(--mono);color:var(--text3);white-space:nowrap}
 .empty-state{text-align:center;padding:2rem;color:var(--text3);font-family:var(--mono);font-size:12px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border)}
 .loading{text-align:center;padding:1.5rem;color:var(--text3);font-family:var(--mono);font-size:12px}
-@media(max-width:600px){.tools-grid{grid-template-columns:1fr}.app{padding:1.25rem 1rem 3rem}.logo-title{font-size:17px}}
+@media(max-width:600px){.tools-grid{grid-template-columns:1fr}.app{padding:1rem 1rem 3rem}.logo-title{font-size:15px}}
 </style>
 </head>
 <body>
-<div class="app">
-  <header>
-    <div class="logo">
-      <div class="logo-mark">RE</div>
+<header>
+    <a href="index.html" class="logo" style="text-decoration:none;color:inherit;">
+      <div class="logo-mark">REI</div>
       <div class="logo-info">
-        <div class="logo-title">Ridgeline Electrical</div>
-        <div class="logo-sub">Prefab Hub</div>
+        <div class="logo-title">Prefab Hub</div>
+        <div class="logo-sub">Ridgeline Electrical Industries</div>
       </div>
-    </div>
+    </a>
   </header>
+  <div class="app">
   <div class="section-label">Tools</div>
   <div class="tools-grid">
     <a href="assembly-lookup.html" class="tool-card lookup"><div class="tool-arrow">&rsaquo;</div><div class="tool-icon">&#128269;</div><div class="tool-name">Assembly Lookup</div><div class="tool-desc">Auto-fill assembly components from a project sheet and generate a bill of materials.</div></a>
