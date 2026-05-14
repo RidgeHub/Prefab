@@ -66,6 +66,10 @@ header{padding:.875rem 1rem;display:flex;align-items:center;justify-content:spac
 .project-prog{display:flex;align-items:center;gap:8px}
 .project-prog .progress-bar-outer{width:100px;flex:none}
 .status-select{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:6px 8px;font-size:11px;font-family:var(--mono);color:var(--text2);cursor:pointer;flex-shrink:0;width:auto;max-width:145px}
+.remove-project-btn{background:none;border:1px solid var(--border2);border-radius:6px;padding:5px 8px;font-size:14px;cursor:pointer;flex-shrink:0;transition:all 0.15s;line-height:1}
+.remove-project-btn.locked{opacity:0.35;cursor:not-allowed}
+.remove-project-btn.unlocked{border-color:var(--red,#c03020);color:var(--red,#c03020)}
+.remove-project-btn.unlocked:hover{background:rgba(192,48,32,0.08)}
 
 /* Batch items */
 .batch-section{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
@@ -263,6 +267,21 @@ async function loadFromGitHub(){
   }catch(e){setSyncStatus('error','Load failed');loadLocal();showProjectList();}
 }
 
+function removeProject(projectId){
+  const p = projects.find(x=>x.id===projectId);
+  if(!p) return;
+  const total = p.assemblies.length;
+  const done  = p.assemblies.filter(a=>a.labelDone).length;
+  if(done < total){
+    alert('All assemblies must be labeled before removing this project.');
+    return;
+  }
+  if(!confirm('Remove "'+p.name+'" from the board? This cannot be undone.')) return;
+  projects = projects.filter(x=>x.id!==projectId);
+  saveData();
+  showProjectList();
+}
+
 async function saveData(){
   saveLocal();
   const token=getGHToken();if(!token)return;
@@ -437,6 +456,7 @@ function showProjectList(){
         <option value="ready" ${status==='ready'?'selected':''}>Ready for Delivery</option>
         <option value="shipped" ${status==='shipped'?'selected':''}>Shipped</option>
       </select>
+      <button class="remove-project-btn ${pct===100?'unlocked':'locked'}" onclick="event.stopPropagation();removeProject('${p.id}')" title="${pct===100?'Remove project':'Label all assemblies to unlock removal'}">${pct===100?'🗑':'🔒'}</button>
     </div>`;
   }).join('');
 }
@@ -467,15 +487,6 @@ function updateProgress(){
   document.getElementById('progressLabel').textContent=`${done} / ${total} labeled`;
   document.getElementById('progressFill').style.width=pct+'%';
   document.getElementById('progressPct').textContent=pct+'%';
-  if(total>0&&done===total&&!currentProject._completionPrompted){
-    currentProject._completionPrompted=true;
-    setTimeout(()=>{
-      if(confirm('All assemblies labeled! Mark this project as complete and remove it from the list?')){
-        projects=projects.filter(p=>p.id!==currentProject.id);
-        saveData();showProjectList();
-      }
-    },400);
-  }
 }
 
 /* Phase 1 */
