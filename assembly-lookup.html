@@ -179,11 +179,24 @@ function withQty(item, qty) {
 
 function parseMasterMatrix(text) {
   const rows = parseCSV(text);
-  if (rows.length < 4) throw new Error('master-codes.csv has too few rows.');
-  const itemNames  = rows[0];
-  const categories = rows[2];
+  if (rows.length < 2) throw new Error('master-codes.csv has too few rows.');
+
+  const itemNames = rows[0]; // Row 0: Room, ID#, Prefab-Code, then item names
+
+  // Infer category from column header name — no category row needed
+  function getCategory(name) {
+    const n = name.toLowerCase();
+    if (n.includes('plaster ring'))  return 'plaster ring';
+    if (n.includes('pigtail'))       return 'pigtail';
+    if (n.includes('wire connector'))return 'wire connector';
+    if (n.includes('upc-12ma') || n.includes('device cover')) return 'device cover';
+    if (n.startsWith('lvbs'))        return 'box';
+    return 'device'; // receptacles, switches, dimmers, etc.
+  }
+
   const map = {};
-  for (let ri = 3; ri < rows.length; ri++) {
+  // Assembly data starts at row 1
+  for (let ri = 1; ri < rows.length; ri++) {
     const row  = rows[ri];
     const code = (row[2] || '').trim().toUpperCase();
     if (!code) continue;
@@ -192,10 +205,10 @@ function parseMasterMatrix(text) {
       const val = (row[ci] || '').trim();
       if (!val || val === '0') continue;
       const qty  = isNaN(val) ? 1 : Number(val);
-      const cat  = (categories[ci] || '').trim().toLowerCase();
-      const item = (itemNames[ci]  || '').trim();
+      const item = (itemNames[ci] || '').trim();
       if (!item) continue;
-      entry.rawItems.push({ cat: categories[ci] || '', item, qty });
+      const cat = getCategory(item);
+      entry.rawItems.push({ cat, item, qty });
       if      (cat === 'box')            entry.box.push({item,qty});
       else if (cat === 'plaster ring')   entry.plasterRing.push({item,qty});
       else if (cat === 'wire connector') entry.wireConnector.push({item,qty});
