@@ -55,7 +55,7 @@ header{padding:.875rem 1rem;display:flex;align-items:center;justify-content:spac
 .progress-bar-fill{height:100%;background:#1a5fb4;border-radius:99px;transition:width 0.4s}
 .progress-pct{font-family:var(--mono);font-size:11px;color:#1a5fb4;white-space:nowrap;font-weight:600}
 
-.content{padding:1rem;display:flex;flex-direction:column;gap:10px;padding-bottom:80px}
+.content{padding:1rem;display:flex;flex-direction:column;gap:10px;padding-bottom:80px;max-width:780px;margin:0 auto;width:100%}
 
 /* Project list */
 .project-card{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);padding:1rem;display:flex;align-items:center;gap:10px;transition:all 0.15s;min-width:0;box-shadow:var(--shadow)}
@@ -240,8 +240,8 @@ const GH_API=`https://api.github.com/repos/${REPO}/contents/${GH_FILE}`;
 let projects=[],currentProject=null,currentPhase=1;
 let assemblerName=localStorage.getItem('prefab_assembler')||'';
 let ghSha=null;
-const STATUS_LABELS={notstarted:'Not Started',inprogress:'In Progress',ready:'Ready for Delivery',shipped:'Shipped'};
-const STATUS_COLORS={notstarted:'#8aaac8',inprogress:'#1a5fb4',ready:'#8a6200',shipped:'#c06010'};
+const STATUS_LABELS={inprogress:'In Progress',ready:'Ready for Delivery',shipped:'Shipped'};
+const STATUS_COLORS={inprogress:'#1a5fb4',ready:'#8a6200',shipped:'#c06010'};
 
 function getGHToken(){return localStorage.getItem('prefab_gh_token')||'';}
 function saveLocal(){localStorage.setItem(STORAGE_KEY,JSON.stringify({projects,sha:ghSha}));}
@@ -452,7 +452,6 @@ function showProjectList(){
         </div>
       </div>
       <select class="status-select" onchange="updateStatus('${p.id}',this.value)" onclick="event.stopPropagation()">
-        <option value="notstarted" ${status==='notstarted'?'selected':''}>Not Started</option>
         <option value="inprogress" ${status==='inprogress'?'selected':''}>In Progress</option>
         <option value="ready" ${status==='ready'?'selected':''}>Ready for Delivery</option>
         <option value="shipped" ${status==='shipped'?'selected':''}>Shipped</option>
@@ -610,7 +609,7 @@ function createProject(){
       if(!assemblies.length){alert('No assemblies found. Check the file has an ID Label column and data rows.');return;}
       const boxes=parseInt(document.getElementById('npBoxes').value)||null;
       const onSiteDate=document.getElementById('npOnSite').value||'';
-      const project={id:genId(),name,num,assemblies,createdAt:Date.now(),status:'notstarted',boxCount:boxes,onSiteDate};
+      const project={id:genId(),name,num,assemblies,createdAt:Date.now(),status:'inprogress',boxCount:boxes,onSiteDate};
       projects.unshift(project);saveData();closeNewProject();
       if(!assemblerName){localStorage.setItem('_pendingProject',project.id);openSetName();}
       else openProject(project.id);
