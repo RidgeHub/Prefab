@@ -131,11 +131,11 @@
         ],
         "height": "",
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 15, 12:52 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp7461og92ei",
@@ -150,11 +150,11 @@
         ],
         "height": "",
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 15, 12:52 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp7461og01tg",
