@@ -5469,11 +5469,11 @@
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
         "batchDone": true,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": "May 12, 3:02 PM",
         "batchDoneBy": "James",
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 15, 1:08 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp2wn0gtbspl",
@@ -5487,11 +5487,11 @@
           "5-20R / DUPLEX / Commercial Grade / White (1)"
         ],
         "batchDone": true,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": "May 12, 3:02 PM",
         "batchDoneBy": "James",
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 15, 1:08 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp2wn0gticcn",
