@@ -398,11 +398,11 @@
         "devices": [],
         "height": "",
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 15, 12:52 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp7461ogm1dh",
@@ -417,11 +417,11 @@
         ],
         "height": "",
         "batchDone": true,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": "May 15, 12:13 PM",
         "batchDoneBy": "James",
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 15, 12:52 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp7461ogmff2",
