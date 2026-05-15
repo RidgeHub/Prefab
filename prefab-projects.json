@@ -741,11 +741,11 @@
         ],
         "height": "",
         "batchDone": true,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": "May 15, 12:18 PM",
         "batchDoneBy": "James",
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 15, 12:18 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp73oa7pvx7b",
@@ -962,10 +962,10 @@
           "5-20R - DUPLEX / Spec Grade / GFCI / Ivory (1)"
         ],
         "height": "",
-        "batchDone": false,
+        "batchDone": true,
         "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
+        "batchDoneAt": "May 15, 12:18 PM",
+        "batchDoneBy": "James",
         "labelDoneAt": null,
         "labelDoneBy": null
       },
@@ -1015,10 +1015,10 @@
           "5-20R - DUPLEX / Spec Grade / White (1)"
         ],
         "height": "",
-        "batchDone": false,
+        "batchDone": true,
         "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
+        "batchDoneAt": "May 15, 12:18 PM",
+        "batchDoneBy": "James",
         "labelDoneAt": null,
         "labelDoneBy": null
       },
@@ -1358,10 +1358,10 @@
           "5-20R - SIMPLEX / Commercial Grade / GFCI / Ivory (1)"
         ],
         "height": "",
-        "batchDone": false,
+        "batchDone": true,
         "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
+        "batchDoneAt": "May 15, 12:18 PM",
+        "batchDoneBy": "James",
         "labelDoneAt": null,
         "labelDoneBy": null
       },
@@ -1377,10 +1377,10 @@
           "5-20R - SIMPLEX / Commercial Grade / GFCI / Ivory (1)"
         ],
         "height": "",
-        "batchDone": false,
+        "batchDone": true,
         "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
+        "batchDoneAt": "May 15, 12:18 PM",
+        "batchDoneBy": "James",
         "labelDoneAt": null,
         "labelDoneBy": null
       },
@@ -1396,10 +1396,10 @@
           "5-20R - SIMPLEX / Commercial Grade / GFCI / Ivory (1)"
         ],
         "height": "",
-        "batchDone": false,
+        "batchDone": true,
         "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
+        "batchDoneAt": "May 15, 12:18 PM",
+        "batchDoneBy": "James",
         "labelDoneAt": null,
         "labelDoneBy": null
       },
@@ -1415,10 +1415,10 @@
           "5-20R - SIMPLEX / Commercial Grade / GFCI / Ivory (1)"
         ],
         "height": "",
-        "batchDone": false,
+        "batchDone": true,
         "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
+        "batchDoneAt": "May 15, 12:18 PM",
+        "batchDoneBy": "James",
         "labelDoneAt": null,
         "labelDoneBy": null
       },
@@ -1434,10 +1434,10 @@
           "5-20R / DUPLEX / Commercial Grade / Ivory (1)"
         ],
         "height": "",
-        "batchDone": false,
+        "batchDone": true,
         "labelDone": false,
-        "batchDoneAt": null,
-        "batchDoneBy": null,
+        "batchDoneAt": "May 15, 12:18 PM",
+        "batchDoneBy": "James",
         "labelDoneAt": null,
         "labelDoneBy": null
       }
