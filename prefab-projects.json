@@ -1069,11 +1069,11 @@
         "devices": [],
         "height": "",
         "batchDone": true,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": "May 15, 12:18 PM",
         "batchDoneBy": "James",
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 15, 12:18 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp73oa7p098n",
@@ -1086,11 +1086,11 @@
         "devices": [],
         "height": "",
         "batchDone": true,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": "May 15, 12:18 PM",
         "batchDoneBy": "James",
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 15, 12:18 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp73oa7pk3sl",
