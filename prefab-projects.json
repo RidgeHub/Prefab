@@ -345,11 +345,11 @@
         "devices": [],
         "height": "",
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 15, 1:01 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp75ooda6cyf",
@@ -362,11 +362,11 @@
         "devices": [],
         "height": "",
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 15, 1:01 PM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp75ooda83fr",
