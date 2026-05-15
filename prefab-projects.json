@@ -1435,11 +1435,11 @@
         ],
         "height": "",
         "batchDone": true,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": "May 15, 12:18 PM",
         "batchDoneBy": "James",
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 15, 12:19 PM",
+        "labelDoneBy": "James"
       }
     ],
     "createdAt": 1778860603573,
