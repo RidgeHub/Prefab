@@ -321,8 +321,7 @@ function saveName(){
   assemblerName=n;localStorage.setItem('prefab_assembler',n);
   document.getElementById('assemblerNameDisplay').textContent=assemblerName;
   closeSetName();
-  const pending=localStorage.getItem('_pendingProject');
-  if(pending){localStorage.removeItem('_pendingProject');openProject(pending);}
+
 }
 function updateAssemblerBar(){
   const show=!!currentProject;
@@ -472,7 +471,6 @@ function showProjectList(){
 }
 
 function openProject(id){
-  if(!assemblerName){localStorage.setItem('_pendingProject',id);openSetName();return;}
   currentProject=projects.find(p=>p.id===id);if(!currentProject)return;
   document.getElementById('phaseTabs').style.display='flex';
   document.getElementById('progressWrap').style.display='flex';
