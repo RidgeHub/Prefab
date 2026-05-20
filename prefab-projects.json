@@ -7109,11 +7109,11 @@
         "devices": [],
         "height": "",
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:32 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mpe1olv5fbd1",
@@ -7128,11 +7128,11 @@
         ],
         "height": "",
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:32 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mpe1olv5qqer",
@@ -7145,11 +7145,11 @@
         "devices": [],
         "height": "",
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:32 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mpe1olv5th8q",
@@ -7164,11 +7164,11 @@
         ],
         "height": "",
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:32 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mpe1olv5lnw3",
@@ -7181,11 +7181,11 @@
         "devices": [],
         "height": "",
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:32 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mpe1olv56qf3",
@@ -7198,11 +7198,11 @@
         "devices": [],
         "height": "",
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:32 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mpe1olv566jr",
@@ -7215,11 +7215,11 @@
         "devices": [],
         "height": "",
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:32 AM",
+        "labelDoneBy": "James"
       }
     ],
     "createdAt": 1779280522673,
