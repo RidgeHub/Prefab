@@ -471,7 +471,10 @@ function showProjectList(){
 }
 
 function openProject(id){
-  currentProject=projects.find(p=>p.id===id);if(!currentProject)return;
+  alert('openProject called: '+id+' projects:'+projects.length);
+  currentProject=projects.find(p=>p.id===id);
+  alert('currentProject: '+(currentProject?currentProject.name:'NOT FOUND'));
+  if(!currentProject)return;
   document.getElementById('phaseTabs').style.display='flex';
   document.getElementById('progressWrap').style.display='flex';
   document.getElementById('backBtn').style.display='';
