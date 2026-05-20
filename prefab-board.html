@@ -258,15 +258,31 @@ function setSyncStatus(state,text){
 
 async function loadFromGitHub(){
   setSyncStatus('syncing','Loading…');
-  const rawUrl='https://raw.githubusercontent.com/'+REPO+'/main/'+GH_FILE+'?v='+Date.now();
+  const token=getGHToken();
   try{
-    const res=await fetch(rawUrl);
-    if(res.status===404){projects=[];ghSha=null;setSyncStatus('synced','Ready');showProjectList();return;}
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    projects=await res.json();
-    const token=getGHToken();
-    if(token){const meta=await fetch(GH_API,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});if(meta.ok){ghSha=(await meta.json()).sha;}}
-    saveLocal();setSyncStatus('synced','Synced');showProjectList();
+    // Use API endpoint (not raw CDN) so we always get the latest version
+    if(token){
+      const meta=await fetch(GH_API,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});
+      if(meta.status===404){projects=[];ghSha=null;setSyncStatus('synced','Ready');showProjectList();return;}
+      if(!meta.ok)throw new Error('HTTP '+meta.status);
+      const d=await meta.json();
+      // Only update if SHA is different from what we have saved (avoids overwriting local changes)
+      if(d.sha!==ghSha){
+        ghSha=d.sha;
+        const decoded=decodeURIComponent(escape(atob(d.content.replace(/\n/g,''))));
+        projects=JSON.parse(decoded);
+        saveLocal();
+      }
+      setSyncStatus('synced','Synced');showProjectList();
+    } else {
+      // No token - try raw URL as fallback
+      const rawUrl='https://raw.githubusercontent.com/'+REPO+'/main/'+GH_FILE+'?v='+Date.now();
+      const res=await fetch(rawUrl);
+      if(res.status===404){projects=[];ghSha=null;setSyncStatus('synced','Ready');showProjectList();return;}
+      if(!res.ok)throw new Error('HTTP '+res.status);
+      projects=await res.json();
+      saveLocal();setSyncStatus('synced','Synced');showProjectList();
+    }
   }catch(e){setSyncStatus('error','Load failed');loadLocal();showProjectList();}
 }
 
