@@ -119,9 +119,10 @@ const CATS=['Plaster Ring','Device','Wire Connector','Pigtail','Device Cover','O
 const CAT_LABELS={'Plaster Ring':'Plaster Rings','Device':'Devices','Wire Connector':'Wire Connectors','Pigtail':'Pigtails','Device Cover':'Device Covers','Other':'Other Items'};
 async function loadProjects(){
   try{
-    const res=await fetch(RAW+'?v='+Date.now());
-    if(!res.ok)throw new Error();
-    projects=await res.json();
+    const apiRes=await fetch('https://api.github.com/repos/RidgeHub/Prefab/contents/prefab-projects.json',{headers:{Accept:'application/vnd.github.v3+json'}});
+    if(!apiRes.ok)throw new Error();
+    const d=await apiRes.json();
+    projects=JSON.parse(decodeURIComponent(escape(atob(d.content.replace(/\n/g,'')))));
     const sel=document.getElementById('projectSelect');
     sel.innerHTML='<option value="">— Select a project —</option>'+projects.map(p=>'<option value="'+p.id+'">'+esc(p.name)+(p.num?' (#'+esc(p.num)+')':'')+'</option>').join('');
   }catch(e){document.getElementById('orderContent').innerHTML='<div class="empty">Could not load projects.</div>';}
