@@ -485,7 +485,12 @@ function openProject(id){
 function showPhase(n){
   currentPhase=n;
   [1,2,3].forEach(i=>document.getElementById('ptab'+i).classList.toggle('active',i===n));
-  if(n===1)renderPhase1();else if(n===2)renderPhase2();else renderPhase3();
+  try{
+    if(n===1)renderPhase1();else if(n===2)renderPhase2();else renderPhase3();
+  }catch(err){
+    document.getElementById('mainContent').innerHTML='<div class="empty" style="color:red;">Error: '+err.message+'<br><pre style="font-size:10px;text-align:left;">'+err.stack+'</pre></div>';
+    console.error(err);
+  }
   updateProgress();
 }
 function updateProgress(){
