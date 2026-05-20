@@ -471,9 +471,7 @@ function showProjectList(){
 }
 
 function openProject(id){
-  alert('openProject called: '+id+' projects:'+projects.length);
   currentProject=projects.find(p=>p.id===id);
-  alert('currentProject: '+(currentProject?currentProject.name:'NOT FOUND'));
   if(!currentProject)return;
   document.getElementById('phaseTabs').style.display='flex';
   document.getElementById('progressWrap').style.display='flex';
@@ -642,8 +640,7 @@ function createProject(){
       const onSiteDate=document.getElementById('npOnSite').value||'';
       const project={id:genId(),name,num,assemblies,createdAt:Date.now(),status:'inprogress',boxCount:boxes,onSiteDate};
       projects.unshift(project);saveData();closeNewProject();
-      if(!assemblerName){localStorage.setItem('_pendingProject',project.id);openSetName();}
-      else openProject(project.id);
+      openProject(project.id);
     }catch(err){alert('Error reading file: '+err.message);}
   };
   if(isXLSX)reader.readAsArrayBuffer(file);else reader.readAsText(file);
