@@ -290,12 +290,15 @@ async function saveData(){
   const token=getGHToken();if(!token)return;
   setSyncStatus('syncing','Saving…');
   try{
+    // Always fetch fresh SHA before saving to avoid 409 conflicts
+    const meta=await fetch(GH_API,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});
+    if(meta.ok){ghSha=(await meta.json()).sha;}
     const body={message:'Update prefab projects',content:btoa(unescape(encodeURIComponent(JSON.stringify(projects,null,2))))};
     if(ghSha)body.sha=ghSha;
     const res=await fetch(GH_API,{method:'PUT',headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
     if(!res.ok)throw new Error('HTTP '+res.status);
-    ghSha=(await res.json()).content.sha;setSyncStatus('synced','Saved ✓');
-  }catch(e){setSyncStatus('error','Save failed');}
+    const d=await res.json();ghSha=d.content.sha;setSyncStatus('synced','Saved ✓');
+  }catch(e){setSyncStatus('error','Save failed — '+e.message);}
 }
 
 function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
@@ -552,7 +555,7 @@ function renderPhase2(){
   rooms.forEach(room=>{
     const items=byRoom[room],doneCount=items.filter(({a})=>a.labelDone).length;
     const allRoomDone=doneCount===items.length;
-    html+=`<div class="room-section"><div class="room-hdr"><span>Room ${esc(room)}</span><div style="display:flex;align-items:center;gap:8px;"><span class="room-count">${doneCount}/${items.length}</span><button class="room-check-all ${allRoomDone?'all-done':''}" onclick="toggleRoomLabel('${esc(room)}')">${allRoomDone?'✓ Uncheck All':'✓ Check All'}</button></div></div>`;
+    html+=`<div class="room-section"><div class="room-hdr"><span>Room ${esc(room)}</span><div style="display:flex;align-items:center;gap:8px;"><span class="room-count">${doneCount}/${items.length}</span><button class="room-check-all ${allRoomDone?'all-done':''}" data-room="${esc(room)}" onclick="toggleRoomLabel(this.dataset.room)">${allRoomDone?'✓ Uncheck All':'✓ Check All'}</button></div></div>`;
     items.forEach(({a,idx})=>{
       html+=`<div class="label-item ${a.labelDone?'done-label':''}">
         <div class="label-check ${a.labelDone?'checked':''}" onclick="toggleLabel(${idx})">${a.labelDone?'✓':''}</div>
