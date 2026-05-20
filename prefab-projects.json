@@ -5027,11 +5027,11 @@
         ],
         "height": "",
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:42 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mpe5vykwjxmm",
