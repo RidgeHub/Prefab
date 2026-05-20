@@ -345,7 +345,7 @@ function parseAssemblies(rows){
   const iPlaster=ci(['plaster']),iWire=ci(['wire connector','wire']),iPigtail=ci(['pigtail']);
   const iD1=ci(['device 1']),iD2=ci(['device 2']),iD3=ci(['device 3']),iD4=ci(['device 4']),iStatus=ci(['status']);
   // Height column: any column containing '- Prefab'
-  const iHeight=hdr.findIndex(h=>h.includes('- prefab'));
+  const iHeight=hdr.findIndex(h=>h.includes('- prefab')||h.includes('height')||h==='aff'||h.includes('mounting')||h.includes('elev'));
   const assemblies=[];
   for(let i=1;i<rows.length;i++){
     const r=rows[i];
@@ -429,7 +429,14 @@ function isBatchDone(batch,assemblies){return batch.indices.every(i=>assemblies[
 /* Project list */
 function updateStatus(projectId,status){
   const p=projects.find(x=>x.id===projectId);if(!p)return;
-  p.status=status;saveData();showProjectList();
+  p.status=status;
+  // Update badge color in place without rebuilding the whole list
+  const card=document.querySelector(`[data-pid="${projectId}"]`);
+  if(card){
+    const badge=card.querySelector('.status-badge-inline');
+    if(badge){badge.textContent=STATUS_LABELS[status]||status;badge.style.background=STATUS_COLORS[status]+'22';badge.style.color=STATUS_COLORS[status];}
+  }
+  saveData();
 }
 
 function showProjectList(){
@@ -450,7 +457,7 @@ function showProjectList(){
     const color=STATUS_COLORS[status]||'#5b9cf6';
     const boxes=p.boxCount?`📦 ${p.boxCount} box${p.boxCount>1?'es':''}`:'';
     const onSite=p.onSiteDate?'📅 '+new Date(p.onSiteDate).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';
-    return `<div class="project-card">
+    return `<div class="project-card" data-pid="${p.id}">
       <div class="project-card-info" onclick="openProject('${p.id}')">
         <div class="project-name">${esc(p.name)}${p.num?` <span style="font-size:11px;font-weight:400;color:var(--text3);">#${esc(p.num)}</span>`:''}</div>
         <div class="project-meta">${total} assemblies${boxes?' · '+boxes:''}${onSite?' · '+onSite:''}</div>
@@ -460,7 +467,7 @@ function showProjectList(){
           <span style="font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:99px;background:${color}22;color:${color};">${STATUS_LABELS[status]||status}</span>
         </div>
       </div>
-      <select class="status-select" onchange="updateStatus('${p.id}',this.value)" onclick="event.stopPropagation()">
+      <select class="status-select" oninput="updateStatus('${p.id}',this.value)" onclick="event.stopPropagation()">
         <option value="inprogress" ${status==='inprogress'?'selected':''}>In Progress</option>
         <option value="ready" ${status==='ready'?'selected':''}>Ready for Delivery</option>
         <option value="shipped" ${status==='shipped'?'selected':''}>Shipped</option>
