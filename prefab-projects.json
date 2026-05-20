@@ -2357,11 +2357,11 @@
         ],
         "height": "",
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:36 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mpe5vykwkt0r",
