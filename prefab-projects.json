@@ -5120,11 +5120,11 @@
           "5-20R / DUPLEX / Commercial Grade / White"
         ],
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:53 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp30glxuvi58",
@@ -5138,11 +5138,11 @@
           "5-20R / DUPLEX / Commercial Grade / White"
         ],
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:53 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp30glxu9677",
@@ -5156,11 +5156,11 @@
           "5-20R / DUPLEX / Commercial Grade / White"
         ],
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:53 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp30glxue1ac",
@@ -5174,11 +5174,11 @@
           "5-20R - DUPLEX / Commercial Grade / GFCI / White"
         ],
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:53 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp30glxu2okm",
@@ -5192,11 +5192,11 @@
           "5-20R / DUPLEX / Commercial Grade / White"
         ],
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:53 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp30glxun5iz",
@@ -5210,11 +5210,11 @@
           "5-20R - DUPLEX / Commercial Grade / GFCI / White"
         ],
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:53 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp30glxuz60d",
@@ -5228,11 +5228,11 @@
           "5-20R - DUPLEX / Commercial Grade / Tamper Resistant / White"
         ],
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:53 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp30glxuxjhj",
@@ -5244,11 +5244,11 @@
         "pigtail": "",
         "devices": [],
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:53 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp30glxunt8w",
@@ -5262,11 +5262,11 @@
           "5-20R / DUPLEX / Commercial Grade / White"
         ],
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:53 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp30glxusz2b",
@@ -5280,11 +5280,11 @@
           "5-20R / DUPLEX / Commercial Grade / White"
         ],
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:53 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mp30glxuz104",
@@ -5298,11 +5298,11 @@
           "5-20R / DUPLEX / Commercial Grade / White"
         ],
         "batchDone": false,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 10:53 AM",
+        "labelDoneBy": "James"
       }
     ],
     "createdAt": 1778613341970,
