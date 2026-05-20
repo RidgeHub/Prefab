@@ -280,7 +280,10 @@ function checkReady() {
 }
 
 function runLookup() {
-  const outHeaders = ['Room','ID Label','Assembly Code','Box','Plaster Ring','Wire Connector','Pigtail','Device Cover','Device 1','Device 2','Device 3','Device 4','Status'];
+  // Find height column index in project sheet header row
+  const projHdr = projectRows[0].map(h=>String(h||'').toLowerCase().trim());
+  const iHeight = projHdr.findIndex(h=>h.includes('height')||h.includes('- prefab')||h==='aff'||h.includes('mounting'));
+  const outHeaders = ['Room','ID Label','Assembly Code','Height','Box','Plaster Ring','Wire Connector','Pigtail','Device Cover','Device 1','Device 2','Device 3','Device 4','Status'];
   filledData  = [outHeaders];
   missedCodes = [];
   const bomRaw = {};
@@ -289,11 +292,12 @@ function runLookup() {
     const r     = projectRows[i];
     const room  = r[0]||'', label = r[1]||'';
     const code  = (r[2]||'').trim().toUpperCase();
+    const height = iHeight !== -1 ? (r[iHeight]||'').toString().trim() : '';
     const match = masterMap[code];
 
     if (!match) {
       if (code) missedCodes.push(code);
-      filledData.push([room, label, code, '','','','','','','','','', code ? 'NOT FOUND' : '']);
+      filledData.push([room, label, code, height,'','','','','','','','','', code ? 'NOT FOUND' : '']);
       continue;
     }
 
@@ -309,7 +313,7 @@ function runLookup() {
     const devCells = match.device.slice(0,4).map(({item,qty}) => withQty(item,qty));
     while (devCells.length < 4) devCells.push('');
 
-    filledData.push([room, label, code, box, plaster, wire, pigtail, devCov, ...devCells, 'OK']);
+    filledData.push([room, label, code, height, box, plaster, wire, pigtail, devCov, ...devCells, 'OK']);
 
     // BOM accumulation with actual quantities
     for (const {item, qty} of match.rawItems) {
