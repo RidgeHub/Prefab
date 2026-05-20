@@ -290,12 +290,16 @@ async function saveData(){
   const token=getGHToken();if(!token)return;
   setSyncStatus('syncing','Saving…');
   try{
-    // Always fetch fresh SHA before saving to avoid 409 conflicts
-    const meta=await fetch(GH_API,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});
-    if(meta.ok){ghSha=(await meta.json()).sha;}
     const body={message:'Update prefab projects',content:btoa(unescape(encodeURIComponent(JSON.stringify(projects,null,2))))};
     if(ghSha)body.sha=ghSha;
-    const res=await fetch(GH_API,{method:'PUT',headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+    let res=await fetch(GH_API,{method:'PUT',headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+    // If 409 conflict (stale SHA), refresh SHA and retry once
+    if(res.status===409){
+      const meta=await fetch(GH_API,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});
+      if(meta.ok){ghSha=(await meta.json()).sha;}
+      body.sha=ghSha;
+      res=await fetch(GH_API,{method:'PUT',headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+    }
     if(!res.ok)throw new Error('HTTP '+res.status);
     const d=await res.json();ghSha=d.content.sha;setSyncStatus('synced','Saved ✓');
   }catch(e){setSyncStatus('error','Save failed — '+e.message);}
