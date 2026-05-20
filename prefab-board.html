@@ -257,33 +257,34 @@ function setSyncStatus(state,text){
 }
 
 async function loadFromGitHub(){
-  setSyncStatus('syncing','Loading…');
+  // Always show local data immediately so the user sees current state right away
+  loadLocal();
+  showProjectList();
+  setSyncStatus('syncing','Syncing…');
   const token=getGHToken();
   try{
-    // Use API endpoint (not raw CDN) so we always get the latest version
     if(token){
       const meta=await fetch(GH_API,{headers:{Authorization:`token ${token}`,Accept:'application/vnd.github.v3+json'}});
-      if(meta.status===404){projects=[];ghSha=null;setSyncStatus('synced','Ready');showProjectList();return;}
+      if(meta.status===404){projects=[];ghSha=null;saveLocal();setSyncStatus('synced','Ready');showProjectList();return;}
       if(!meta.ok)throw new Error('HTTP '+meta.status);
       const d=await meta.json();
-      // Only update if SHA is different from what we have saved (avoids overwriting local changes)
+      // Only overwrite local if GitHub has a NEWER sha than our last save
       if(d.sha!==ghSha){
         ghSha=d.sha;
         const decoded=decodeURIComponent(escape(atob(d.content.replace(/\n/g,''))));
-        projects=JSON.parse(decoded);
-        saveLocal();
+        const remoteProjects=JSON.parse(decoded);
+        // Only update if remote has more or equal projects (don't restore deleted ones)
+        if(remoteProjects.length>=projects.length){
+          projects=remoteProjects;
+          saveLocal();
+          showProjectList();
+        }
       }
-      setSyncStatus('synced','Synced');showProjectList();
+      setSyncStatus('synced','Synced');
     } else {
-      // No token - try raw URL as fallback
-      const rawUrl='https://raw.githubusercontent.com/'+REPO+'/main/'+GH_FILE+'?v='+Date.now();
-      const res=await fetch(rawUrl);
-      if(res.status===404){projects=[];ghSha=null;setSyncStatus('synced','Ready');showProjectList();return;}
-      if(!res.ok)throw new Error('HTTP '+res.status);
-      projects=await res.json();
-      saveLocal();setSyncStatus('synced','Synced');showProjectList();
+      setSyncStatus('synced','No token');
     }
-  }catch(e){setSyncStatus('error','Load failed');loadLocal();showProjectList();}
+  }catch(e){setSyncStatus('error','Load failed');}
 }
 
 function removeProject(projectId){
