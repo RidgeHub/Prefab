@@ -89,11 +89,11 @@
         ],
         "height": "",
         "batchDone": true,
-        "labelDone": false,
+        "labelDone": true,
         "batchDoneAt": "May 20, 8:42 AM",
         "batchDoneBy": "James",
-        "labelDoneAt": null,
-        "labelDoneBy": null
+        "labelDoneAt": "May 20, 8:42 AM",
+        "labelDoneBy": "James"
       },
       {
         "id": "mpe1olv5qml7",
