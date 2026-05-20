@@ -149,9 +149,10 @@ function dueLabel(days){
 
 async function loadProjects(){
   try{
-    const res=await fetch(RAW+'?v='+Date.now());
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    renderProjects(await res.json());
+    const apiRes=await fetch('https://api.github.com/repos/RidgeHub/Prefab/contents/prefab-projects.json',{headers:{Accept:'application/vnd.github.v3+json'}});
+    if(!apiRes.ok)throw new Error('HTTP '+apiRes.status);
+    const d=await apiRes.json();
+    renderProjects(JSON.parse(decodeURIComponent(escape(atob(d.content.replace(/\n/g,''))))));
   }catch(e){
     document.getElementById('projectsWrap').innerHTML='<div class="empty-state">Could not load projects.</div>';
   }
