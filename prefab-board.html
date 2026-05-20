@@ -95,7 +95,10 @@ header{padding:.875rem 1rem;display:flex;align-items:center;justify-content:spac
 
 /* Label list */
 .room-section{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);overflow:hidden}
-.room-hdr{padding:10px 14px;background:linear-gradient(135deg,#1a5fb4,#3584e4);border-bottom:none;font-size:12px;font-weight:700;color:#fff;display:flex;justify-content:space-between;align-items:center}
+.room-hdr{padding:10px 14px;background:linear-gradient(135deg,#1a5fb4,#3584e4);border-bottom:none;font-size:12px;font-weight:700;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.room-check-all{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.35);border-radius:6px;padding:3px 10px;font-size:11px;color:#fff;cursor:pointer;font-family:var(--mono);white-space:nowrap;transition:all 0.15s;flex-shrink:0}
+.room-check-all:hover{background:rgba(255,255,255,0.28)}
+.room-check-all.all-done{background:rgba(26,122,78,0.35);border-color:rgba(26,122,78,0.6)}
 .room-count{font-size:10px;color:rgba(255,255,255,0.8);font-family:var(--mono);font-weight:400}
 .label-item{padding:13px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;transition:background 0.15s}
 .label-item:last-child{border-bottom:none}
@@ -548,7 +551,8 @@ function renderPhase2(){
   let html='';
   rooms.forEach(room=>{
     const items=byRoom[room],doneCount=items.filter(({a})=>a.labelDone).length;
-    html+=`<div class="room-section"><div class="room-hdr"><span>Room ${esc(room)}</span><span class="room-count">${doneCount}/${items.length}</span></div>`;
+    const allRoomDone=doneCount===items.length;
+    html+=`<div class="room-section"><div class="room-hdr"><span>Room ${esc(room)}</span><div style="display:flex;align-items:center;gap:8px;"><span class="room-count">${doneCount}/${items.length}</span><button class="room-check-all ${allRoomDone?'all-done':''}" onclick="toggleRoomLabel('${esc(room)}')">${allRoomDone?'✓ Uncheck All':'✓ Check All'}</button></div></div>`;
     items.forEach(({a,idx})=>{
       html+=`<div class="label-item ${a.labelDone?'done-label':''}">
         <div class="label-check ${a.labelDone?'checked':''}" onclick="toggleLabel(${idx})">${a.labelDone?'✓':''}</div>
@@ -563,6 +567,20 @@ function renderPhase2(){
   });
   document.getElementById('mainContent').innerHTML=html;
 }
+function toggleRoomLabel(room) {
+  const items = currentProject.assemblies.map((a, i) => ({a, i})).filter(({a}) => (a.room || '?') === room);
+  const allDone = items.every(({a}) => a.labelDone);
+  // If all done, uncheck all; otherwise check all
+  items.forEach(({a, i}) => {
+    a.labelDone = !allDone;
+    a.labelDoneAt = a.labelDone ? tsNow() : null;
+    a.labelDoneBy = a.labelDone ? assemblerName : null;
+  });
+  saveData();
+  renderLabelSort();
+  updateProgress();
+}
+
 function toggleLabel(idx){
   const a=currentProject.assemblies[idx];if(!a)return;
   a.labelDone=!a.labelDone;a.labelDoneAt=a.labelDone?tsNow():null;a.labelDoneBy=a.labelDone?assemblerName:null;
