@@ -377,7 +377,7 @@ const gradeRe=/hospital\s+grade|commercial\s+grade|specification\s+grade|residen
 function assemblyHTML(a){
   const gang=a.plaster?getGang(stripAdj(a.plaster)):'';
   const gangHTML=gang?`<span class="seg-gang">${esc(gang)}</span>`:'';
-  const devHTMLParts=a.devices.map(d=>{
+  const devHTMLParts=(a.devices||[]).map(d=>{
     const parts=formatDevice(d);let grade='';
     const filtered=parts.filter(p=>{if(gradeRe.test(p)){grade=p;return false;}return true;});
     gradeRe.lastIndex=0;
@@ -394,7 +394,7 @@ function batchItemHTML(a){
   const gang=a.plaster?getGang(stripAdj(a.plaster)):'';
   const gangHTML=gang?`<span class="seg-gang">${esc(gang)}</span>`:'';
   let grade='';
-  const devHTMLParts=a.devices.map(d=>{
+  const devHTMLParts=(a.devices||[]).map(d=>{
     const parts=formatDevice(d);
     const filtered=parts.filter(p=>{
       gradeRe.lastIndex=0;
@@ -417,7 +417,7 @@ function buildBatches(assemblies){
   const map=new Map();
   assemblies.forEach((a,idx)=>{
     const gang=a.plaster?getGang(stripAdj(a.plaster)):'';
-    const devKey=a.devices.map(d=>formatDevice(d).join('|')).join('::');
+    const devKey=(a.devices||[]).map(d=>formatDevice(d).join('|')).join('::');
     const key=`${gang}||${devKey}`;
     if(!map.has(key))map.set(key,{key,gang,devices:a.devices,indices:[],count:0});
     map.get(key).indices.push(idx);map.get(key).count++;
@@ -511,7 +511,7 @@ function renderPhase1(){
     const gang=firstA.plaster?getGang(stripAdj(firstA.plaster)):'';
     const gangHTML=gang?`<span class="seg-gang">${esc(gang)}</span>`:'';
     let grade='';
-    const devHTMLParts=firstA.devices.map(d=>{
+    const devHTMLParts=(firstA.devices||[]).map(d=>{
       const parts=formatDevice(d);
       const filtered=parts.filter(p=>{gradeRe.lastIndex=0;if(gradeRe.test(p)){grade=p;return false;}return true;});
       gradeRe.lastIndex=0;
