@@ -32,11 +32,11 @@
         "devices": [],
         "height": "",
         "batchDone": false,
-        "labelDone": true,
+        "labelDone": false,
         "batchDoneAt": null,
         "batchDoneBy": null,
-        "labelDoneAt": "Jun 12, 1:50 PM",
-        "labelDoneBy": "James"
+        "labelDoneAt": null,
+        "labelDoneBy": null
       },
       {
         "id": "mpr88zuuqo7t",
